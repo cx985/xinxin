@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { nextTick, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const InsertText = (data) => {
   const Win: any = window;
@@ -98,7 +98,7 @@ const GetWord = (path?) => {
   }
 
   // if (toPath == '/' || toPath == '/en/') {
-  if (toPath == '/') {
+  if (toPath == '/xinxin/') {
     axios({
       method: 'get',
       url: 'https://v1.hitokoto.cn',
