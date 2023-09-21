@@ -62,16 +62,6 @@ export default hopeTheme({
         timeline: '美好的事情即将发生',
       },
     },
-    '/en/': {
-      navbar: enNavbar,
-      sidebar: enSidebar,
-      blog: {
-        name: 'Mo7',
-        description: 'Simple and happy, as it should be.',
-        intro: '/en/intro.html',
-        timeline: 'Something wonderful is about to  happen.',
-      },
-    },
   },
 
   encrypt: {

@@ -16,11 +16,6 @@ export default defineUserConfig({
       title: '辰心编码',
       description: '辰心编码 - 简单快乐，理应如此。',
     },
-    '/en/': {
-      lang: 'en-US',
-      title: 'Mo7',
-      description: 'Mo7 - Simple and happy, as it should be.',
-    },
   },
 
   plugins: [
