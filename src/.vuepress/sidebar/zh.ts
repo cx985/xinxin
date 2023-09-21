@@ -3,7 +3,7 @@ import { sidebar } from 'vuepress-theme-hope';
 export const zhSidebar = sidebar({
   '/about/': [
     {
-      text: '返回博文',
+      text: '返回技术',
       icon: 'sort',
       link: '/posts/',
     },
@@ -17,7 +17,7 @@ export const zhSidebar = sidebar({
   ],
   '/tools/': [
     {
-      text: '返回博文',
+      text: '返回技术',
       icon: 'sort',
       link: '/posts/',
     },
@@ -31,7 +31,7 @@ export const zhSidebar = sidebar({
   ],
   '/linux/': [
     {
-      text: '返回博文',
+      text: '返回技术',
       icon: 'sort',
       link: '/posts/',
     },
@@ -52,7 +52,7 @@ export const zhSidebar = sidebar({
   ],
   '/skills/': [
     {
-      text: '返回博文',
+      text: '返回技术',
       icon: 'sort',
       link: '/posts/',
     },
@@ -66,7 +66,7 @@ export const zhSidebar = sidebar({
   ],
   '/favorite/': [
     {
-      text: '返回博文',
+      text: '返回技术',
       icon: 'sort',
       link: '/posts/',
     },
@@ -102,14 +102,14 @@ export const zhSidebar = sidebar({
   '/': [
     '',
     {
-      text: '博文',
+      text: '技术1',
       icon: 'note',
       prefix: 'posts/',
       link: '/posts/',
       children: 'structure',
     },
     {
-      text: '收藏',
+      text: '生活',
       icon: 'favoritea',
       link: '/favorite/',
       children: [

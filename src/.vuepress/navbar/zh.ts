@@ -3,7 +3,7 @@ import { navbar } from 'vuepress-theme-hope';
 export const zhNavbar = navbar([
   '/posts',
   {
-    text: '索引',
+    text: '管理',
     icon: 'jiansuo',
     children: [
       { text: '全部', icon: 'list', link: '/article' },
@@ -14,7 +14,7 @@ export const zhNavbar = navbar([
   },
 
   {
-    text: '收藏',
+    text: '项目',
     icon: 'start',
     link: '/favorite',
     children: ['/favorite/links', '/favorite/movies', '/favorite/music', '/favorite/photos'],

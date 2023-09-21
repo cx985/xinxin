@@ -34,7 +34,6 @@ https://cha5p7o63r.feishu.cn/docx/NoJDd4J79oo6lQx2HSsc5Ihknof
 可点击下方【显示评论区】按钮 匿名留言。
 
 ::: right
-[@辰心编码-飞书](https://cha5p7o63r.feishu.cn/docx/NoJDd4J79oo6lQx2HSsc5Ihknof)。
 :::
 
 ::::

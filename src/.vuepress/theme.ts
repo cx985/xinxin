@@ -38,10 +38,10 @@ export default hopeTheme({
     avatar: '//file.mo7.cc/static/lxh_gif/lxh_71.gif',
     roundAvatar: true,
     medias: {
-      Email: 'mailto:mo7@mo7.cc',
-      GitHub: 'https://github.com/mo7cc',
-      Lark: 'https://www.feishu.cn/invitation/page/add_contact/?token=417h7852-934c-4f08-9112-00d257d0cdae&amp;unique_id=FnKsnwD3MN8t7zjWer4tqQ==',
-      Zhihu: 'https://www.zhihu.com/people/meichangliang',
+      Email: 'mailto:1690273757@qq.com',
+      GitHub: 'https://github.com/cx985',
+      Lark: 'https://www.feishu.cn',
+      Zhihu: 'https://www.zhihu.com',
     },
   },
 

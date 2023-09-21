@@ -7,7 +7,7 @@ index: false
 permalink: /favorite
 ---
 
-# 收藏
+# 生活
 
 ::: info 有些记忆，弥足珍贵
 

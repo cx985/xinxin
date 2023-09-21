@@ -6,7 +6,7 @@ index: false
 permalink: /posts
 ---
 
-# 博文
+# 技术
 
 ::: info 记录一些所思所想
 
