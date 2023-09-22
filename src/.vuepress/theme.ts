@@ -1,19 +1,15 @@
 import { hopeTheme } from 'vuepress-theme-hope';
-import { enNavbar, zhNavbar } from './navbar/index.js';
-import { enSidebar, zhSidebar } from './sidebar/index.js';
+import { zhNavbar } from './navbar/index.js';
+import { zhSidebar } from './sidebar/index.js';
 
-const footerICP_HTML = `
-<a class="footer-icp" href="https://beian.miit.gov.cn" target="_blank">
-  <img src="//file.mo7.cc/static/img/beian.png">
-  陕ICP备2022011574号
-</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a class="footer-about" href="/about/website.html">关于本站</a>`;
+const footerICP_HTML = `<a class="footer-about" href="/about/website.html">关于本站</a>`;
 
 export default hopeTheme({
-  hostname: 'https://blog.mo7.cc',
+  hostname: 'https://cx985.github.io/xinxin/',
   author: {
     name: '辰心编码',
-    url: 'https://mo7.cc',
-    email: 'mo7@mo7.cc',
+    url: 'https://cx985.github.io/xinxin/',
+    email: '1690273757@qq.com',
   },
   iconAssets: '//at.alicdn.com/t/c/font_3855310_p3z6ugbxr7a.css',
   logo: '/pwa/144.png',
@@ -57,7 +53,7 @@ export default hopeTheme({
       sidebar: zhSidebar,
       blog: {
         name: '辰心编码',
-        description: '简单快乐，理应如此。',
+        description: '轻舟已过万重山，长路漫漫亦灿灿。',
         intro: '/about/me.html',
         timeline: '美好的事情即将发生',
       },

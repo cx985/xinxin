@@ -2,9 +2,9 @@
 icon: music
 layout: Layout
 pageInfo: ['Author', 'PageView']
-date: 1978-12-18
+date: 2023-09-22
 index: false
-permalink: /favorite/music
+permalink: /project/music
 ---
 
 # 音乐

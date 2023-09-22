@@ -3,7 +3,7 @@ icon: note
 layout: Layout
 pageInfo: ['Author', 'PageView']
 index: false
-permalink: /posts
+permalink: /technology
 ---
 
 # 技术

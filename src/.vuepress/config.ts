@@ -14,7 +14,7 @@ export default defineUserConfig({
     '/': {
       lang: 'zh-CN',
       title: '辰心编码',
-      description: '辰心编码 - 简单快乐，理应如此。',
+      description: '辰心编码 - 轻舟已过万重山，长路漫漫亦灿灿。',
     },
   },
 

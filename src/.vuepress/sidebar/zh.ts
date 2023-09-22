@@ -5,7 +5,7 @@ export const zhSidebar = sidebar({
     {
       text: '返回技术',
       icon: 'sort',
-      link: '/posts/',
+      link: '/technology/',
     },
     {
       text: '关于',
@@ -15,155 +15,38 @@ export const zhSidebar = sidebar({
       children: 'structure',
     },
   ],
-  '/tools/': [
+  '/project/': [
     {
       text: '返回技术',
       icon: 'sort',
-      link: '/posts/',
-    },
-    {
-      text: '工具',
-      icon: 'gongju',
-      prefix: '',
-      link: '/tools/',
-      children: 'structure',
-    },
-  ],
-  '/linux/': [
-    {
-      text: '返回技术',
-      icon: 'sort',
-      link: '/posts/',
-    },
-    {
-      text: 'Debian',
-      icon: 'debianos',
-      prefix: 'Debian/',
-      children: 'structure',
-      link: '/linux/Debian/',
-    },
-    {
-      text: 'Settings',
-      icon: 'shezhi',
-      prefix: 'Settings/',
-      children: 'structure',
-      link: '/linux/Settings/',
-    },
-  ],
-  '/skills/': [
-    {
-      text: '返回技术',
-      icon: 'sort',
-      link: '/posts/',
-    },
-    {
-      text: '技巧',
-      icon: 'zhiliangjishu',
-      prefix: '',
-      link: '/skills/',
-      children: 'structure',
-    },
-  ],
-  '/favorite/': [
-    {
-      text: '返回技术',
-      icon: 'sort',
-      link: '/posts/',
-    },
-    {
-      text: '影视',
-      icon: 'movie',
-      prefix: 'movies/',
-      link: '/favorite/movies/',
-      children: 'structure',
+      link: '/technology/',
     },
     {
       text: '音乐',
       icon: 'music',
       prefix: 'music/',
       children: 'structure',
-      link: '/favorite/music/',
-    },
-    {
-      text: '相册',
-      icon: 'xiangce',
-      prefix: 'photos/',
-      children: 'structure',
-      link: '/favorite/photos/',
-    },
-    {
-      text: '链接',
-      icon: 'link',
-      prefix: 'links/',
-      children: 'structure',
-      link: '/favorite/links/',
-    },
+      link: '/project/music/',
+    }
   ],
   '/': [
     '',
     {
-      text: '技术1',
+      text: '技术',
       icon: 'note',
-      prefix: 'posts/',
-      link: '/posts/',
+      prefix: 'technology/',
+      link: '/technology/',
       children: 'structure',
     },
     {
-      text: '生活',
+      text: '项目',
       icon: 'favoritea',
-      link: '/favorite/',
+      link: '/project/',
       children: [
-        {
-          text: '影视',
-          icon: 'movie',
-          link: '/favorite/movies/',
-        },
         {
           text: '音乐',
           icon: 'music',
-          link: '/favorite/music/',
-        },
-        {
-          text: '相册',
-          icon: 'xiangce',
-          link: '/favorite/photos/',
-        },
-        {
-          text: '链接',
-          icon: 'link',
-          link: '/favorite/links/',
-        },
-      ],
-    },
-    {
-      text: '技巧',
-      icon: 'zhiliangjishu',
-      prefix: 'skills/',
-      link: '/skills/',
-      children: 'structure',
-    },
-    {
-      text: '工具',
-      icon: 'gongju',
-      prefix: 'tools/',
-      link: '/tools/',
-      children: 'structure',
-    },
-    {
-      text: 'Linux',
-      icon: 'linux',
-      prefix: 'linux/',
-      link: '/linux/',
-      children: [
-        {
-          text: 'Debian',
-          icon: 'debianos',
-          link: '/linux/Debian/',
-        },
-        {
-          text: 'Settings',
-          icon: 'shezhi',
-          link: '/linux/Settings/',
+          link: '/project/music/',
         },
       ],
     },

@@ -7,7 +7,7 @@ heroImage: /pwa/144.png
 bgImage: //file.mo7.cc/api/public/bz?idx=1
 heroText: 辰心编码
 heroFullScreen: true
-tagline: 简单快乐，理应如此。
+tagline: 轻舟已过万重山，长路漫漫亦灿灿。
 description: 辰心编码,博客,记录,分享
 article: false
 index: false
@@ -18,14 +18,14 @@ projects:
     link: /article
 
   - icon: youlian
-    name: 友情链接
-    desc: 欢迎交换友情链接
-    link: /favorite/links/friend
+    name: JAVA基础
+    desc: JAVA基础知识
+    link: /technology/markdown
 
   - icon: liuyan
-    name: 留言板
-    desc: 欢迎交换友情链接
-    link: /about/guestbook
+    name: JAVA基础
+    desc: JAVA高级知识
+    link: /technology/markdown
 
 footer: true
 permalink: /

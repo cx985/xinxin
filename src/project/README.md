@@ -2,20 +2,17 @@
 icon: favoritea
 layout: Layout
 pageInfo: ['Author', 'PageView']
-date: 1978-12-18
+date: 2023-09-11
 index: false
-permalink: /favorite
+permalink: /project
 ---
 
-# 生活
+# 项目
 
 ::: info 有些记忆，弥足珍贵
 
 :::
 
-- [影视](./movies/)
 - [音乐](./music/)
-- [照片](./photos/)
-- [链接](./links/)
 
 ---

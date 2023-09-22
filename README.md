@@ -1,7 +1,4 @@
 # 个人博客
-
-https://blog.mo7.cc
-
 博客源码，基于 `VuePress Theme Hope` 搭建
 
 ## 博客框架
