@@ -8,10 +8,12 @@ permalink: /technology
 
 # 技术
 
-::: info 记录一些所思所想
+::: info 所学知识沉淀汇总
 
 :::
 
-- [Markdown](./markdown.md)
+- [JAVA基础](./javaBase.md)
+- [JUC](./juc.md)
+- [Spring](./spring.md)
 
 ---
