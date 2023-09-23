@@ -19,10 +19,10 @@ https://mrhope.site/
 https://waline.js.org
 
 服务地址\
-https://talk.mo7.cc
+https://comment.cx985.top
 
 管理后台(Github 登录)
-https://talk.mo7.cc/ui
+https://comment.cx985.top/ui
 
 ## 图标
 

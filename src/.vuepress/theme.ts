@@ -71,7 +71,8 @@ export default hopeTheme({
 
     comment: {
       provider: 'Waline',
-      serverURL: 'https://talk.mo7.cc',
+      // serverURL: 'https://talk.mo7.cc',
+      serverURL: 'https://comment.cx985.top',
       copyright: false,
       reaction: true,
     },
