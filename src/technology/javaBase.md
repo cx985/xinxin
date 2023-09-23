@@ -1,6 +1,6 @@
 ---
 icon: markdown
-order: 2
+order: 1
 category:
   - 使用指南
 tag:
@@ -42,9 +42,12 @@ break: 指跳出整个循环体，继续执行循环下面的语句
  
 Byte,Short,Integer,Long 这4种包装类默认创建了数值[-128,127] 的相应类型的缓存数据
 题目
+```
 Integer i1 = 40;
 Integer i2 = new Integer(40);
 System.out.println(i1==i2);
+```
+
  
 答案：false, i1使用了缓存中的对象，i2会直接创建新的对象。
  
@@ -56,10 +59,13 @@ System.out.println(i1==i2);
 //成员变量(属于类)
 private String name;
  
+```
 //局部变量(属于方法)
 public void method(){
     //int num1 =10;
 }
+```
+
  
 ## 8、方法重载和重写
 重载：发生在同一个类中，参数列表必须修改
@@ -91,6 +97,7 @@ public void method(){
 equals: 类没有重写equals()方法时，等价于==比较这两个对象；类重写了equals()方法时，一般
 来比较两个对象的属性是否相等
  
+```
 String a = new String("ab"); // a 为一个引用
 String b = new String("ab"); // b为另一个引用,对象的内容一样
 String aa = "ab"; // 放在常量池中
@@ -99,6 +106,8 @@ System.out.println(aa == bb);// true
 System.out.println(a == b);// false
 System.out.println(a.equals(b));// true
 System.out.println(42 == 42.0);// true
+```
+
  
 ## 14、为什么重写equals()时必须重写hashCode()方法？
 答：因为两个相等的对象的 hashCode 值必须是相等。如果重写 equals() 时没有重写 hashCode() 方法的话就可能会导致 equals 方法判断是相等的两个对象，hashCode 值却不相等
@@ -109,12 +118,15 @@ StringBuffer 线程安全
 StringBuilder 线程不安全
  
 ## 16、字符串常量池
+```
 // 在堆中创建字符串对象”ab“
 // 将字符串对象”ab“的引用保存在字符串常量池中
 String aa = "ab";
 // 直接返回字符串常量池中字符串对象”ab“的引用
 String bb = "ab";
 System.out.println(aa==bb);// true
+```
+
  
 ## 17、String s1 = new String("abc") 创建了几个字符串对象？
 答：会创建1或者2个字符串对象。如果字符串常量池不存在，那么会先在字符串常量池创建，然后在堆空间创建
@@ -123,9 +135,12 @@ System.out.println(aa==bb);// true
 作用：将指定的字符串对象的引用保存在字符串常量池中。
 如果字符串常量池中保存了对应的字符串对象的引用，就直接返回该引用
 如果字符串常量池中没有保存对应的字符串引用，那就在常量池创建一个指向该字符串对象的引用并返回
+```
 String s3 = new String("java");
 String s4 = s3.intern();
 System.out.println(s3 == s4); //false
+```
+
  
  
  
