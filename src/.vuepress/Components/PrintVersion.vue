@@ -25,9 +25,9 @@ const textConsole = `
 const PrintlnInfo = () => {
   const PackageData: any = AppPackage;
   console.info(textConsole + PackageData.version);
+  console.log("cx-version"+process.env.NODE_ENV)
 };
 
-alert(process.env.NODE_ENV)
 onMounted(() => {
   PrintlnInfo();
 });
