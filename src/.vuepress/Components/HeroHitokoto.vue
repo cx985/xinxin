@@ -98,7 +98,8 @@ const GetWord = (path?) => {
   }
 
   // if (toPath == '/' || toPath == '/en/') {
-  if (toPath == '/xinxin/') {
+  // if (toPath == '/xinxin/') {
+  if (toPath == '/') {
     axios({
       method: 'get',
       url: 'https://v1.hitokoto.cn',

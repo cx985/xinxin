@@ -27,6 +27,7 @@ const PrintlnInfo = () => {
   console.info(textConsole + PackageData.version);
 };
 
+alert(process.env.NODE_ENV)
 onMounted(() => {
   PrintlnInfo();
 });
