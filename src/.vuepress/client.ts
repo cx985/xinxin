@@ -1,6 +1,6 @@
 import { defineClientConfig } from '@vuepress/client';
-import { onMounted } from 'vue';
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, onBeforeUnmount, onMounted } from 'vue';
+import { setDurationTime } from './utils';
 
 const NavBarBeautify = defineAsyncComponent(() => import('./Components/NavBarBeautify.vue'));
 const HeroBG = defineAsyncComponent(() => import('./Components/HeroBG.vue'));
@@ -19,7 +19,17 @@ export default defineClientConfig({
     app.component('MyIcon', MyIcon);
   },
   setup() {
-    onMounted(() => {});
+    let timerInterval: ReturnType<typeof setInterval> | null
+    onMounted(() => {
+      setDurationTime()
+      timerInterval = setInterval(() => {
+        setDurationTime()
+      }, 1000)
+    })
+    onBeforeUnmount(() => {
+      if (timerInterval) clearInterval(timerInterval)
+      timerInterval = null
+    })
   },
   rootComponents: [
     NavBarBeautify,

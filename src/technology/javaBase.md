@@ -8,6 +8,11 @@ tag:
 ---
 
 # JAVA基础
+
+::: tip java基础总结
+这里对java中常见的知识点做一个总结
+::: 
+
 ## 1、jdk、jvm、jre、jit
 jdk: 是一个提供开发和执行，Java程序环境的工具包
 jvm: java虚拟机
@@ -140,6 +145,8 @@ String s3 = new String("java");
 String s4 = s3.intern();
 System.out.println(s3 == s4); //false
 ```
+
+
 
  
  

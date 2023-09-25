@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onMounted, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { mStorage, LoadImage } from '../utils/tools';
+import { nextTick, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { LoadImage, mStorage } from '../utils/tools';
 
 const UpdateBingImg = () => {
   let toPath = window.location.pathname;
@@ -32,11 +32,7 @@ const UpdateBingImg = () => {
   }
 
   let NowData = imgList[nowBingImgIndex];
-  // 区分英文版
-  if (toPath.includes('/en')) {
-    NowData = NowData.EN;
-  }
-
+  
   // 填充文案
   const linkText = document.getElementById('bingLink_text');
 

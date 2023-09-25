@@ -1,15 +1,20 @@
 import { hopeTheme } from 'vuepress-theme-hope';
+import packageData from '../../package.json' assert { type: 'json' };
 import { zhNavbar } from './navbar/index.js';
 import { zhSidebar } from './sidebar/index.js';
 
-const footerICP_HTML = `<a class="footer-about" href="/about/website.html">关于本站</a>`;
+const year = new Date().getFullYear()
+const devDependencies = packageData.devDependencies
+const ThemeVersion =
+  'v' + devDependencies['vuepress-theme-hope'].replace('^', '')
+
+import { AuthorName, HostName } from './utils/constant.ts';
+
 
 export default hopeTheme({
-  hostname: 'https://cx985.github.io/xinxin/',
+  hostname: HostName,
   author: {
-    name: '辰心编码',
-    url: 'https://cx985.github.io/xinxin/',
-    email: '1690273757@qq.com',
+    name: AuthorName,
   },
   iconAssets: '//at.alicdn.com/t/c/font_3855310_p3z6ugbxr7a.css',
   logo: '/pwa/144.png',
@@ -17,7 +22,6 @@ export default hopeTheme({
   editLink: false,
   fullscreen: true,
   navbarAutoHide: 'always',
-  footer: footerICP_HTML,
   pageInfo: [
     'Author',
     'Category',
@@ -29,7 +33,6 @@ export default hopeTheme({
     'PageView',
     //..
   ],
-
   blog: {
     avatar: '//file.mo7.cc/static/lxh_gif/lxh_71.gif',
     roundAvatar: true,
@@ -62,7 +65,6 @@ export default hopeTheme({
 
   encrypt: {
     config: {
-      '/en/demo/encrypt.html': ['1234'],
     },
   },
 
@@ -174,4 +176,18 @@ export default hopeTheme({
       },
     },
   },
-});
+  //自定义页脚
+  footer: `
+    <div>
+      <div class="footer-about">
+        <span>本博客已运行</span>
+        <span id="blog-duration"></span>
+      </div>
+    </div>
+  `
+},
+// 主题行为选项：https://theme-hope.vuejs.press/zh/config/theme/behavior.html
+{
+  custom: true
+}
+);

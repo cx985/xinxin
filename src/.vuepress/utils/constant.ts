@@ -1,0 +1,5 @@
+export const BlogStartDate = '2023-09-25 08:00:00'
+export const Description = '辰心编码，分享，记录，总结。'
+export const Repo = 'cx985/xinxin.me'
+export const AuthorName = '辰心编码'
+export const HostName = 'https://blog.cx985.top'

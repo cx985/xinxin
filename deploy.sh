@@ -10,7 +10,7 @@ pnpm run build
 cd dist
 
 # 如果是发布到自定义域名
-echo 'blog.cx985.top' > CNAME
+echo 'https://blog.cx985.top' > CNAME
 
 git init
 git add -A
