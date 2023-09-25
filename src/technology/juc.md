@@ -49,6 +49,139 @@ wait() 是让获得对象锁的线程实现等待，会自动释放当前线程�
  
 ## 8、可以直接调用Thread类中的run方法吗？
 答：调用 start() 方法方可启动线程并使线程进入就绪状态，直接执行 run() 方法的话不会以多线程的方式执行。
+
+
+## 9. JMM内存模型
+可见性：某个线程要先将变量从主内存拷贝到自己的工作内存空间，然后对变量进行操作，操作完成后
+再将变量写回主内存
+ 
+原子性：不可分割，完整性，即某个线程正在做某个业务时，中间不可以被加塞或者被分割。需要整体完整，
+        要么同时成功，要么同时失败
+有序性
+ 
+## 10、volatile
+volatile 是java虚拟机提供的轻量级同步机制
+它基本上遵守了jmm规范,保证可以性和禁止指令重排，但是不保证原子性
+ 
+如何解决原子性
+使用AtomicInteger   i++  ===》 atomicInteger.getAndIncrement();
+ 
+AtomicInteger 为何能实现原子性
+使用了CAS(比较并交换) 底层unsafe类 +自旋锁保证 原子性
+ 
+CAS 确定会有ABA问题
+ABA问题： 线程A修改一个值后再改回原来的值，此次线程B读到值还是原来的值，而线程B是不知道线程A已经修改过的
+ABA问题解决： 加版本号
+
+```
+AtomicReference 原子引用
+AtomicStampedReference 版本号原子引用
+ 
+//100代表初始值 1代表版本号
+AtomicStampedReference<Integer> ato = new AtomicStampedReference<>(100,1);
+```
+ 
+## 11. java锁
+悲观锁：认为共享资源每次被访问的时候就会出现问题，所以每次在获取资源操作的时候都会上锁，如synchronized 和 ReentrantLock
+乐观锁：认为共享资源每次被访问的时候不会出现问题，无需加锁也无需等待， cas算法+版本号实现， AtomicInteger，LongAddr ，有ABA问题
+公平锁：锁被释放后，先申请的线程先得到锁
+非公平锁：锁被释放后，后申请的线程可能会先获取到锁
+可重入锁：也叫递归锁，指的是线程可以再次获取自己内部锁
+共享锁：一把锁可以被多个线程同时获得 （读锁）
+独占锁：一把锁只能被一个线程获得（写锁）
+ 
+## 12. synchronized 
+- 作用：主要解决的是多个线程之间访问资源的同步性，可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行
+- 使用：
+修饰实例方法（锁当前对象实例）
+    给当前对象实例加锁，进入同步代码前要获得当前对象实例的锁
+    ```
+    synchronized void method(){
+           //业务代码
+    }
+    ```
+  修饰静态方法（锁当前类）
+  ```
+    synchronized static void method(){
+       //业务代码
+    }
+  ```
+  修饰代码块 （锁指定对象/类）
+  ```
+    synchronized(object) 表示进入同步代码库前要获得给定对象的锁
+    synchronized(类.class) 表示进入同步代码前要获得给定Class的锁
+  ```
+ 
+构造方法可以用synchronized修饰么
+答：不能，因为构造方法本身就属于线程安全，不存在同步的构造方法一说
+ 
+synchronized底层原理？
+修饰代码块情况
+  ```
+   public class SynchronizedDemo{
+           public void method(){
+               synchronized(this){
+                  System.out.println("synchronized 代码块");
+               }
+           }
+    }
+  ```
+ 底层使用的是monitorenter 和 monitorexit 指令，一个monitorenter指令包含两个monitorexit指令，这是为了保证锁在同步代码块代码正常执行以及出现异常
+的这两种情况下都能被正确释放，如果自己加了异常，则只会出现一个monitorenter 和一个monitorexit指令
+ 
+ 修饰方法的情况
+ ```
+   public class SynchronizedDemo2{
+       public synchronized void method(){
+           System.out.println("synchronized 方法")
+       }
+    } 
+  ```
+ 
+底层使用的是ACC_SYNCHRONIZED 访问标识，标记是一个同步方法
+ 
+1.6之后synchronized底层做了哪些优化？
+答：1.6以后对锁的实现引入了大量的优化，如偏向锁、轻量级锁、自旋锁、锁消除、锁粗化.
+     锁的四种状态，依次是无锁、偏向锁、轻量级锁、重量级锁，他们会随着竞争激烈而逐渐升级，锁可以升级但不可降级
+ 
+ 
+## 13.synchronized 和 ReentrantLock 的区别
+1.原始构成
+synchronized 是关键字属于jvm层面
+   monitorenter(底层是通过monitor对象来完成，)
+   monitorexit
+Lock是具体类(java.util.concurrent.locks.lock)是api层面的锁   
+ 
+2.使用方法
+synchronized 不需要用户去手动释放锁，当synchronized代码执行完后系统会自动
+让线程释放对锁的占用
+ReentrantLock 则需要用户去手动释放锁若没有主动释放锁，就有可能导致出现死锁现象
+需要配合lock()和unlock()方法配合try/finally语句块来完成
+ 
+3.等待是否可中断
+synchronized 不可中断，除非抛出异常或者正常运行完成
+ReentrantLock 可中断，1.设置超时方法 tryLock(long timeOut,TimeUnit unit)
+2.lockInterruptibly()放代码块中，调用interupt()方法可中断
+ 
+4.加锁是否公平
+synchronized 非公平锁
+ReentrantLock 两者都可以，默认非公平锁，构造方法可以传入boolean值，
+true为公平锁，false为非公平锁
+ 
+5.锁绑定多个条件Condition
+synchronized 没有
+ReentrantLock 用来实现分组唤醒需要唤醒的线程们，可以精确唤醒，而不是像synchronized
+要么随机唤醒一个线程，要么唤醒全部线程
+ 
+ 
+    
+ 
+ 
+ 
+ 
+ 
+ 
+
  
  
  

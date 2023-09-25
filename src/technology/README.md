@@ -13,6 +13,8 @@ permalink: /technology
 :::
 
 - [JAVA基础](./javaBase.md)
+- [JAVA进阶](./javaAdvanced.md)
+- [JAVA集合](./javaCollect.md)
 - [JUC](./juc.md)
 - [Spring](./spring.md)
 
