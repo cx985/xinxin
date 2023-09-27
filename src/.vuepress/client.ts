@@ -12,6 +12,11 @@ const MyLinks = defineAsyncComponent(() => import('./Components/MyLinks.vue'));
 const MyIcon = defineAsyncComponent(() => import('./Components/MyIcon.vue'));
 const BlogBg = defineAsyncComponent(() => import('./Components/BlogBg.vue'));
 const BlogBeautify = defineAsyncComponent(() => import('./Components/BlogBeautify.vue'));
+const CursorEffects = defineAsyncComponent(() => import('./Components/CursorEffects.vue'));
+const DynamicTitle = defineAsyncComponent(() => import('./Components/DynamicTitle.vue'));
+const Bulletin = defineAsyncComponent(() => import('./Components/Bulletin.vue'));
+//const Live2d = defineAsyncComponent(() => import('./Components/live2d/Live2d.vue'));
+
 
 export default defineClientConfig({
   enhance({ app, router, siteData }) {
@@ -40,6 +45,10 @@ export default defineClientConfig({
     CommentHideBtn,
     BlogBg,
     BlogBeautify,
+    CursorEffects,
+    DynamicTitle,
+    Bulletin,
+    //Live2d
     // ...
   ],
 });

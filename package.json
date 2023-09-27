@@ -1,5 +1,5 @@
 {
-  "name": "mo7-blog",
+  "name": "xinxin",
   "version": "1.4.0",
   "description": "辰心编码的个人博客",
   "license": "MIT",
@@ -16,15 +16,17 @@
     "@vuepress/client": "2.0.0-beta.67",
     "aplayer": "^1.10.1",
     "axios": "^1.5.0",
-    "vue": "^3.3.4",
+    "vue": "^3.2.36",
     "vuepress": "2.0.0-beta.67",
     "vuepress-theme-hope": "2.0.0-beta.237"
   },
   "dependencies": {
-    "@types/store": "^2.0.2",
+    "@types/store": "^2.0.3",
     "date-fns": "^2.30.0",
+    "path": "^0.12.7",
     "store": "^2.0.12",
-    "vue-router": "^4.2.4",
+    "typescript": "^5.2.2",
+    "vue-router": "^4.0.13",
     "vuepress-plugin-search-pro": "2.0.0-beta.237"
   }
 }
