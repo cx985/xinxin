@@ -74,7 +74,7 @@ onMounted(() => {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #e493d0;
+  background-color: #1587b4;
   background-image: radial-gradient(closest-side, rgba(235, 105, 78, 1), rgba(235, 105, 78, 0)),
     radial-gradient(closest-side, rgba(243, 11, 164, 1), rgba(243, 11, 164, 0)),
     radial-gradient(closest-side, rgba(254, 234, 131, 1), rgba(254, 234, 131, 0)),

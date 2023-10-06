@@ -10,6 +10,7 @@ export const zhNavbar = navbar([
       { text: '分类', icon: 'category', link: '/category' },
       { text: '标签', icon: 'tag', link: '/tag' },
       { text: '时间轴', icon: 'time', link: '/timeline' },
+      { text: '项目管理', icon: 'category', link: '/manager' },
     ],
   },
 
