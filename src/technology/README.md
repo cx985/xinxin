@@ -6,16 +6,14 @@ index: false
 permalink: /technology
 ---
 
-# 技术
+# java
 
-::: info 所学知识沉淀汇总
+::: info 技术类知识汇总沉淀
 
 :::
 
-- [JAVA基础](./javaBase.md)
-- [JAVA进阶](./javaAdvanced.md)
-- [JAVA集合](./javaCollect.md)
-- [JUC](./juc.md)
-- [Spring](./spring.md)
+- [JAVA](./java/)
+- [前端](./frontend/)
+- [大数据](./bigdata/)
 
 ---

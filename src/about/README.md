@@ -1,5 +1,5 @@
 ---
-icon: info
+icon: guanyuwo
 pageInfo: ['Author', 'PageView']
 index: false
 permalink: /about

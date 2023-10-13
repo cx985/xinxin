@@ -20,12 +20,12 @@ projects:
   - icon: youlian
     name: JAVA基础
     desc: JAVA基础知识
-    link: /technology/javaBase
+    link: /technology/java/javaBase
 
   - icon: liuyan
     name: JAVA基础
     desc: JAVA高级知识
-    link: /technology/juc
+    link: /technology/java/juc
 
 footer: true
 permalink: /
