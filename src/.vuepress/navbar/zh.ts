@@ -14,11 +14,11 @@ export const zhNavbar = navbar([
     text: '管理',
     icon: 'yunyingguanli',
     children: [
-      { text: '全部', icon: 'list', link: '/article' },
-      { text: '分类', icon: 'category', link: '/category' },
-      { text: '标签', icon: 'tag', link: '/tag' },
-      { text: '时间轴', icon: 'time', link: '/timeline' },
-      { text: '项目管理', icon: 'category', link: '/manager' },
+      { text: '全部', icon: 'quanbu-copy', link: '/article' },
+      { text: '分类', icon: 'fenlei', link: '/category' },
+      { text: '标签', icon: 'biaoqian', link: '/tag' },
+      { text: '时间轴', icon: 'shijianzhou', link: '/timeline' },
+      { text: '项目管理', icon: 'xiangmuguanli', link: '/manager' },
     ],
   },
 

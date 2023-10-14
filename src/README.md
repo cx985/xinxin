@@ -1,7 +1,7 @@
 ---
 home: true
 layout: BlogHome
-icon: home
+icon: shouye
 title: 首页
 heroImage: /pwa/144.png
 bgImage: //file.mo7.cc/api/public/bz?idx=1

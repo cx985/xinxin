@@ -4,12 +4,12 @@ export const zhSidebar = sidebar({
   '/about/': [
     {
       text: '返回技术',
-      icon: 'sort',
+      icon: 'fanhui',
       link: '/technology/',
     },
     {
       text: '关于',
-      icon: 'info',
+      icon: 'guanyuwo',
       prefix: '',
       link: '/about/',
       children: 'structure',
@@ -18,12 +18,12 @@ export const zhSidebar = sidebar({
   '/project/': [
     {
       text: '返回技术',
-      icon: 'sort',
+      icon: 'fanhui',
       link: '/technology/',
     },
     {
       text: '音乐',
-      icon: 'music',
+      icon: 'yinle',
       prefix: 'music/',
       children: 'structure',
       link: '/project/music/',
@@ -33,26 +33,26 @@ export const zhSidebar = sidebar({
     '',
     {
       text: '技术',
-      icon: 'note',
+      icon: 'jishufuwu',
       prefix: 'technology/',
       link: '/technology/',
       children: 'structure',
     },
     {
       text: '项目',
-      icon: 'favoritea',
+      icon: 'xiangmu',
       link: '/project/',
       children: [
         {
           text: '音乐',
-          icon: 'music',
+          icon: 'yinle',
           link: '/project/music/',
         },
       ],
     },
     {
       text: '关于',
-      icon: 'info',
+      icon: 'guanyuwo',
       prefix: 'about/',
       link: '/about/website.html',
       children: 'structure',

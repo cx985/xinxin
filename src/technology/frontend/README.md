@@ -1,9 +1,11 @@
 ---
-icon: note
+icon: qianduan
 layout: Layout
 pageInfo: ['Author', 'PageView']
 index: false
 permalink: /technology/frontend
+order: 5
+date: 2023-10-14
 ---
 
 # 前端
@@ -11,6 +13,6 @@ permalink: /technology/frontend
 ::: info 所学知识沉淀汇总
 
 :::
-
+ 
 - [CSS](./css.md)
 ---

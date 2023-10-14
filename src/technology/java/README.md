@@ -1,9 +1,11 @@
 ---
-icon: note
+icon: java
 layout: Layout
 pageInfo: ['Author', 'PageView']
 index: false
 permalink: /technology/java
+date: 2023-10-05
+order: 1
 ---
 
 # JAVA

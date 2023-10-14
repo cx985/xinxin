@@ -1,6 +1,6 @@
 ---
 icon: markdown
-order: 1
+order: 3
 category:
   - 使用指南
 tag:

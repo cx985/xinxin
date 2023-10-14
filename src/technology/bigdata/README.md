@@ -1,9 +1,11 @@
 ---
-icon: note
+icon: dashuju
 layout: Layout
 pageInfo: ['Author', 'PageView']
 index: false
 permalink: /technology/bigdata
+order: 3
+date: 2023-10-15
 ---
 
 # 大数据
