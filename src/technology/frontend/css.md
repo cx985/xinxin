@@ -192,23 +192,218 @@ vertical-align: top;
   - normal: 等于400
   - bold: 等于700
 
- ### line-height
+ ### font-style(一般)
+ 作用: 用于设置文字的常规、斜体显示
+ - normal: 常规显示
+ - italic: 用文字的斜体显示（字体本身支持斜体时，显示的斜体）
+ - oblique: 文本倾斜显示（让文本倾斜）
 
- ### font缩写属性
+ ### line-height（常用）
+ 作用：用于设置文本的行高
+ 行高可以先简单理解为一行文字所占据的高度
+ 严格定义：两行文字**基线**之间的距离
+
+ 基线：与小写字母x最底部对齐的线
+ ![Alt text](image.png)
+
+ 应用场景：假设div中只有一行文字，如何让这行文字在div内部垂直居中？
+ 答案： **让line-height 等于height**
+
+
+ ### font
+ 是一个缩写属性
+ ```css
+ font: italic small-caps 700 30px/1.5 serif;
+ 
+ ```
+ 默认顺序： font-style font-variant font-weight font-size/line-height font-family
+
+ 规则：
+  - font-style,font-variant,font-weight 可以随意调换顺序，也可以省略
+  - /line-height 可以省略，如果不省略，必须跟在font-size后面
+  - font-size, font-family 不可以调换顺序，不可以省略
 
  ## CSS常见选择器
+ 按照一定的规则选出符合条件的元素，为之添加css样式
 
- ### 属性选择器
+ ### 简单选择器(重要)
+ - 元素选择器，使用元素的名称
+ - 类选择器，使用.类名
+ - id选择器，使用 #id
 
- ### 后代选择器
+ ### 属性选择器（了解）
+ ```css
+ <div title="div">我是div</div>
+ <h2 title="h2">我是h2元素</h2>
 
- ### 兄弟选择器
+ <style>
+  [title] {
+    color: red;
+  }
 
- ### 选择器组
+  [title-div] {
+    background-color: blue;
+  }
+ </style>
+ ```
+
+ ### 后代选择器（重要）
+ - 选择器一：所有的后代(直接/间接的后代)
+ 选择器以**空格**分割
+
+ ```css
+  .box span{
+    color: red;
+  }
+ ```
+
+ - 选择器二：直接子代选择器（必须是直接子代）
+ 选择器以>分割
+
+  ```css
+  .box > span{
+    color: red;
+  }
+ ```
+
+ ### 兄弟选择器（理解）
+ - 选择器一：相邻兄弟选择器
+  使用 + 连接
+  ```css
+  <div class="one">哈哈</div>
+  <div>嘿嘿</div>
+  <div>呵呵</div>
+  <div>嘻嘻</div>
+
+  <style>
+  .one + div {
+    color: red;
+  }
+  </style>
+  ```
+
+  - 选择器二：普通兄弟选择器
+  使用 ~ 连接
+  ```css
+  <div class="one">哈哈</div>
+  <div>嘿嘿</div>
+  <div>呵呵</div>
+  <div>嘻嘻</div>
+
+  <style>
+  .one ~ div {
+    color: red;
+  }
+  </style>
+  ```
+
+
+
+ ### 选择器组（重要）
+ - 交集选择器-**两个选择器紧密连接**
+ 需要同时符合两个选择器条件，在开发中通常为了精准选择某一个元素
+
+ ```css
+<div class="box">我是div</div>
+<p class="box">我是p</p>
+
+
+div.box{
+  color: red;
+  font-size: 30px;
+}
+
+ ```
+
+ - 并集选择器：符合一个选择器条件即可，**两个选择器以，号分割**
+ 在开发中通常为了给元素设置相同的样式
+
+ ```css
+body,p,h1{
+  margin: 0;
+}
+
+ ```
 
  ### 伪类选择器
+ 是选择器的一种，它用于选择处于特定状态的元素
+ 常见的伪类有
+ 1. 动态伪类
+ - :link :visited :hover :active :focus
 
- ### 伪元素
+ 使用举例
+ - a:link 未访问的链接
+ - a:visited 已访问的链接
+ - a:hover 鼠标挪动到链接上(重要)
+ - a:active 激活的链接(鼠标在链接上长按住未松开)
+
+ **除了a元素，:hover :active也能用在其他元素上**
+
+ 使用注意
+ - :hover必须放在:link和:visited后面才能完全生效
+ - :active必须放在:hover后面才能完全生效
+ - 建议顺序 :link :visited :hover :active
+
+ 2. 目标伪类(少用)
+ - :target
+
+ 3. 语言伪类（少用）
+ - :lang()
+
+ 4. 元素状态伪类
+
+ - :enabled :disabled :checked
+
+ 5. 结构伪类
+ - :nth-child() :nth-of-type()
+
+ 6. 否定伪类
+ - :not()
+
+ ### 伪元素(了解)
+ 选择特定的一个元素
+
+ 常见的伪元素
+ - :before ::before
+ 在元素前面插入内容
+
+ ```css
+ <div class="box item"></div>
+ <div class="box1 item"></div>
+
+
+ <style>
+  .item::before {
+    content: "123",
+    color: red;
+  }
+
+  .item::after {
+    content: url("../images/icon.svg");
+    position: relative;
+    left: 105px;
+    top: 2px;
+  }
+
+  .box2::after{
+    /* 使用伪元素的过程中，不要将content省略 */
+    content: "",
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #f00;
+  }
+ </stylle>
+ 
+ ```
+
+ - :after ::after
+ - :first-line ::first-line
+ 选择某个元素的首行
+ - :first-letter ::first-letter
+ 可以争对首字母设置属性
+
+ **一般开发中用两个冒号** 
 
 
 
