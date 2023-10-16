@@ -594,10 +594,50 @@ CSS中有个display属性，能修改元素的显示类型，有4个常用值
  padding单独编写是一个缩写属性
  **从0点钟方向开始，沿着顺时针转动，也就是上右下左**
 
+ padding的其他值
+
+| padding值的个数 | padding的例子 |代表的含义
+| ---- | ---- | ----|
+|4|padding: 10px;20px;30px;40px;|top:10px;right: 20px;bottom:30px;left:40px;
+|3|padding: 10px 20px 30px;|缺少left,left使用right的值
+|2|padding:10px 20px;|缺少left,使用right的值，缺少bottom,使用top的值
+|1|padding:10px;|top/right/bottom/left都使用10
+
 
  ### 边框/圆角border
 
+ boder用于设置盒子的边框
+ 边框相对与content/padding/margin来说特殊一点
+ - 边框具备宽度width
+ - 边框具备样式style
+ - 边框具备颜色color
+
+ 边框宽度
+ - border-top-width、border-right-width、border-bottom-width、border-left-width
+ - border-width是上面4个属性的简写属性
+
+ 边框颜色
+ - border-top-color、border-right-color、border-bottom-color、border-left=color
+ - border-color是上面4个属性的简写属性
+
+ 边框样式
+ - border-top-style、border-right-style、border-bottom-style、border-left-style
+- border-style是上面4个属性的简写属性
+
+可以简写border: 1px solid red;
+
  ### 外边距margin
+margin属性用于设置盒子的外边距，通常用于元素和元素之间的间距
+
+margin包括四个方向
+- margin-top: 上内边距
+- margin-right: 右边距
+- margin-bottom： 下内边距
+- margin-left: 左内边距
+
+缩写属性
+margin: 10px 20px 30px;
+
 
  ### 盒子和文字阴影
 
