@@ -241,7 +241,7 @@ vertical-align: top;
     color: red;
   }
 
-  [title-div] {
+  [title=div] {
     background-color: blue;
   }
  </style>
@@ -541,11 +541,59 @@ CSS中有个display属性，能修改元素的显示类型，有4个常用值
 
  ## CSS的盒子模型
 
+ 
  ### 认识盒子模型
+
+ html的每一个元素都可以看作一个盒子，主要包含
+ - 内容(content)
+   - 元素的内容width/height
+
+ - 内边距（padding）
+   - 元素和内容之间的间距
+
+ - 边框(border)
+   - 元素自己的边框
+
+ - 外边距(margin)
+   - 元素和其他元素之间的间距
+
+  ![Alt text](image-1.png)
+
+  **因为盒子有四边，所以margin/padding/border都包括top/right/bottom/left四个边**
+  ![Alt text](image-2.png)
+
+
 
  ### 内容width/height
 
+ 宽度设置：width
+ 高度设置：height
+
+ 未设置width,默认auto
+
+ 另外我们还可以设置如下属性
+ - min-width: 最小宽度，无论内容多少，宽度都大于或等于min-width
+ - max-width: 最大宽度，无论内容多少，宽度都小于或等于max-width
+ - 移动端适配时，可以设置最大宽度和最小宽度
+
+ 
+
+
+
  ### 内边距padding
+
+ padding属性用于设置盒子的内边距，通常用于设置边框和内容之间的间距
+
+ padding包括四个方向，有如下取值
+
+ - padding-top :   上内边距
+ - padding-right : 右内边距
+ - padding-bottom: 下内边距
+ - padding-left: 左内边距
+
+ padding单独编写是一个缩写属性
+ **从0点钟方向开始，沿着顺时针转动，也就是上右下左**
+
 
  ### 边框/圆角border
 
