@@ -770,12 +770,68 @@ margin: 10px 20px 30px;
 </html>
   ```
 
+ 元素水平居中方案（重要）
+ - 行内级元素
+   - 水平居中：在父元素中设置text-align: center
+
+ - 块级元素
+    - 水平居中： margin: 0 auto;
 
 
 
- ### 盒子和文字阴影
+### outline
+外轮廓
+- 不占用空间
+- 默认显示在border的外面
+
+```css
+.box{
+  outline: 10px solid #0f0;
+  outline: none
+}
+```
+
+### 盒子和文字阴影
+### 盒子阴影- box-shadow
+设置盒子阴影，有四个值
+- 第一个值，offset-x,水平方向的偏移，正数往右偏移
+- 第二个值，offset-y,垂直方向的偏移，正数往下偏移
+- 第三个值，blur-radius, 模糊半径
+- 第四个值，spread-radius，延伸半径
+- color: 阴影的颜色
+
+```css
+.box{
+  box-shadow: 5px 5px 10px orange, 10px 10px 10px green;
+}
+```
+
+### 文字阴影 text-shadow
+设置文字阴影
+
+```css
+.box{
+  text-shadow: 5px 5px 5px orange, 10px 10px 5px blue, 15px 15px 5px green;
+}
+
+```
+
+### 行内非替换元素的注意事项
+span/a/strong/i
+- 内容： width/height(压根不生效)
+- 内边距：上下会被撑起来，但是不占据空间
+- 边框： 上下会被撑起来，但是不占据空间
+- 外边距：上下的margin是不生效的
+
 
  ### box-sizing
+ 用来设置盒子模型中宽高的行为
+ - content-box
+  - padding、border都布置在width、height外边
+  元素实际占用宽度 = border + padding + width
+
+ - **border-box(经常用)**
+  - padding、border都布置在width、height里边
 
 
 
