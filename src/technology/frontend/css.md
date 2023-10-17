@@ -638,6 +638,140 @@ margin包括四个方向
 缩写属性
 margin: 10px 20px 30px;
 
+小练习：两个div盒子为父子关系，让子盒子向左移动10px
+- 方式一： 设置父盒子的paddding-left值10px,需要注意的是padding-left值过大时，会导致父盒子宽度变大，如何解决呢？
+  可以设置父盒子的box-sizing: border-box
+```css
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box{
+        width: 300px;
+        height: 300px;
+        background-color: #ff0;
+        padding-left: 100px;
+        box-sizing: border-box;
+    }
+    .main{
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+    }
+</style>
+<body>
+    <div class="box">
+        <div class="main">
+    </div>
+</body>
+</html>
+
+```
+
+- 方式二：设置子盒子的margin-left为10px, 不过需要注意的是，margin-top过大时，父盒子会跟着向下移动，怎么解决呢？
+  可以设置父盒子的overflow:auto
+
+```css
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box{
+        width: 300px;
+        height: 300px;
+        background-color: #ff0;
+        overflow: auto;
+    }
+    .main{
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+        margin-left: 20px;
+        margin-top: 100px;
+    }
+</style>
+<body>
+    <div class="box">
+        <div class="main">
+    </div>
+</body>
+</html>
+
+```
+
+**总结**：**对于父子元素来说，设置父元素的padding-left让子盒子向左移动是比较推荐的方式**
+
+
+- margin的传递
+  1. margin-top传递
+  如果**块级元素的顶部线和父元素的顶部线重叠**，那么这个块级元素的margin-top值会传递给**父元素**
+
+  2. margin-bottom传递
+   如果**块级元素的底部线和父元素的底部线重写**，并且父元素的高度是auto,那么这个块级元素的margin-bottom的
+   值会传递给父元素
+
+   那么如何防止出现传递问题？
+   - 给父元素设置padding-top\padding-bottom
+   - 给父元素设置border
+   - 触发bfc: 设置父元素overflow为auto
+
+ 建议：
+  - margin一般是用来设置兄弟元素之间的间距
+  - padding一般是用来设置父子元素之间的间距
+
+ - 上下margin的折叠
+  1. 垂直方向上相邻的2个margin(margin-top、margin-bottom)有可能会合并为1个margin,这种现象叫做
+   collapse（折叠）
+  2. 水平方向上的margin(margin-left,margin-right)永远不会collapse
+   
+  折叠后最终值得计算规则？
+  两个值进行比较，取较大得值
+
+  如何防止margin collapse?
+  只设置其中一个元素得margin
+
+  案例演示：
+  ```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box{
+        width: 300px;
+        height: 300px;
+        background-color: #ff0;
+        margin-bottom: 20px;
+    }
+    .main{
+        width: 100px;
+        height: 100px;
+        background-color: skyblue;
+        margin-top: 50px;
+        
+    }
+</style>
+<body>
+    <div class="box">
+    </div>
+    <div class="main"></div>
+</body>
+</html>
+  ```
+
+
+
 
  ### 盒子和文字阴影
 
