@@ -883,7 +883,7 @@ span/a/strong/i
 - auto: 默认值，以背景图本身大小显示
 - cover: 缩放背景图，以完全覆盖铺满元素，可能背景图片部分看不见
 - contain: 缩放背景图，宽度或者高度铺满元素，但是图片保持宽高比
-- <percentage>: 百分比，相对于背景区
+- percentage: 百分比，相对于背景区
 - length: 具体的大小，比如100px
 
 ```css
