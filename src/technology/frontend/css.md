@@ -736,7 +736,7 @@ margin: 10px 20px 30px;
   两个值进行比较，取较大得值
 
   如何防止margin collapse?
-  只设置其中一个元素得margin
+  答：只设置其中一个元素得margin
 
   案例演示：
   ```css
@@ -785,10 +785,10 @@ margin: 10px 20px 30px;
 - 默认显示在border的外面
 
 ```css
-.box{
-  outline: 10px solid #0f0;
-  outline: none
-}
+ .box{
+    outline: 10px solid #0f0;
+    outline: none
+  }
 ```
 
 ### 盒子和文字阴影
@@ -827,11 +827,114 @@ span/a/strong/i
  ### box-sizing
  用来设置盒子模型中宽高的行为
  - content-box
-  - padding、border都布置在width、height外边
+   - padding、border都布置在width、height外边
   元素实际占用宽度 = border + padding + width
 
  - **border-box(经常用)**
-  - padding、border都布置在width、height里边
+   - padding、border都布置在width、height里边
+
+ ### 网站常用背景色
+ - #f5f5f5
+
+ ### 单行文字显示省略号
+ ```css
+  .item{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+ ```
+
+ ## 多行文字显示省略号
+ ```css
+ .box{
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+ }
+
+ ```
+
+## CSS的背景设置
+作用：为了让网页更加美观
+### background-image
+作用：用于设置元素的背景图片
+- 会盖在background-color上面
+- 也可以设置多张,第一张显示在最前面
+```css
+.box{
+  background-image: url(../images/1.jpg),url(../images/2.png);
+  background-repeat: no-repeat;
+}
+```
+
+### background-repeat
+用于设置背景图片是否要平铺
+有如下几个值：
+- repeat: 平铺
+- no-repeat: 不平铺
+- repeat-x: 只在水平方向平铺
+- repeat-y: 只在垂直方向平铺
+
+### background-size
+用来设置背景图片的大小
+有如下几个值：
+- auto: 默认值，以背景图本身大小显示
+- cover: 缩放背景图，以完全覆盖铺满元素，可能背景图片部分看不见
+- contain: 缩放背景图，宽度或者高度铺满元素，但是图片保持宽高比
+- <percentage>: 百分比，相对于背景区
+- length: 具体的大小，比如100px
+
+```css
+  .box{
+    background-size: 100% 100%;
+    background-size: 100px 100px;
+    background-size: 100px auto;
+  }
+
+```
+
+### background-position
+用来设置背景图片在水平、垂直方向上的具体位置
+- 可以设置具体的数值，比如20px, 30px
+- 水平方向还可以设值：left,center,right
+- 垂直方向还可以设值：top,center,bottom
+- 如果只设置了1个方向，另一个方向默认center
+
+```css
+  .box{
+    background-position: 100px 100px;
+    background-position: right bottom;
+    background-position: center;
+  }
+
+```
+
+### background-attachment
+作用：决定背景图像的位置是在视口内固定，或者随着包含它的区块滚动
+可以设置3个值
+- scroll: 此关键属性值表示背景相对于元素本身固定，而不是随着它的内容滚动
+- local: 此关键属性值表示背景相对于元素的内容固定。如果一个元素拥有滚动机制，背景将会随着元素的内容滚动
+- fixed: 此关键属性值表示背景相对于视口固定。即使一个元素拥有滚动机制，背景也不会随着元素的内容滚动
+
+### background
+一系列背景相关属性的缩写属性
+语法： [color] [image] [repeat] [attachment] [position] / [size] [origin] [clip];
+
+```css
+.box{
+  background: url('image.jpg');
+  background: url('image.jpg') repeat-x;
+  background: #f1f1f1;
+}
+
+
+```
+
+- background-image和img对比
+  1. img，作为网页内容的重要组成部分，比如广告图片，logo图片，文章配图，产品图片
+  2. background-image,可有可无。有，能让网页更加美观。无，也不影响用户获取完整的网页内容信息 
 
 
 

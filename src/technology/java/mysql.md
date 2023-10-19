@@ -69,3 +69,77 @@ drop procedure if exists modify_field_test_table;
 
 ```
 
+
+# ORACLE
+
+## 创建表
+- 标准写法
+```sql
+CREATE TABLE test_table(
+  id varchar2(255) primary key,
+  name varchar2(50),
+  birthdate date,
+  is_active char(1)
+);
+
+COMMENT ON TABLE test_table IS '测试表名';
+COMMENT ON COLUMN test_table.name IS '测试姓名';
+
+```
+
+- 生产环境执行-推荐写法(需要在命令窗口执行)
+  ```
+    PROMPT test_table 创建表
+    DECLARE
+        FLAG_NUM NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO FLAG_NUM
+        FROM USER_TABLES ATS
+        WHERE ATS.TABLE_NAME = UPPER('test_table');
+        IF FLAG_NUM = 0 THEN
+            EXECUTE IMMEDIATE 'CREATE TABLE test_table(
+                        id varchar2(255) primary key,
+                        name varchar2(50),
+                        birthdate date,
+                        is_active char(1)
+              )';
+            -- ADD COMMENTS TO THE COLUMNS
+            EXECUTE IMMEDIATE 'COMMENT ON TABLE test_table IS ''测试表名''';
+            EXECUTE IMMEDIATE 'COMMENT ON COLUMN test_table.name IS ''测试姓名''';
+        END IF;
+    END;
+    /
+    COMMIT;
+
+
+  ```
+
+  ![Alt text](image.png)
+
+## 更新表
+
+- 修改表字段varchar为clob
+  ```
+  alter table test_table rename column name to name_clob;
+  alter table test_table add name clob;
+  update test_table set name=trim(name_clob);
+  alter table test_table drop column name_clob;
+  comment  on  column  test_table.name   is  '测试修改';
+  ```
+- 表后面新增字段
+  ```sql
+  alter table test_table
+  add (sms_type number(9) default null,
+      bkry_id varchar2(255)  default null
+  );
+
+  comment  on  column  test_table.sms_type   is  '短信类型';
+  comment  on  column  test_table.bkry_id    is  '布控人员id'
+  ```
+
+- 修改表字段长度
+  ```sql
+
+  alter table test_table modify (bkry_id varchar2(50));
+
+  ```
