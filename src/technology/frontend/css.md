@@ -1036,11 +1036,65 @@ html提供了3组常见的用来展示列表的元素
 - tr
   表格中的行
 - td
+
+- thead
+  表格的表头
+
+- tbody
+  表格的主体
+
+- tfoot
+  表格的页脚
+
+- caption
+  表格的标题
+
+- th
+ 表格的表头单元格
   
 
 ### 4.表格合并
+ - 跨列合并： 使用colspan
+   在最左边的单元格写上colspan属性，并且省略掉合并的td;
+
+ - 跨行合并：使用rowspan
+   在最上面的单元格协商rowspan属性，并且省略掉后面tr中的td
+
+   ```css
+   <table>
+      <tr>
+        <td colspan="2">1-1</td>
+      </tr>
+      <tr>
+        <td>2-1</td>
+        <td>2-2</td>
+      </tr>
+   </table>
+   
+   ```
+
 
 ### 表单元素
+ - form
+  表单
+
+- input
+ 单号文本输入框
+
+  type有很多值：text,password,radio,checkbox,button,reset,submit,file
+
+- textarea
+  多行文本框
+
+- select, option
+  下拉选择框
+
+- button
+  按钮
+
+- label
+  表单元素的标题
+
 
 ### 表单常见属性
 
