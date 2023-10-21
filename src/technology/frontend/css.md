@@ -17,14 +17,14 @@ SEO（search engine optimization）: 搜索引擎优化
 ## css样式优先级
 
   - 优先级规则：行内样式 > 内部样式 = 外部样式
-  注意
+    注意
   1. 内部样式、外部样式这两者优先级相同，且后面的会覆盖前面的 （后来者居上）
   2. 同一个样式表中，优先级也和编写顺序有关，且后面的会覆盖前面的
 
 
   ## css 选择器
   - 标签选择器
-  
+
   ```
    div{
     color: red;
@@ -69,12 +69,12 @@ vertical-align: top;
   <link rel="stylesheet" href="./css/style.css">
   <link rel="icon" href="../images/favicon.ico">
   ```
- 
+
   ### Chrome浏览器开发者工具
   - 打开
    1. F12打开
    2. 右键->检查
-   
+
   - 其他技巧
   1. 快捷健：ctrl+ 可以调整页面或者调试工具的字体大小
   2. 可以通过删除某些元素来查看网页结构
@@ -93,7 +93,7 @@ vertical-align: top;
    - underline: 下划线
    - overline: 上划线
    - line-through: 中划线
-  
+
 
 
  ### text-transform(了解)
@@ -161,7 +161,7 @@ vertical-align: top;
  ```css
  word-spacing: 30px;
  ```
- 
+
 
  ## CSS字体属性
  ### font-size(重要)
@@ -170,7 +170,7 @@ vertical-align: top;
   - 具体数值+单位
    1. 比如100px
    2. 使用em单位(不推荐)：1em代表100%，2em代表200%
-   
+
   - 百分比
     1. 基于父元素的font-size计算，比如50%表示等于父元素font-size的一半
  ### font-family(重要，不过一般仅设置一次)
@@ -266,11 +266,11 @@ vertical-align: top;
   .box > span{
     color: red;
   }
- ```
+  ```
 
  ### 兄弟选择器（理解）
  - 选择器一：相邻兄弟选择器
-  使用 + 连接
+    使用 + 连接
   ```css
   <div class="one">哈哈</div>
   <div>嘿嘿</div>
@@ -285,7 +285,7 @@ vertical-align: top;
   ```
 
   - 选择器二：普通兄弟选择器
-  使用 ~ 连接
+    使用 ~ 连接
   ```css
   <div class="one">哈哈</div>
   <div>嘿嘿</div>
@@ -358,9 +358,107 @@ body,p,h1{
 
  5. 结构伪类
  - :nth-child() :nth-of-type()
+   
+   :nth-child(1): 是选择父元素中的第一个子元素
+   ```css
+    <style>
+      ul li:nth-child(1) {
+        color: red;
+      }
+    </style>
 
- 6. 否定伪类
+    <ul>
+      <li>列表元素1</li>
+      <li>列表元素2</li>
+      <li>列表元素3</li>
+    </ul>
+   ```
+   :nth-child(2n)
+     - n代表任意正整数和0
+     - 是父元素中的第**偶数**个子元素(第2、4、6、8...个)
+     - 跟:nth-child(even)同义
+  
+   :nth-child(2n+1)
+     - n代表任意正整数和0
+     - 是父元素中的第**奇数**个子元素(第2、4、6、8...个)
+     - 跟:nth-child(odd)同义
+  
+   :nth-child(-n + 2)
+    - 代表前2个子元素
+
+   ```css
+    <style>
+     <!-- 设置偶数被选中 -->
+      ul li:nth-child(2n) {
+        color: green;
+      }
+
+      <!-- 设置奇数被选中 -->
+      ul li:nth-child(2n+1) {
+        color: blue;
+      }
+
+      <!-- 选中前三个 -->
+      ul li:nth-child(-n + 3) {
+        color: red;
+      }
+
+
+    </style>
+
+    <ul>
+      <li>列表元素1</li>
+      <li>列表元素2</li>
+      <li>列表元素3</li>
+      <li>列表元素4</li>
+    </ul>
+
+   ```
+
+
+   :nth-of-type() 用法跟:nth-child()类似
+   不同点是：nth-of-type()计数时只计算同种类型的元素
+
+   ```css
+    <!-- 需求：选择box中div的元素，并且是第三个子元素 -->
+
+    .box > div:nth-of-type(3) {
+      color: blue;
+    }
+
+    <div class="box">
+      <div>我是列表一</div>
+      <p>我是p元素</p>
+      <div>我是div1</div>
+      <div>我是div2</div>
+      <div>我是div3</div>
+      <span>我是span</span>
+      <div>我是div4</div>
+      <div>我是div5</div>
+      <div>我是div6</div>
+    </div>
+    
+
+   ```
+
+ 1. 否定伪类
  - :not()
+
+   格式是：not(x)
+   x是一个简单选择器
+
+   ```css
+    .box :not(.why){
+      color: blue;
+    }
+
+    <div class="box">
+      <div class="item">列表</div>
+      <div class="why">列表</div>
+      <div class="item">列表</div>
+      <div>列表</div>
+    </div>
+   ```
 
  ### 伪元素(了解)
  选择特定的一个元素
@@ -536,14 +634,14 @@ CSS中有个display属性，能修改元素的显示类型，有4个常用值
  .box2{
   opacity: 0
  }
- ```
+```
 
  ### overflow属性
 
 
  ## CSS的盒子模型
 
- 
+
  ### 认识盒子模型
 
  html的每一个元素都可以看作一个盒子，主要包含
@@ -716,9 +814,9 @@ margin: 10px 20px 30px;
   1. margin-top传递
   如果**块级元素的顶部线和父元素的顶部线重叠**，那么这个块级元素的margin-top值会传递给**父元素**
 
-  2. margin-bottom传递
+  1. margin-bottom传递
    如果**块级元素的底部线和父元素的底部线重写**，并且父元素的高度是auto,那么这个块级元素的margin-bottom的
-   值会传递给父元素
+    值会传递给父元素
 
    那么如何防止出现传递问题？
    - 给父元素设置padding-top\padding-bottom
@@ -731,9 +829,9 @@ margin: 10px 20px 30px;
 
  - 上下margin的折叠
   1. 垂直方向上相邻的2个margin(margin-top、margin-bottom)有可能会合并为1个margin,这种现象叫做
-   collapse（折叠）
+      collapse（折叠）
   2. 水平方向上的margin(margin-left,margin-right)永远不会collapse
-   
+
   折叠后最终值得计算规则？
   两个值进行比较，取较大得值
 
@@ -830,7 +928,7 @@ span/a/strong/i
  用来设置盒子模型中宽高的行为
  - content-box
    - padding、border都布置在width、height外边
-  元素实际占用宽度 = border + padding + width
+    元素实际占用宽度 = border + padding + width
 
  - **border-box(经常用)**
    - padding、border都布置在width、height里边
@@ -973,7 +1071,7 @@ html提供了3组常见的用来展示列表的元素
         margin: 0;
         list-style: none
       }
-
+     
      <h2>电影排名</h2>
      <ol>
         <li>星际穿越</li>
@@ -981,7 +1079,7 @@ html提供了3组常见的用来展示列表的元素
         <li>兰闺喜事</li>
         <li>大话西游</li>
      </ol>
-
+     
      ```
 - 无序列表：ul(unordered list)、li
   ```css
@@ -990,7 +1088,7 @@ html提供了3组常见的用来展示列表的元素
         margin: 0;
         list-style: none
       }
-
+  
      <h2>常见编程语言</h2>
      <ul>
         <li>java</li>
@@ -1018,13 +1116,13 @@ html提供了3组常见的用来展示列表的元素
       <dd>html</dd>
       <dd>css</dd>
     </dl>
-
+  
     <dl>
       <dt>阶段2</dt>
       <dd>框架实战</dd>
       <dd>css</dd>
     </dl>
-
+  
   ```
 
 
@@ -1051,7 +1149,7 @@ html提供了3组常见的用来展示列表的元素
 
 - th
  表格的表头单元格
-  
+
 
 ### 4.表格合并
  - 跨列合并： 使用colspan
@@ -1076,19 +1174,77 @@ html提供了3组常见的用来展示列表的元素
 
 ### 表单元素
  - form
-  表单
+    表单
+  
+  form通常作为表单元素的父元素
+
+  常见属性
+  1. action ： 用于提交表单数据的请求url
+  2. method:   请求方法(get和post)，默认get
+   
+  ```css
+    <form action="http://www.baidu.com/s">
+      <input type="text" name="wd">
+      <button type="submit">百度一下</button>
+    </form>
+  ```
+
+  
 
 - input
  单号文本输入框
 
   type有很多值：text,password,radio,checkbox,button,reset,submit,file
 
+ 常见的布尔属性有disabled、checked、readonly、multiple、autofocus、selected
+ 
+ ```css
+ <form action="">
+ 	<input type="button" value="普通按钮"/>
+ 	<input type="reset" value="重置按钮"/>
+     <input type="submit" value="提交按钮"/>
+ </form>
+ ```
+ 
+  
+ 
+ input和label的关系
+ 
+ - label元素一般跟input配合使用，用来表示input的标题
+ 
+ - label可以跟某个input绑定，点击label就可以激活对应的input变为选中
+ 
+   ```css
+   <div>
+   	<label for="username">
+   		用户：
+    		<input id="username" type="text">
+      </label>
+   </div>
+   ```
+ 
+   
+ 
+ 
+ 
 - textarea
   多行文本框
 
+  
+  
 - select, option
   下拉选择框
 
+  ```css
+  <select name="fruits" id="" multiple size="2">
+  	<option value="apple" selected>苹果</option>
+  	<option value="banana">香蕉</option>
+  	<option value="orange">橘子</option>
+  </select>
+  ```
+  
+  
+  
 - button
   按钮
 
@@ -1099,16 +1255,59 @@ html提供了3组常见的用来展示列表的元素
 ### 表单常见属性
 
 
-## 常见Emment语法
+## 常见Emmet语法
 
-### 1.认识Emment
+### 1.认识Emmet
+
+   Emment 是一个能大幅度提高前端开发效率的一个工具
+
+- 在前端开发过程中，一大部门的工作是写html,css代码，如果手动来编写效果会非常低
+- vscode内置了Emmet语法，在后缀为.html/.css中输入缩写后按tab/enter键即可自动生成相应的代码
 
 ### 2.常见Emment语法
+  - >(子代) 和 + （兄弟）
+  div>h1+p
+  div+p+ul>li
 
-### 3.常见的结构伪类
+  - *(多个) 和^(上一级)
+   ul>li*5
+   div+div>p>span^h1
+   div+div>p>span^^^^h1
 
-### 4.否定伪类的使用
+  - () 分组
+
+  - 属性(id属性，class属性，普通属性){}(内容)
+   div#header+div#main>.container>a[href]
 
 
+  - $ 数字
+   ul>li{列表内容$}*10
+
+## 额外知识补充
+
+### border图形
+
+### web网络字体
+
+### web字体图标
+
+### css精灵图
+
+### cursor属性
+
+
+## css元素定位
+
+### 标准流布局
+
+### 相对定位
+
+### 固定定位
+
+### 绝对定位
+
+### 粘性定位
+
+### z-index
 
 
