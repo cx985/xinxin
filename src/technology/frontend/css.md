@@ -1,7 +1,7 @@
 ---
 icon: CSS
 order: 1
-date: 2023-10-14
+date: 2023-10-23
 category:
   - css
 tag:
@@ -720,6 +720,10 @@ CSS中有个display属性，能修改元素的显示类型，有4个常用值
  - border-top-color、border-right-color、border-bottom-color、border-left=color
  - border-color是上面4个属性的简写属性
 
+   ```css
+    border-right-color: transparent;
+   ```
+
  边框样式
  - border-top-style、border-right-style、border-bottom-style、border-left-style
 - border-style是上面4个属性的简写属性
@@ -1286,28 +1290,653 @@ html提供了3组常见的用来展示列表的元素
 ## 额外知识补充
 
 ### border图形
+border也可以做图形
+
+```css
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box{
+        width: 100px;
+        height: 100px;
+        border: 50px solid orange;
+
+        border-right-color: transparent;
+        border-bottom: transparent;
+        border-left-color: transparent;
+
+        box-sizing: border-box;
+
+        /* 旋转 */
+        transform-origin: center 25%;
+        transform: rotate(180deg);
+    }
+</style>
+<body>
+   <div class="box">
+
+   </div>
+</body>
+</html>
+
+```
+ 
+ ![Alt text](image-3.png)
 
 ### web网络字体
+```css
+  @font-face {
+    font-family: "hyfont01";
+    src: url(./fonts/AaJianHaoTi-2.ttf)
+  }
+
+  body{
+    font-family: "hyfont01";
+  }
+```
+
 
 ### web字体图标
+字体图标的好处
+- 放大不会失真
+- 可以任意切换颜色
+- 用到很多个图标时，文件相对图片较小
+
+字体图标的使用
+- 登录阿里icons(https://www.iconfont.cn/)
+- 下载代码，拷贝到项目中
+
 
 ### css精灵图
+ 将各种小图片合并放在一张图片上，然后利用css的背景定位来显示对应的图片部分
+
+ 如何获取精灵图的位置
+ http://www.spritecow.com
+
+ ```css
+  i.hot-icon{
+    background-image: url(../images/topbar_sprite.png);
+    background-repeat: no-repeat;
+
+    display: inline-block;
+    width: 26px;
+    height: 13px;
+    background-position: -192px 0;
+
+  }
+  
+  <i class="hot-icon"></i>
+ ```
 
 ### cursor属性
+ 设置鼠标指针在元素上面时显示样式
+
+- auto：浏览器根据上下文决定指针的显示样式，比如根据文本和非文本切换指针样式
+
+- pointer：一只小手
+
+- text: 一条竖线
+
+- none: 没有任何指针显示在元素上面
 
 
 ## css元素定位
 
 ### 标准流布局
+ 默认情况下，元素是按照标准流进行排布
+ 从左到右、从上到下按顺序摆放好
+ 默认情况下，互相之间不存在层叠现象
+
+ 在标准流中，可以使用margin、padding对元素进行定位
+ 但是明显的缺点是
+ 设置一个元素的margin或者padding,通常会影响到标准流中其他元素的定位效果
+ 不便于实现元素层叠的效果
+
+ 如果我们希望一个元素可以跳出标准流，单独对某个元素进行定位呢？
+ 可以通过position属性来进行设置
+
+ 认识元素的定位
+  - 定位允许从正常的文档流布局中取出元素，并使它们具有不同的行为
+  - 例如放在另一个元素的上面
+  - 或者始终保持在浏览器视窗内的同一位置
+
+ 认识position属性
+ 常见值
+  - static: 默认值，静态定位
+      元素按照标准版布局
+      left,right,top,bottom没有任何作用
+
+  - relative: 相对定位
+  - absolute: 绝对定位
+  - fixed: 固定定位
+  - sticky: 粘性定位
+
 
 ### 相对定位
+ - **元素依然按照标准流布局，不脱标**
+ - **可以通过left,right,top,bottom进行定位**
+ - **定位参照对象是元素自己原来的位置**
+ - left,right,top,bottom用来设置元素的具体位置，对元素的作用如下图
+    ![Alt text](image-4.png)
+ - 相对定位应用场景
+    **在不影响其他元素位置的前提下，当当前元素位置进行微调**
+
+ ```css
+  .box{
+    position: relative;
+    left: 50px;
+    top: 50px;
+  }
+ 
+ ```
+
+ ```css
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+   div{
+    font-size: 20px;
+   }
+
+   span{
+    font-size: 12px;
+    position: relative;
+    bottom: 8px;
+   }
+</style>
+<body>
+   <div>
+    3<span>2</span> + 2<span>3</span> = 17
+   </div>
+</body>
+</html>
+ 
+ ```
 
 ### 固定定位
+ 
+元素脱离标准流(脱标)
+可以通过left,right,top,bottom进行定位
+定位参照对象是视口（viewport:文档的可视区域）
+当画布滚动时，固定不动
+
+```css
+ .box{
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+ }
+```
 
 ### 绝对定位
+ 
+ **元素脱离标准流，脱标**
+
+可以通过left,right,top,bottom进行定位
+- 定位参考对象是**最邻近的定位祖先元素**
+- 如果**找不到这样的祖先元素，参考对象是视口**
+
+什么是定位元素？
+- position值不为static的元素
+- 也就是position值为relative,absolute,fixed的元素
+
+```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+   .container{
+      width: 800px;
+      height: 800px;
+      background-color: #f00;
+      position: relative;
+   }
+   .box{
+      width: 500px;
+      height: 500px;
+      background-color: #0f0;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+   }
+   image{
+      width: 100px;
+   }
+   strong{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+   }
+</style>
+<body>
+   <div class="container">
+      <div class="box">
+         <span>我是span元素</span>
+         <strong>我是strong元素</strong>
+         <img src="./1.webp" alt="">
+         <div>我是div元素</div>
+      </div>
+   </div>
+</body>
+</html>
+
+```
+
+- 子绝父相
+绝大多数情况下，子元素的绝对定位都是相对于父元素进行定位
+
+如果希望子元素相对－元素进行定位，又不希望**父元素脱标**，常用的解决方案
+- 父元素设置position: relative (让父元素成为定位元素，而且父元素不脱离标准流)
+- 子元素设置positive: absolute
+- 简称子绝父相
+
+
+绝对定位元素的特点（absolute/fixed）
+- 可以随意设置宽高
+- 宽高默认由内容决定
+- 不再受标准流的约束
+  - 不再严格按照从上到下，从左到右排布
+  - 不再严格区分块级，行内级，行内块级的很多特性都会消失
+- 不再给父元素汇报宽高数据(父元素如果没有内容，也没设置宽高，子元素设置absolute，父元素会消失)
+
+- 脱标元素内部默认还是按照标准流布局
+- 对于绝对定位元素来说
+  - 定位参照对象的宽度= left+right+ margin-left +margin-right + 绝对定位元素的实际占用宽度
+  - 定位参照对象的高度 = top + bottom + margin-top + margin-bottom + 绝对定位元素的实际占用高度
+
+- 如果希望绝对定位元素的宽高和定位参照对象一样，可以给绝对定位元素设置以下属性
+  - left:0 right:0 top:0 bottom:0 margin:0
+
+- 如果希望绝对定位元素在定位参照对象中居中显示，可以给绝对定位元素设置以下属性
+  - left:0, right:0, top:0, bottom:0 ,margin: auto
+  - 另外，还得设置具体的宽高值（宽高小于定位参照对象的宽高） 
+
+  练习： 让子元素在父元素里面水平和垂直都居中显示
+
+  ```css
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <style>
+      .container {
+          width: 800px;
+          height: 800px;
+          background-color: #f0f;
+          position: relative;
+      }
+
+      .box{
+          width: 400px;
+          height: 400px;
+          background-color: #f00;
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          top:0;
+          margin: auto;
+      }
+    </style>
+    <body>
+      <div class="container">
+          <div class="box">
+          </div>
+      </div>
+    </body>
+    </html>
+  ```
+
 
 ### 粘性定位
+ 比起其他定位值要新一些position: sticky
+ 可以看作是相对定位和固定(绝对)定位的结合体
+ 它允许被定位的元素表现得像相对定位一样，直到它滚动到某个阈值点
+ 当达到这个阈值点时，就会变成固定(绝对)定位
+
+ sticky是相对于最近的滚动祖先包含视口的
+
+ ```css
+  .box{
+    position: sticky;
+    top: 0;
+  }
+ ```
+
+ position值对比
+
+ ![Alt text](image-5.png)
 
 ### z-index
 
+作用：用来设置定位元素的层叠顺序，仅对**定位元素有效**
 
+取值可以是正整数，负整数，0
+
+比较原则：
+ - 如果是兄弟关系
+   - z-index越大，层叠在越上面
+   - z-index相等，写在后面的那个元素层叠在上面
+
+ - 如果不是兄弟关系
+   - 各自从元素自己以及祖先元素中，找出最邻近的2个定位元素进行比较
+   - 而且这2个定位元素必须有设置z-index的具体数值
+
+
+## CSS的浮动
+
+### 认识浮动
+ float属性可以指定一个元素应沿着其容器的左侧或右侧放置，允许文本和内联元素环绕它
+ - float属性最初只用于在一段文本内浮动图像，实现文字环绕的效果
+ - 早期css标准并没有提供好的左右布局方案，因此在一段时间里面它成为网页多列布局的最常用工具
+
+ 绝对定位，浮动都会让元素脱离标准流，以达到灵活布局的效果
+
+ 常见取值
+ - none: 不浮动，默认值
+ - left: 向左浮动
+ - right: 向右浮动
+
+### 浮动的规则
+= 元素一旦浮动后，脱离标准流
+  - 朝着向左或者向右方向移动，直到自己的边界紧贴着包含块（一般是父元素）或者其他浮动元素的边界为止
+  - 定位元素会层叠在浮动元素上面
+- 如果元素是向左或者向右浮动，浮动元素的左或者右边界不能超出包含块的左或者右边界
+- 浮动元素之间不能层叠
+  - 左浮找左浮，右浮找右浮
+  - 如果水平方向剩余空间不够显示浮动元素，浮动元素将向下移动，直到有充足的空间为止
+- 浮动元素不能与行内级内容层叠，行内级内容将会被浮动元素推出
+  - 比如行内级元素，inline-block元素，块级元素的文字内容
+- 行内级元素、inline-block元素浮动后，其顶部将与所在行的顶部对齐
+
+将多个行内级元素中间的空格(间隙)去除的方法
+- 1. 删除换行符（不推荐）
+- 2. 将父级元素的font-size设置为0，但是需要子元素设置回来
+- 3. 通过子元素(span)统一向一个方向浮动即可
+- 4. flex布局（还没学习）
+
+
+### 浮动的案例
+1. 百度页面展示练习
+
+![Alt text](image-6.png)
+
+```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+   ul,li{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+   }
+
+   a{
+      text-decoration: none;
+      color: #333;
+   }
+
+   body{
+      background-color: #f2f2f2;
+   }
+
+   ul > li {
+      float: left;
+      background-color: #fff;
+      margin-left: 12px;
+   }
+
+   ul > li >a {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      text-align: center;
+      line-height: 36px;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #3951b3;
+      font-size: 14px;
+   }
+
+   ul > li >a:hover{
+      background-color: blue;
+      color: #fff;
+   }
+
+   ul > li.active >a{
+      background-color: blue;
+      color: #fff;
+   }
+   
+   ul > li.next > a{
+      width: 80px;
+   }
+</style>
+<body>
+  <ul>
+   <li class="item active"><a href="#">1</a></li>
+   <li class="item"><a href="#">2</a></li>
+   <li class="item"><a href="#">3</a></li>
+   <li class="item"><a href="#">4</a></li>
+   <li class="item"><a href="#">5</a></li>
+   <li class="item"><a href="#">6</a></li>
+   <li class="item"><a href="#">7</a></li>
+   <li class="item"><a href="#">8</a></li>
+   <li class="item"><a href="#">9</a></li>
+   <li class="item"><a href="#">10</a></li>
+   <li class="item next"><a href="#">下一页 &gt;</a></li>
+  </ul>
+</body>
+</html>
+
+```
+
+2. 模仿京东布局
+![Alt text](image-7.png)
+ 
+ ```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   /* 公共的class */
+   .content {
+      width: 1190px;
+      margin: 0 auto;
+      background-color: orange;
+      height: 800px;
+   }
+
+   .box{
+      margin-right: -10px;;
+   }
+
+   /* 布局样式 */
+   .item{
+      width: 230px;
+      height: 322px;
+      background-color: purple;
+      float: left;
+      color: #fff;
+      margin-right: 10px;
+   }
+
+   /* 存在兼容性 */
+   /* .item:nth-child(5n){
+      margin-right: 0;
+   } */
+
+
+</style>
+<body>
+   <div class="content">
+      <div class="box">
+         <div class="item item1">1</div>
+         <div class="item item2">2</div>
+         <div class="item item3">3</div>
+         <div class="item item4">4</div>
+         <div class="item item5">5</div>
+      </div>
+      
+   </div>
+</body>
+</html>
+ 
+ ```
+
+ 3. 模仿京东布局
+ ![Alt text](image-8.png)
+
+ ```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   /* 公共的class */
+   body{
+      background-color: #f5f5f5;
+   }
+
+   .content {
+      width: 1190px;
+      margin: 0 auto;
+      background-color: #f5f5f5;
+      height: 1000px;
+      
+   }
+
+   .wrapper{
+      margin-right: -10px;
+   }
+
+   .item {
+      width: 290px;
+      background: #fff;
+      margin-bottom: 10px;;
+
+      float: left;
+      margin-right: 10px;
+   }
+
+   .item.left {
+      height: 370px;
+   }
+
+   .item.right{
+      height: 180px;
+   }
+
+   
+</style>
+<body>
+   <div class="content">
+      <div class="wrapper">
+         <div class="item left"></div>
+         <div class="item left"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         <div class="item right"></div>
+         
+      </div>
+   </div>
+</body>
+</html>
+ 
+ ```
+
+### 浮动的问题
+ 高度塌陷
+ - 由于浮动元素脱离了标准流，变成了脱标元素，所以不再向父元素汇报高度
+   - 父元素计算总高度时，就不会计算浮动子元素的高度，导致了高度坍塌的问题
+
+那么如何解决父元素高度坍塌问题呢，一般叫做清除浮动
+
+清除浮动的目的是
+  让父元素计算总高度的时候，把浮动子元素的高度算进去
+
+
+### 清除浮动
+
+如何清除浮动呢？
+答：使用clear属性
+
+clear属性是做什么的呢？
+- clear属性可以指定一个元素是否必须移动（清除浮动后）到在它之前的浮动元素下面
+
+clear常见取值
+ - left: 要求元素的顶部低于之前生成的所有左浮动元素的底部
+ - right: 要求元素的顶部低于之前生成的所有右浮动元素的底部
+ - both: 要求元素的顶部低于之前生成的所有浮动元素的底部
+ - none: 默认值，无特殊要求
+
+ 清除浮动的方法
+ - 方法一：给父元素设置固定高度，扩展性不好，不推荐
+ - 方法二：在父元素最后增加一个空的块级子元素，并且让它设置clear:both
+   会增加很多无意义的空标签，维护麻烦，不推荐
+ - 方案三： 给父元素增加::after伪元素，纯css样式解决，结构与样式分离，**推荐**
+
+  ```CSS
+    .clear_fix:after{
+      content: "";
+      clear: both;
+      display: block;
+
+      <!-- 浏览器兼容性 -->
+      visibility: hidden;
+      height: 0;
+    }
+
+    .clear-fix{
+      <!-- ie6/7兼容性 -->
+      *zoom:1; 
+    }
+  ```
+
+## Flex布局
+
+### 认识flex布局
+
+### flex布局的理解
+
+### flex-container属性
+
+### flex-item属性
