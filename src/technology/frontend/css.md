@@ -2198,21 +2198,21 @@ justify-content 决定了flex items 在main axis上的对齐方式
   ![Alt text](image-13.png)
 
 
-- space-between
+- space-between(两端个放一个元素，其他多余的元素一定要空间等分)
   - flex items 之前的距离相等
   - 与main start 、main end 两端对齐
 
  ![Alt text](image-14.png)
 
 
-- space-around
+- space-around(两端也有间距，两端的间距是items之间的间距一半)
   - flex items 之间的距离相等
   - flex itmes 与main start、main end 之间的距离是flex items之间距离的一半
   
   ![Alt text](image-15.png)
 
 
-- space-evenly
+- space-evenly(两端也有空隙，并且所有的空间进行等分)
   - flex items之间的距离相等
   - flex items与 main start、main end之间的距离等于flex items 之间的距离
   
