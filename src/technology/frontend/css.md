@@ -402,6 +402,7 @@ body,p,h1{
       ul li:nth-child(-n + 3) {
         color: red;
       }
+   ```
 
 
     </style>
@@ -1559,8 +1560,9 @@ border也可以做图形
   - 定位参照对象的高度 = top + bottom + margin-top + margin-bottom + 绝对定位元素的实际占用高度
 
 - 如果希望绝对定位元素的宽高和定位参照对象一样，可以给绝对定位元素设置以下属性
-  - left:0 right:0 top:0 bottom:0 margin:0
-
+  
+- left:0 right:0 top:0 bottom:0 margin:0
+  
 - 如果希望绝对定位元素在定位参照对象中居中显示，可以给绝对定位元素设置以下属性
   - left:0, right:0, top:0, bottom:0 ,margin: auto
   - 另外，还得设置具体的宽高值（宽高小于定位参照对象的宽高） 
@@ -2217,3 +2219,110 @@ justify-content 决定了flex items 在main axis上的对齐方式
   - flex items与 main start、main end之间的距离等于flex items 之间的距离
   
   ![Alt text](image-16.png)
+
+
+
+### align-items
+
+align-items决定了flex items 在cross axis(交叉轴：竖线)上的对齐方式
+
+- normal(了解): 在弹性布局中，效果和stretch一样
+- stretch(了解): 当flex items 在cross axis方向的size 为auto时，会自动拉伸至填充flex container
+- flex-start: 与cross start对齐
+- flex-end: 与cross end对齐
+- center(重要): 居中对齐
+- baseline: 与基准线对齐
+
+### align-content
+
+align-content 决定了多行flex items在cross axis上的对齐方式，用法与justify-content类似
+
+- stretch(默认值)：与align-items的stretch类似
+- flex-start: 与cross start对齐
+- flex-end: 与cross end对齐
+- center: 居中对齐
+- space-between
+  - flex items之间的距离相等
+  - 与cross start、cross end两端对齐
+
+- space-around
+  - flex items之间的距离相等
+  - flex items 与cross start、cross end之间的距离是flex items之间距离的一半
+
+- space-evenly
+  - flex items 之间的距离相等
+  - flex items 与 cross start、cross end之间的距离等于flex items之间的距离
+
+--------------------------------------------------
+
+### order(item属性)-了解
+
+order 决定了flex  items的排布顺序
+
+- 可以设置任意整数，**值越小就越排在前面**
+
+- 默认值是0
+
+  ```css
+  .item1{
+      order:5;
+  }
+  item2{
+      order:3;
+  }
+  ```
+
+
+
+### align-self(item属性)-了解
+
+flex items可以通过align-self 覆盖flex container设置align-items
+
+- auto: 默认值，遵从flex container的align-items设置
+- stretch、flex-start、flex-end、center、baseline 效果和align-items一致
+
+### flex-grow(item属性)-掌握
+
+flex-grow 决定了flex items如何扩展（拉伸/成长）
+
+- 可以设置任意非负数字，默认值是0
+- 当flex container 在main axis方向上有剩余size时，flex-grow属性才会生效
+
+
+
+### flex-shrink(item属性)-掌握
+
+flex-shrink 决定了flex items 如何收缩（缩小）
+
+- 可以设置任意非负数字，**默认值是1**
+- 当flex items 在main axis 方向上**超过了flex container 的size, flex-shrink属性才会有效**
+
+### flex-basis(item属性)-了解
+
+flex-basis用来设置flex items 在main axis 方向上的base size
+
+- auto （默认值）
+- 具体的宽度数值（100px）
+
+
+
+### flex(item属性)-缩小属性-掌握
+
+flex 是flex-grow||flex-shrink||flex-basis的简写，flex属性可以指定1个，2个或者3个值
+
+> none  | <flex-grow><flex-shrink>?||<flex-basis>
+
+- 单值语法：值必须为以下其中之一
+  - 一个无单位数(<number>): 它会被当作flex-grow的值
+  - 一个有效的宽度(width)值，它会被当作flex-basis的值
+  - 关键字none,auto或initial
+
+- 双值语法：
+  - 第一个值必须为一个无单位数，并且它会被当作flex-grow的值
+  - 第二个值必须为以下之一
+    - 一个无单位数：flex-shrink的值
+    - 一个有效的宽度值：flex-basis的值
+
+- 三值语法
+  - 第一个flex-grow,第二个flex-shrink,第三个flex-basis
+
