@@ -366,7 +366,7 @@ body,p,h1{
         color: red;
       }
     </style>
-
+   
     <ul>
       <li>列表元素1</li>
       <li>列表元素2</li>
@@ -392,12 +392,12 @@ body,p,h1{
       ul li:nth-child(2n) {
         color: green;
       }
-
+   
       <!-- 设置奇数被选中 -->
       ul li:nth-child(2n+1) {
         color: blue;
       }
-
+   
       <!-- 选中前三个 -->
       ul li:nth-child(-n + 3) {
         color: red;
@@ -405,7 +405,7 @@ body,p,h1{
 
 
     </style>
-
+    
     <ul>
       <li>列表元素1</li>
       <li>列表元素2</li>
@@ -451,7 +451,7 @@ body,p,h1{
     .box :not(.why){
       color: blue;
     }
-
+   
     <div class="box">
       <div class="item">列表</div>
       <div class="why">列表</div>
@@ -820,7 +820,7 @@ margin: 10px 20px 30px;
 
   1. margin-bottom传递
    如果**块级元素的底部线和父元素的底部线重写**，并且父元素的高度是auto,那么这个块级元素的margin-bottom的
-    值会传递给父元素
+      值会传递给父元素
 
    那么如何防止出现传递问题？
    - 给父元素设置padding-top\padding-bottom
@@ -1179,13 +1179,13 @@ html提供了3组常见的用来展示列表的元素
 ### 表单元素
  - form
     表单
-  
+
   form通常作为表单元素的父元素
 
   常见属性
   1. action ： 用于提交表单数据的请求url
   2. method:   请求方法(get和post)，默认get
-   
+
   ```css
     <form action="http://www.baidu.com/s">
       <input type="text" name="wd">
@@ -1201,7 +1201,7 @@ html提供了3组常见的用来展示列表的元素
   type有很多值：text,password,radio,checkbox,button,reset,submit,file
 
  常见的布尔属性有disabled、checked、readonly、multiple、autofocus、selected
- 
+
  ```css
  <form action="">
  	<input type="button" value="普通按钮"/>
@@ -1209,15 +1209,15 @@ html提供了3组常见的用来展示列表的元素
      <input type="submit" value="提交按钮"/>
  </form>
  ```
- 
+
   
- 
+
  input和label的关系
- 
+
  - label元素一般跟input配合使用，用来表示input的标题
- 
+
  - label可以跟某个input绑定，点击label就可以激活对应的input变为选中
- 
+
    ```css
    <div>
    	<label for="username">
@@ -1226,11 +1226,11 @@ html提供了3组常见的用来展示列表的元素
       </label>
    </div>
    ```
- 
+
    
+
  
- 
- 
+
 - textarea
   多行文本框
 
@@ -1270,22 +1270,22 @@ html提供了3组常见的用来展示列表的元素
 
 ### 2.常见Emment语法
   - >(子代) 和 + （兄弟）
-  div>h1+p
-  div+p+ul>li
+    div>h1+p
+    div+p+ul>li
 
   - *(多个) 和^(上一级)
-   ul>li*5
-   div+div>p>span^h1
-   div+div>p>span^^^^h1
+      ul>li*5
+      div+div>p>span^h1
+      div+div>p>span^^^^h1
 
   - () 分组
 
   - 属性(id属性，class属性，普通属性){}(内容)
-   div#header+div#main>.container>a[href]
+      div#header+div#main>.container>a[href]
 
 
   - $ 数字
-   ul>li{列表内容$}*10
+      ul>li{列表内容$}*10
 
 ## 额外知识补充
 
@@ -1325,7 +1325,7 @@ border也可以做图形
 </html>
 
 ```
- 
+
  ![Alt text](image-3.png)
 
 ### web网络字体
@@ -1464,7 +1464,7 @@ border也可以做图形
  ```
 
 ### 固定定位
- 
+
 元素脱离标准流(脱标)
 可以通过left,right,top,bottom进行定位
 定位参照对象是视口（viewport:文档的可视区域）
@@ -1479,7 +1479,7 @@ border也可以做图形
 ```
 
 ### 绝对定位
- 
+
  **元素脱离标准流，脱标**
 
 可以通过left,right,top,bottom进行定位
@@ -1582,7 +1582,7 @@ border也可以做图形
           background-color: #f0f;
           position: relative;
       }
-
+  
       .box{
           width: 400px;
           height: 400px;
@@ -1755,7 +1755,7 @@ border也可以做图形
 
 2. 模仿京东布局
 ![Alt text](image-7.png)
- 
+
  ```css
   <!DOCTYPE html>
 <html lang="en">
@@ -1935,8 +1935,285 @@ clear常见取值
 
 ### 认识flex布局
 
+  认识flexbox
+
+- Flexbox翻译为弹性盒子
+
+  - 弹性盒子是一种用于按行或按列布局元素的一维布局方法
+  - 元素可以膨胀以填充额外的空间，收缩以适应更小的空间
+  - 通常我们使用flexbox来进行布局的方案称之为flex布局（flex layout）
+
+- flex布局是目前web开发中使用最多的布局方案
+
+  - flex布局（flexible布局，弹性布局）
+  - 目前特别在移动端可以说已经完全普及
+  - 在pc端也几乎已经完全普及和使用，只有非常少数的网站依然在用浮动来布局
+
+- 为什么需要flex布局？
+
+  - 长久以来，css布局中唯一可靠且跨浏览器兼容的布局工具只有floats和positioning
+
+  - 但是这两种方法本身存在很大的局限性，并且他们用于布局实在是无奈之举
+
+    
+
+ 原先的布局存在的痛点？
+
+- 在父内容里面垂直居中一个块内容
+- 比如使容器的所有子项等分可用宽度/高度，而不管有多少宽度/高度可用
+
+
+
 ### flex布局的理解
+
+ flex布局中重要概念
+
+- 两个重要概念
+  - 开启了flex布局的元素叫 flex container
+  - flex container 里面的直接子元素叫做flex item
+
+- 当flex cntainer中的子元素变成了flex item时，具备以下特点
+  - flex item的布局将受**flex container属性的设置来进行控制和布局**
+  - flex item **不再严格区分块级元素和行内级元素**
+  - flex item**默认情况下是包裹内容**的，但是**可以设置宽度和高度**
+
+- **设置display属性为flex或者inline-flex可以成为flex container**
+  - flex:  flex container 以block-level形式存在
+  - inline-flex: flex container 以 inline-level 形式存在
+
+
+
+代码初体验
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   .box{
+      background-color: #f00;
+      display: flex;
+   }
+</style>
+<body>
+   111
+   <div class="box">
+      <div class="item">box1</div>
+      <div class="item">box2</div>
+      <div class="item">box3</div>
+   </div>
+   2222
+</body>
+</html>
+```
+
+![效果图](css.assets/image-20231023150913844.png)
+
+
+
+
 
 ### flex-container属性
 
 ### flex-item属性
+
+
+
+### Flex布局的模型
+
+![image-20231023153313293](css.assets/image-20231023153313293.png)
+
+### Flex相关的属性
+
+1. 应用在flex container上的css属性
+   - flex-flow
+   - flex-direction
+   - flex-wrap
+   - justify-content
+   - align-items
+   - align-content
+2. 应用在flex items上的css属性
+   - flex-grow
+   - flex-basis
+   - flex-shrink
+   - order
+   - align-self
+   - flex
+
+
+
+###  flex-direction
+
+flex items 默认都是沿着main axis（主轴）从main start 开始往 main end 方向排布
+
+- flex-direction 决定了main axis的方向，有4个取值
+- row(默认值)、row-reverse、column、column-reverse
+
+![方向对比](image-9.png)
+
+```css
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   .box{
+      background-color: #f00;
+      display: flex;
+      flex-direction: row-reverse;
+   }
+   .item{
+      width: 200px;
+      height: 200px;
+   }
+   .item1{
+      background-color: aquamarine;
+   }
+   .item2{
+      background-color: bisque;
+   }
+   .item3{
+      background-color: skyblue;
+   }
+</style>
+<body>
+   <div class="box">
+      <div class="item item1">box1</div>
+      <div class="item item2">box2</div>
+      <div class="item item3">box3</div>
+   </div>
+</body>
+</html>
+
+```
+
+![image-20231023172442255](css.assets/image-20231023172442255.png)
+
+
+
+### flex-wrap
+
+flex-wrap 决定了flex container 是单行还是多行
+
+有三个取值
+
+- nowrap(默认)：单行
+- wrap: 多行
+- wrap-reverse: 多行（对比wrap, cross start 与 cross end 相反）
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   .box{
+      background-color: #f00;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 600px;
+      height: 800px;
+   }
+   .item{
+      width: 200px;
+      height: 200px;
+   }
+   .item1{
+      background-color: aquamarine;
+   }
+   .item2{
+      background-color: bisque;
+   }
+   .item3{
+      background-color: skyblue;
+   }
+   .item4{
+      background-color: gainsboro;
+   }
+   .item5{
+      background-color: cornsilk;
+   }
+</style>
+<body>
+   <div class="box">
+      <div class="item item1">box1</div>
+      <div class="item item2">box2</div>
+      <div class="item item3">box3</div>
+      <div class="item item4">box4</div>
+      <div class="item item5">box5</div>
+   </div>
+</body>
+</html>
+  
+```
+
+![Alt text](image-10.png)
+
+
+
+
+
+### flex-flow
+
+flex-flow是属性flex-direction 和 flex-wrap 的简写
+
+- 顺序任何，并且都可以省略
+
+```css
+.item{
+    flex-flow: wrap;
+    flex-flow: row wrap;
+}
+```
+
+
+
+### justify-content
+
+justify-content 决定了flex items 在main axis上的对齐方式
+
+- flex-start(默认值)：与main start 对齐
+
+  ![Alt text](image-11.png)
+
+
+- flex-end: 与main end对齐
+  
+  ![Alt text](image-12.png)
+
+
+- center: 居中对齐
+  
+  ![Alt text](image-13.png)
+
+
+- space-between
+  - flex items 之前的距离相等
+  - 与main start 、main end 两端对齐
+
+ ![Alt text](image-14.png)
+
+
+- space-around
+  - flex items 之间的距离相等
+  - flex itmes 与main start、main end 之间的距离是flex items之间距离的一半
+  
+  ![Alt text](image-15.png)
+
+
+- space-evenly
+  - flex items之间的距离相等
+  - flex items与 main start、main end之间的距离等于flex items 之间的距离
+  
+  ![Alt text](image-16.png)
