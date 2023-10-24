@@ -17,3 +17,7 @@ input{
     outline: none;
     border: none;
 }
+
+img {
+    vertical-align: top;
+}
