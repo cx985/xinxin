@@ -106,7 +106,13 @@ vertical-align: top;
  ### text-indent(了解)
  作用： 文本缩进
  eg: 将段落的第一行缩进2em
- div {text=indent:2em;}
+ ```css
+   div {text=indent:2em;}
+ ```
+ 注意事项
+  - text-indent 只应用于**块级元素**
+  - text-indent 设置负值可以将文本向左移动
+
 
  ### text-align(重要)
  直接翻译：文本对齐的方式（**图片也可以居中**）
@@ -210,6 +216,10 @@ vertical-align: top;
 
  应用场景：假设div中只有一行文字，如何让这行文字在div内部垂直居中？
  答案： **让line-height 等于height**
+
+ 注意
+  - 行高是可以继承的
+  - **行高对行内非替换元素是无效的**
 
 
  ### font
@@ -402,10 +412,8 @@ body,p,h1{
       ul li:nth-child(-n + 3) {
         color: red;
       }
-   ```
 
-
-    </style>
+      </style>
     
     <ul>
       <li>列表元素1</li>
@@ -413,7 +421,6 @@ body,p,h1{
       <li>列表元素3</li>
       <li>列表元素4</li>
     </ul>
-
    ```
 
 
@@ -2310,10 +2317,10 @@ flex-basis用来设置flex items 在main axis 方向上的base size
 
 flex 是flex-grow||flex-shrink||flex-basis的简写，flex属性可以指定1个，2个或者3个值
 
-> none  | <flex-grow><flex-shrink>?||<flex-basis>
+> none  | flex-grow |flex-shrink?|flex-basis
 
 - 单值语法：值必须为以下其中之一
-  - 一个无单位数(<number>): 它会被当作flex-grow的值
+  - 一个无单位数(number): 它会被当作flex-grow的值
   - 一个有效的宽度(width)值，它会被当作flex-basis的值
   - 关键字none,auto或initial
 
@@ -2325,4 +2332,114 @@ flex 是flex-grow||flex-shrink||flex-basis的简写，flex属性可以指定1个
 
 - 三值语法
   - 第一个flex-grow,第二个flex-shrink,第三个flex-basis
+
+
+
+### flex布局对齐问题
+
+思考：如下布局如何解决对齐问题
+
+![image-20231024100100343](css.assets/image-20231024100100343.png)
+
+答案： 推荐方式，不用计算
+
+1. 给里面div盒子后面增加i元素，元素个数为一排总数-2，上图对应就是4-2=2
+
+  ```
+  <div class="box">
+        <div class="item item1">box1</div>
+        <div class="item item2">box2</div>
+        <div class="item item3">box3</div>
+        <div class="item item4">box4</div>
+        <div class="item item5">box5</div>
+        <div class="item item6">box6</div>
+        <div class="item item7">box7</div>
+        <div class="item item8">box8</div>
+        <div class="item item8">box8</div>
+        <div class="item item6">box6</div>
+        <div class="item item8">box8</div>      
+        <i></i>
+        <i></i>
+       
+     </div>
+  ```
+
+2. 给i元素设置和item相同的width
+
+   ```css
+   .box i{
+         width: 80px;
+      }
+   ```
+
+完整示例代码
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+</head>
+<style>
+   .box{
+      background-color: #f3f3f3;
+      display: flex;
+      flex-wrap: wrap;
+      width: 350px;
+      justify-content: space-between;
+   }
+   .item{
+      width: 80px;
+      height: 60px;
+   }
+   .item1{
+      background-color: aquamarine;
+   }
+   .item2{
+      background-color: bisque;
+   }
+   .item3{
+      background-color: skyblue;
+   }
+   .item4{
+      background-color: gainsboro;
+   }
+   .item5{
+      background-color: cornsilk;
+   }
+   .item6{
+      background-color: blueviolet;
+   }
+   .item7{
+      background-color: lawngreen;
+   }
+   .item8{
+      background-color: gold;
+   }
+   .box i{
+      width: 80px;
+   }
+</style>
+<body>
+   <div class="box">
+      <div class="item item1">box1</div>
+      <div class="item item2">box2</div>
+      <div class="item item3">box3</div>
+      <div class="item item4">box4</div>
+      <div class="item item5">box5</div>
+      <div class="item item6">box6</div>
+      <div class="item item7">box7</div>
+      <div class="item item8">box8</div>
+      <div class="item item8">box8</div>
+      <div class="item item6">box6</div>
+      <div class="item item8">box8</div>      
+      <i></i>
+      <i></i>
+     
+   </div>
+</body>
+</html>
+```
 
