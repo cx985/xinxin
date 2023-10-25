@@ -412,7 +412,7 @@ body,p,h1{
       ul li:nth-child(-n + 3) {
         color: red;
       }
-
+   
       </style>
     
     <ul>
@@ -2442,4 +2442,196 @@ flex 是flex-grow||flex-shrink||flex-basis的简写，flex属性可以指定1个
 </body>
 </html>
 ```
+
+
+
+## transform
+
+css 属性- transform 属性允许对某一个元素进行某些形变，包括旋转，缩放，倾斜或平移等
+
+transform 是形变的意思
+
+并非所有的盒子都可以进行transform的转换（**行内级元素不能进行形变**）
+
+所以transform 对于行内级非替换元素是无效的（比如span, a元素等）
+
+
+
+transform属性的语法
+
+常见的函数有
+
+- 平移：translate(x,y)
+- 缩放：scale(x,y)
+- 旋转：rotate(deg)
+- 倾斜：skew(deg,deg)
+
+
+
+一. 位移- translate
+
+- 平移：translate(x,y)
+  - 这个css函数用于移动元素在平面上的位置
+
+- 值个数
+  - 一个值时，设置x轴上的距离
+  - 两个值时，设置x和y轴的距离
+
+```css
+.box{
+    transform: translate(100px);
+    transform: translate(100px,100px);
+}
+```
+
+- 值类型
+  - 数字：100px
+  - 百分比：参照元素**本身**
+
+注意：translate的百分比是相对于自身的
+
+如果设置x位移：那么参考的是自身的宽度
+
+如果设置y位移：那么参考的是自身的高度
+
+
+
+translate的补充
+
+- translate是translateX和translateY函数的简写
+- translate的百分比可以完成一个**元素的水平和垂直居中**
+
+
+
+二. 缩放-sacle
+
+- 缩放：scale(x,y): 可改变元素的大小
+
+  - 值个数
+    - 一个值，设置x轴上的缩放
+    - 两个值，设置x轴和y轴上的缩放
+
+  - 值类型
+    - 数字
+      - 1：保持不变
+      - 2：放大一倍
+      - 0.5：缩小一半
+
+```css
+.box{
+    transform: scale(0.6,0.6);
+}
+```
+
+
+
+三、旋转-rotate
+
+- 值个数
+  - 一个值时，表示旋转的角度
+
+- 值类型：
+  - 常用单位deg: 旋转的角度（degrees）
+  - 正数为顺时针
+  - 负数为逆时针
+
+```
+.box{
+	transform: rotate(90deg);
+}
+```
+
+四、倾斜-skew（了解）
+
+倾斜：skew(x,y)
+
+- 定义了一个元素在二维平面上的倾斜转换
+- 值个数
+  - 一个值：表示x轴上的倾斜
+  - 两个值：表示x轴和y轴上的倾斜
+
+- 值类型
+  - deg: 旋转的角度
+  - 正数为顺时针
+  - 负数为逆时针
+
+
+
+```css
+.box:hover {
+    transform: skew(-10deg,0);
+}
+```
+
+
+
+transform 可以设置多个值
+
+eg
+
+```css
+.box:hover{
+    transform: translate(50px) scale(1.2) rotate(45deg);
+}
+```
+
+
+
+
+
+
+
+## 垂直居中总结（重要）
+
+一、回顾让元素水平居中，有如下几种
+
+1.  行内级元素
+   - 设置父元素的text-align: center
+
+2. 块级元素
+   - 设置当前块级元素的margin: 0 auto;(元素必须有宽度)
+
+3. 绝对定位
+   - 元素有宽度的情况下，left:0; right:0；margin: 0 auto;
+
+4. flex
+   - justify-content: center
+
+二、垂直居中
+
+1. 绝对定位
+   - 元素有高度情况下，top:0; bottom:0; margin: auto 0;
+   - 弊端：必须使用定位(脱离标准流)；元素必须设置宽度
+
+2. flex布局
+   - 父元素display: flex; align-items: center;
+   - 弊端：当前flex局部中所有的元素都会被垂直居中，兼容性差一点点
+
+3. top+translate(推荐，但是不好理解)
+
+   两件事情
+
+   - 需要让元素向下位移父元素的50%
+   - 需要让元素向上位移自身的50%
+
+   ```css
+   .box{
+       position: relative;
+       top: 50%;
+       transform: translate(0,-50%);
+           
+   }
+   ```
+
+   
+
+
+
+## transition 动画
+
+## animation动画
+
+## vertical-align
+
+
 

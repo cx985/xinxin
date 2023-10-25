@@ -15,6 +15,7 @@
     }
 
     .banner .area{
+        position: relative;
         height: 285px;
         background-color: orchid;
     }
@@ -73,6 +74,66 @@
         background-position: -16px -343px;
     }
 
+    /* 右侧内容 */
+    .banner .area-right{
+        position: absolute;
+        right: -1px;
+        top:0;
+        bottom: 0;
+        width: 254px;
+        background: url(./image/download_sprice.png);
+    }
+
+    .banner .area-right .download{
+        display: block;
+        width: 215px;
+        height: 56px;
+        margin: 186px 0 0 19px;
+        text-indent: -9999px;
+    }
+
+    .banner .area-right .download:hover{
+        background: url(./image/download_sprice.png) 0 -290px;
+    }
+
+    .banner .area-right .desc{
+        font-size: 12px;
+        color: #8d8d8d;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    /* 两个控制按钮 */
+    .banner .area .control {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        margin: auto 0;
+        width: 37px;
+        height: 63px;
+        background: url(./image/banner.png);
+    }
+
+    .banner .area .control.left{
+        left: -70px;
+        background-position: 0 -360px;
+    }
+    .banner .area .control.right{
+        right: -70px;
+        background-position: 0 -508px;
+    }
+
+    .banner .area .control.left:hover{
+        background-position: 0 -430px;
+    }
+
+
+    .banner .area .control.right:hover{
+        background-position: 0 -578px;
+    }
+    
+
+
 
 </style>
 <body>
@@ -115,7 +176,12 @@
                     <li><a class="item" href=""></a></li>
                 </ul>
             </div>
-            <div class="area-right"></div>
+            <div class="area-right">
+                <a class="download" href="#">下载客户端</a>
+                <p class="desc">PC 安卓 iPhone WP iPad Mac 六大客户端</p>
+            </div>
+            <a class="control left" href="#"></a>
+            <a class="control right" href="#"></a>
         </div>
     </div>
 </body>
