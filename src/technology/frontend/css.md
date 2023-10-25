@@ -2629,6 +2629,69 @@ eg
 
 ## transition 动画
 
+一、认识transition动画
+
+什么是transition动画
+
+- css transition提供了一种在更改css属性时控制动画速度的方法
+
+css transitions 可以决定
+
+- 哪些属性发现动画效果
+- 何时开始
+- 持续多久
+- 如何动画
+
+二、哪些css属性可以做动画呢？
+
+查文档
+
+三、过渡动画-transition
+
+包含四个属性
+
+- transition-property: 指定应用过渡属性的名称
+
+  - all: 所有属性都执行动画
+  - none: 所有属性都不执行动画
+  - css属性名称：要执行动画的css属性名称，比如width、left、transform等
+
+  
+
+- transition-duration: 指定过渡动画所需的时间
+
+  - 单位可以是秒（s）或毫秒（ms）
+
+- transition-timing-function: 指定动画的变化曲线
+
+- transition-delay： 指定过渡动画执行之前的等待时间
+
+ ```css
+.box{
+    positon: relative;
+    left:0;
+    width:200px;
+    height:100px;
+    background-color: orange;
+    
+    transition-property: transform,left;
+    transition-duration: 1s;
+    transition-timing-function: ease-in;
+    transition-delay: 2s;
+    
+    /*简写属性 */
+    transition: all 1s ease-in 1s;
+    
+}
+
+.box:hover{
+    left:100px;
+    transform: translate(100px);
+}
+ ```
+
+
+
 ## animation动画
 
 ## vertical-align
