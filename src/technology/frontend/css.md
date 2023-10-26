@@ -2694,7 +2694,137 @@ css transitions 可以决定
 
 ## animation动画
 
+认识css animation
+
+过渡动画有如下缺点
+
+- transition 只能定义开始状态和结束状态
+- transition不能重复执行
+- transition需要在特定状态下触发才能执行
+
+
+
+css animation的使用分成两个步骤
+
+1.  使用keyframes定义动画序列（每一帧动画如何执行）
+
+   可以使用@keyframes来定义多个变化状态，并且使用animation-name来声明匹配：
+
+   - 关键帧使用percentage来指定动画发生的时间点
+   - 0%表示动画的第一时刻，100%表示动画的最终时刻
+   - 因为这俩个时间点十分重要，所以还有特殊的别名：from和to
+
+2. 配置动画执行的名称、持续时间、动画曲线、延迟、执行次数、方向等等
+
+   - animation-name：指定执行哪一个关键帧动画
+   - animation-duration: 指定动画的持续时间
+   - animation-timing-function: 指定动画的变化曲线
+   - animation-delay: 指定延迟的执行时间
+   - animation-iteration-count: 指定动画执行的次数，执行infinite表示无限动画
+   - animation-direction: 指定方向，常用值normal和reverse
+   - animation-fill-mode: 执行动画最后保留哪一个值
+     - none: 回到没有执行动画的位置
+     - forwards：动画最后一帧的位置
+     - backwards: 动画第一帧的位置
+
+animation是animation-name、animation-duration、animation-timing-function、animation-delay、animation-iteration-count
+
+animation-direction、animation-fill-mode、animation-play-state 属性的一个简写属性形式
+
+
+
+```css
+animation: test 3s linear 1s 2 normal forwards
+```
+
+
+
+
+
+   ```css
+   .box{
+      width: 300px;
+      heigth: 300px;
+      background-color: orange;
+      
+      animation-delay: 2s;
+      animation-name: test;
+      animation-duration: 3s;
+      animation-timing-function: ease-in-out;
+       
+      /*动画执行的次数*/
+      animation-iteration-count: 2;
+      animation-direction: reverse;
+      /*元素停留在动画的哪一个位置*/
+      animation-fill-mode: forwards;
+   }
+   
+    @keyframes test{
+           0%{
+               transform: translate(0,0) sacle(0.5,0.5);
+           }
+           33%{
+               transform: translate(0,200px) sacle(1.2,1.2);
+           }
+           66%{
+               transform: translate(400px,200px);
+           }
+           100%{
+               transform: translate(400px,0);
+           }
+       }
+   ```
+
+
+
 ## vertical-align
 
+line box: 行盒
 
+vertical-align: 官方解释：会影响行内块级元素在一个行盒中垂直方向的位置
+
+
+
+思考：一个div没有设置高度的时候，会不会有高度？
+
+- 没有内容，没有高度
+- 有内容，内容撑起来高度
+
+但是内容撑起高度的本质是什么呢？
+
+- 内容有行高，撑起来了div的高度
+
+那行高为什么可以撑起div的高度呢？
+
+- 这是因为line boxes的存在，并且line-boxes有一个特性，包裹每行的inline level
+- 而其中的文字是有行高的，必须将整个行高包裹进去，才算包裹这个line-level
+
+那么，进一步思考：
+
+- 如果这个div中有图片，文字，inline-block, 甚至他们设置了margin这些属性呢？
+
+
+
+结论：line-boxes一定会想办法包裹住当前行中所有的内容
+
+但是为啥对齐方式千奇百怪呢？
+
+- 答案就是baseline对齐
+
+vertical-align 默认值就是baseline
+
+baseline都是谁呢？
+
+- 文本的baseline是字母x的下方
+- inline-blcok默认的baseline是margin-bottom的底部（没有，就是盒子的底部）
+- inline-block有文本时，baseline是最后一行文本的x的下方
+
+**vertical-align 取值**
+
+- baseline(默认值)：基线对齐
+- top: 把行内级盒子的顶部跟line boxes顶部对齐
+- middle：行内级盒子的中心点与父盒基线加上x-height一半的线对齐
+- bottom: 把行内级盒子的底部跟line box底部对齐
+- percentage: 把行内级盒子提升或者下降一段距离（距离相对于line-height计算\元素高度），0%意味着同baseline一样
+- length: 把行内级盒子提升或者下降一段距离，0cm意味着同baseline一样
 
