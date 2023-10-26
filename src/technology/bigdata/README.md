@@ -13,6 +13,6 @@ date: 2023-10-15
 ::: info 所学知识沉淀汇总
 
 :::
-
+- [linux](./linux.md)
 - [spark](./spark.md)
 ---

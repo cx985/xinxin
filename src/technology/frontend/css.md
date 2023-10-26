@@ -212,7 +212,7 @@ vertical-align: top;
  严格定义：两行文字**基线**之间的距离
 
  基线：与小写字母x最底部对齐的线
- ![Alt text](image.png)
+ ![Alt text](css.assets/image.png)
 
  应用场景：假设div中只有一行文字，如何让这行文字在div内部垂直居中？
  答案： **让line-height 等于height**
@@ -665,10 +665,10 @@ CSS中有个display属性，能修改元素的显示类型，有4个常用值
  - 外边距(margin)
    - 元素和其他元素之间的间距
 
-  ![Alt text](image-1.png)
+  ![Alt text](css.assets/image-1.png)
 
   **因为盒子有四边，所以margin/padding/border都包括top/right/bottom/left四个边**
-  ![Alt text](image-2.png)
+  ![Alt text](css.assets/image-2.png)
 
 
 
@@ -1334,7 +1334,7 @@ border也可以做图形
 
 ```
 
- ![Alt text](image-3.png)
+ ![Alt text](css.assets/image-3.png)
 
 ### web网络字体
 ```css
@@ -1430,7 +1430,7 @@ border也可以做图形
  - **可以通过left,right,top,bottom进行定位**
  - **定位参照对象是元素自己原来的位置**
  - left,right,top,bottom用来设置元素的具体位置，对元素的作用如下图
-    ![Alt text](image-4.png)
+    ![Alt text](css.assets/image-4.png)
  - 相对定位应用场景
     **在不影响其他元素位置的前提下，当当前元素位置进行微调**
 
@@ -1631,7 +1631,7 @@ border也可以做图形
 
  position值对比
 
- ![Alt text](image-5.png)
+ ![Alt text](css.assets/image-5.png)
 
 ### z-index
 
@@ -1685,7 +1685,7 @@ border也可以做图形
 ### 浮动的案例
 1. 百度页面展示练习
 
-![Alt text](image-6.png)
+![Alt text](css.assets/image-6.png)
 
 ```css
   <!DOCTYPE html>
@@ -1763,7 +1763,7 @@ border也可以做图形
 ```
 
 2. 模仿京东布局
-![Alt text](image-7.png)
+![Alt text](css.assets/image-7.png)
 
  ```css
   <!DOCTYPE html>
@@ -1820,7 +1820,7 @@ border也可以做图形
  ```
 
  3. 模仿京东布局
- ![Alt text](image-8.png)
+ ![Alt text](css.assets/image-8.png)
 
  ```css
   <!DOCTYPE html>
@@ -2062,7 +2062,7 @@ flex items 默认都是沿着main axis（主轴）从main start 开始往 main e
 - flex-direction 决定了main axis的方向，有4个取值
 - row(默认值)、row-reverse、column、column-reverse
 
-![方向对比](image-9.png)
+![方向对比](css.assets/image-9.png)
 
 ```css
   <!DOCTYPE html>
@@ -2167,7 +2167,7 @@ flex-wrap 决定了flex container 是单行还是多行
   
 ```
 
-![Alt text](image-10.png)
+![Alt text](css.assets/image-10.png)
 
 
 
@@ -2194,38 +2194,38 @@ justify-content 决定了flex items 在main axis上的对齐方式
 
 - flex-start(默认值)：与main start 对齐
 
-  ![Alt text](image-11.png)
+  ![Alt text](css.assets/image-11.png)
 
 
 - flex-end: 与main end对齐
   
-  ![Alt text](image-12.png)
+  ![Alt text](css.assets/image-12.png)
 
 
 - center: 居中对齐
   
-  ![Alt text](image-13.png)
+  ![Alt text](css.assets/image-13.png)
 
 
 - space-between(两端个放一个元素，其他多余的元素一定要空间等分)
   - flex items 之前的距离相等
   - 与main start 、main end 两端对齐
 
- ![Alt text](image-14.png)
+ ![Alt text](css.assets/image-14.png)
 
 
 - space-around(两端也有间距，两端的间距是items之间的间距一半)
   - flex items 之间的距离相等
   - flex itmes 与main start、main end 之间的距离是flex items之间距离的一半
   
-  ![Alt text](image-15.png)
+  ![Alt text](css.assets/image-15.png)
 
 
 - space-evenly(两端也有空隙，并且所有的空间进行等分)
   - flex items之间的距离相等
   - flex items与 main start、main end之间的距离等于flex items 之间的距离
   
-  ![Alt text](image-16.png)
+  ![Alt text](css.assets/image-16.png)
 
 
 

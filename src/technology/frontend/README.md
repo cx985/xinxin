@@ -4,7 +4,7 @@ layout: Layout
 pageInfo: ['Author', 'PageView']
 index: false
 permalink: /technology/frontend
-order: 5
+order: 2
 date: 2023-10-14
 ---
 
