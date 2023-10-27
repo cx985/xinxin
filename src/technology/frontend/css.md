@@ -2828,3 +2828,51 @@ baseline都是谁呢？
 - percentage: 把行内级盒子提升或者下降一段距离（距离相对于line-height计算\元素高度），0%意味着同baseline一样
 - length: 把行内级盒子提升或者下降一段距离，0cm意味着同baseline一样
 
+
+
+## HTML5
+
+###HTML5新增元素
+
+- header: 头部元素
+- nav: 导航元素
+- section: 定义文档某个区域的元素
+- article: 内容元素
+- aside: 侧边栏元素
+- footer: 尾部元素
+
+### Video、Audio元素
+
+video: 用于视频播放
+
+```html
+<video src="./video/test.mp4" controls></video>
+```
+
+| 常见属性 | 值的方式           | 属性作用                                                     |
+| -------- | ------------------ | ------------------------------------------------------------ |
+| src      | url地址            | 视频播放的url地址                                            |
+| width    | 像素               | 设置video宽度                                                |
+| height   | 像素               | 设置video高度                                                |
+| controls | boolean类型        | 是否显示控制栏，包括音量，跨帧，暂停/恢复播放                |
+| autoplay | boolean类型        | 是否视频自动播放                                             |
+| muted    | boolean类型        | 是否静音播放                                                 |
+| preload  | nono/metadata/auto | 是否需要预加载视频，metadata表示预加载元数据（比如视频的时长） |
+| poster   | url地址            | 一海报帧的url                                                |
+
+
+
+
+
+### input、全局属性data-*
+
+### White-space/text-overflow
+
+### CSS常见的函数扩展
+
+###  理解浏览器前缀
+
+### 深入理解BFC
+
+
+
