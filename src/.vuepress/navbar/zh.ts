@@ -28,5 +28,10 @@ export const zhNavbar = navbar([
     link: '/project',
     children: ['/project/music'],
   },
+  {
+    text: '生活',
+    icon: 'shenghuofuwu',
+    link: '/life',
+  },
   '/about',
 ]);

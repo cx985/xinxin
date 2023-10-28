@@ -17,7 +17,7 @@ export default hopeTheme({
     name: AuthorName,
   },
   // iconAssets: '//at.alicdn.com/t/c/font_3855310_p3z6ugbxr7a.css',
-  iconAssets: '//at.alicdn.com/t/c/font_4285559_wygf6ym51pr.css',
+  iconAssets: '//at.alicdn.com/t/c/font_4285559_lhlv2q6o0b.css',
   logo: '/pwa/144.png',
   docsDir: 'src',
   editLink: false,

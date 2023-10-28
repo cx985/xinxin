@@ -29,6 +29,20 @@ export const zhSidebar = sidebar({
       link: '/project/music/',
     }
   ],
+  '/life/': [
+    {
+      text: '返回技术',
+      icon: 'fanhui',
+      link: '/technology/',
+    },
+    {
+      text: '生活',
+      icon: 'shenghuofuwu',
+      prefix: '',
+      link: '/life/',
+      children: 'structure',
+    },
+  ],
   '/': [
     '',
     {
@@ -51,10 +65,17 @@ export const zhSidebar = sidebar({
       ],
     },
     {
+      text: '生活',
+      icon: 'shenghuofuwu',
+      link: '/life/',
+      prefix: 'life/',
+      children: 'structure',
+    },
+    {
       text: '关于',
       icon: 'guanyuwo',
       prefix: 'about/',
-      link: '/about/website.html',
+      link: '/about/',
       children: 'structure',
     },
   ],
