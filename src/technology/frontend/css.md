@@ -2860,19 +2860,401 @@ video: 用于视频播放
 | preload  | nono/metadata/auto | 是否需要预加载视频，metadata表示预加载元数据（比如视频的时长） |
 | poster   | url地址            | 一海报帧的url                                                |
 
+audio: 用于音频播放
 
+常见属性
+
+- src: url地址
+- controls: boolean类型，是否显示控制栏
+- autoplay: boolean类型，是否自动播放
+- muted: boolean类型，是否静音播放
+- preload: none/metadata/auto 是否需要预加载视频
 
 
 
 ### input、全局属性data-*
 
+html5新增属性
+
+- placeholder: 输入框的占位文字
+- multiple: 多个值
+- autofocus：最多输入的内容
+
+```html
+<input type="text" placeholder="占位文本" autofocus>
+
+<select multiple>
+    <option value="">苹果</option>
+    <option value="">香蕉</option>
+    <option value="">橘子</option>
+</select>
+```
+
+input 新增type属性
+
+- date
+- time
+- number
+- tel
+- color
+- email
+
+
+
+html5新增全局属性data-*
+
+用于自定义数据属性
+
+- data设置的属性可以在js的dom操作中通过dataset轻松获取到
+- 通常用于html和js数据之间的传递
+
+```html
+<div class="box" data-name="cx" data-age="18"></div>
+<script>
+	const boxE1 = document.querySelector(".box")
+    console.log(boxE1.dataset)
+</script>
+```
+
 ### White-space/text-overflow
+
+ white-space: 用于设置空白处理 (空格 tab 换行符) 和换行规则
+
+常见值：
+
+- normal： 合并所有连续的空白，允许单词超屏时自动换行
+- nowrap:  合并所有连续的空白，不允许单词超屏时自动换行
+
+
+
+text-overflow: 用于设置文字溢出时的行为
+
+- clip: 溢出的内容直接裁剪掉（文字可能会显示不完整）
+- ellipsis: 溢出那行的结尾处用省略号显示
+
+**text-overflow生效的前提是overflow不为visible**
+
+```html
+.box{
+	width: 150px;
+	background-color: #f00;
+
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+```
+
+
 
 ### CSS常见的函数扩展
 
+css函数通常可以帮助威明更加灵活的来编写样式的值
+
+几个非常好用的css函数
+
+- var: 使用css定义的变量
+
+  - 属性名需要以两个减号（--）开始；
+  - 属性值则可以是任何有效的css值；
+  - 推荐将自定义属性定义在html中，也可以使用:root 选择器；
+
+  ```html
+  html{
+  	/*定义了一个变量 只有后代元素可以使用*/
+  	--main-color: #f3c258;
+  }
+  
+  .box {
+  	color: var(--main-color);
+  }
+  
+  .title {
+  	color: var(--main-color);
+  }
+  ```
+
+  
+
+- calc: 计算css值, 通常用于计算元素的大小或位置
+
+  - 计算支持加减乘除的运算
+    - 对于+或-的运算符的两边必须要有空格
+    - 通常用来设置一些元素的尺寸或者位置
+
+  ```html
+  <div class="box">
+  	<div class="item item1">
+      </div>
+      <div class="item item2">
+      </div>
+  </div>
+  
+  <style>
+      .box{
+          width: 300px;
+          height: 100px;
+          background-color: orange;
+         
+      }
+      .item{
+        height: 50px;
+        display: inline-block;
+      }
+      .item1{
+          /*width的百分比相对于包含块（父元素）*/
+          width: calc(100% - 100px);
+          background-color: #f0f;
+      }
+      .item2{
+          width: 100px;
+          background-color: #0f0;
+      }
+  </style>
+  ```
+
+
+
+- blur: 毛玻璃(高斯模糊)效果
+
+  blur()函数通常将高斯模糊应用于输出图片或者元素
+
+  - blur(radius)
+  - radius，模糊的半径，用于定义高斯函数的偏差值，偏差值越大，图片越模糊
+
+  通常会和两个属性一起使用
+
+  - filter: 将模糊或颜色偏移等图形效果应用于元素
+  - backdrop-filter: 为元素后面的区域添加模糊或者其他效果
+
+  ```html
+  img{
+  	filter: blur(5px);
+  }
+  
+  .box{
+  	background-color: rgba(0,0,0,.5);
+  	backdrop-filter: blur(10px);
+  }
+  ```
+
+  
+
+- gradient: 颜色渐变函数
+
+  gradient是一种imagecss数据的子类型，用于表现两种或多种颜色的过渡转变
+
+  - css的image数据类型描述的是2d图形，如background-image, list-style-image
+  - image常见的方式是通过url引入一个图片资源，它也可以通过css的gradient函数来设置颜色的渐变
+
+  gradient常见函数
+
+  - linear-gradient(): 创建一个表示两种或多种颜色线性渐变的图片
+
+    ```htm
+    .box
+    	background-image: linear-gradient(red,blue);
+    	background-image: linear-gradient(to right,red,blue);
+    	background-image: linear-gradient(to right top,red,blue);
+    	background-image: linear-gradient(-45deg,red,blue);
+    }
+    ```
+
+    
+
+  - radial-gradient(): 创建一个图像，该图像是由从原点发出的两种或者多种颜色之间的逐步过渡组成
+
+  - repeating-linear-gradient(): 创建一个由重复线性渐变组成的image
+
+  - repeating-radial-gradient(): 创建一个重复的原点触发渐变组成的image
+
+  
+
 ###  理解浏览器前缀
 
+浏览器前缀：有时候我们会看到css属性前面带有：-o- 、-xv- 、-ms-、mso- 、-moz-、-webkit-
+
+官方文档术语叫做：供应商特点扩展
+
+为什么需要浏览器前缀了？
+
+- css属性刚开始并没有成为标准，浏览器为了防止后续会修改名字给新的属性添加了浏览器前缀
+
+上述前缀也叫做浏览器私有前缀，只有对应的浏览器才能解析使用
+
+- -o-、-xv-: opera等
+- -ms- 、mso-: ie等
+- -moz-: firefox 等
+- -webkit-: safari、chrome等
+
+注意： 不需要手动添加，后面学习了模块化打包工具会自动添加浏览器前缀
+
+
+
 ### 深入理解BFC
+
+fc: formatting context (格式化上下文)，元素在标准流里面都是属于一个fc的
+
+BFC: 块级元素的布局属于Blcok Formatting Context(BFC)
+
+- 也就是block level box都是在bfc中布局的
+
+IFC: 行内级元素的布局属于Inline Formatting Context(IFC)
+
+- 而inline level box都是在IFC中布局的
+
+
+
+那么BFC在哪里？
+
+mdn 整理了哪些情况会有bfc
+
+- 根元素
+- 浮动元素
+- 绝对定位元素
+- 行内块元素
+- 表单单元格
+- overflow不为visible的块元素
+- 弹性元素
+- 网格元素
+- display值为flow-root的元素
+
+
+
+BFC有什么作用？
+
+- 在bfc中，box会在垂直方向上一个挨着一个排布
+- 垂直方向的间距由margin属性决定
+- 在同一个bfc中，相邻两个box之间的margin会折叠
+- 在bfc中，每个元素的左边缘是紧挨着包含块的左边缘的
+
+
+
+那么这个东西有什么用？
+
+- 解决margin的折叠问题
+
+- 解决浮动高度塌陷问题
+
+  - 网上很多说法，bfc可以解决浮动高度塌陷，可以实现清除浮动的效果
+    - 但是从来没有给出过bfc可以解决高度塌陷的原理或者权威的文档说明
+    - 他们也压根没有解释，为什么可以解决浮动高度塌陷问题，但是不能解决定位元素高度塌陷问题？
+
+  - 事实上，bfc解决高度塌陷需要满足两个条件
+    - 浮动元素的父元素触发BFC, 形成独立的格式化上下文
+    - 浮动元素的父元素的高度是auto的
+
+  - bfc的高度是auto的情况下，是如下方法计算高度的
+    - 如果只有inline-level, 是行高的顶部和底部的距离
+    - 如果有block-level,是由最底层的块上边缘和最底层块盒子的下边缘之间的距离
+    - 如果有绝对定位元素，将被忽略
+    - 如果有浮动元素，会增加高度以包括这些浮动元素的下边缘
+
+#
+
+
+
+## 媒体查询
+
+媒体查询是一种提供给开发者争对不同设备需求进行定制化开发的一个接口
+
+可以根据设备类型来修改页面
+
+使用方式：
+
+需求：屏幕小于800显示橙色
+
+- 方式1：通过@media和@import使用不同的css规则
+
+  ```html
+  <style>
+  	@import url(./css/body_bgc.css) (max-width: 800px);
+  </style>
+  ```
+
+- 方式二：使用media属性为style、link、source和其他html元素指定特定的媒体类型
+
+  ```htm
+  <link rel="stylesheet" media="(max-width: 800px)" href="./css/body_bgc.css">
+  ```
+
+  
+
+- 方式三：
+
+  ```html
+  <style>
+      @media (max-width: 800px) and (min-width:500px){
+          body{
+              background-color: orange;
+          }
+      }
+  </style>
+  ```
+
+ 媒体类型： 
+
+在使用媒体查询时，必须指定要使用的媒体类型
+
+媒体类型是可选的，并且会隐式地应用all类型
+
+常见媒体类型
+
+- all： 适用于所有设备
+- print：使用于打印模式
+- screen：（掌握）主要用于屏幕
+- speech：用于语音合成器
+
+
+
+媒体查询-逻辑运算符
+
+- and（最常用）
+- not
+- only
+- 逗号
+
+
+
+## CSS常见单位详解
+
+整体可以分为两类
+
+- 绝对长度单位
+
+  - 它们与其他任何东西都没有关系，通常被认为总是相同的大小
+  - 唯一一个经常使用的值，px(像素)
+
+- 相对长度单位
+
+  - 相对于其他一些东西
+  - 比如父元素的字体大小，或者视图端口的大小
+  - 使用相对单位的好处，经过一些仔细地规划，可以使文本或其他元素的大小与页面上的其他内容相对应
+
+  常见相对单位
+
+  - em
+    - 相对于font-size中自身
+
+
+
+## 深入理解pixel、dpr、ppi
+
+
+
+## CSS预处理器Less、Sass
+
+
+
+## 浏览器视口viewport
+
+
+
+## 移动端适配rem方案
+
+
+
+## 移动端适配vm方案
 
 
 
