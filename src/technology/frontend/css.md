@@ -3234,21 +3234,232 @@ BFC有什么作用？
   常见相对单位
 
   - em
-    - 相对于font-size中自身
+    - 相对于自身的font-size
+  
+  - rem
+    - 相对于html的font-size
+  
+  - vw/vh
+    - vw相对于视口的宽度,视口宽度的1%  1vw--->1000 10vw-->10px
+    - vh相对于视口的高度，视口高度的1%
 
 
 
 ## 深入理解pixel、dpr、ppi
 
+px是pixel的缩写
+
+那么像素到底是什么？
+
+- 像素是影响显示的基本单位，比如屏幕上看到的画面，一幅图片
+- pix是picture的简写，加上element 单词，就得到pixel;
+- 像素表示画像元素之意，有时被称为pel(picture element)
+
+像素单位常见有三种像素名称
+
+- 设备像素（物理 像素）
+
+  - 屏幕出厂以后就不会变化了
+  - 设备分辨率就是设备像素大小
+  - 比如iphone x 的分辨率1125*2436 指的就是设备像素
+
+- 设备独立像素 （逻辑像素）
+
+  - 在设备像素之上，操作系统为开发者进行抽象，提供了逻辑像素的概念
+
+- css像素
+
+  - 经常使用单位是px, 它在默认情况下等同于设备独立像素（也就是逻辑像素）
+
+  - 毕竟逻辑像素才是面向我们开发者
+
+    
+
+DPR: 设备像素比
+
+- Retina屏幕：视网膜显示屏，在Retina屏幕中，一个逻辑像素长度对应两个物理像素，这个比例称之为设备像素比
+- 可以通过window,devicePixelRatio获取当前屏幕的dpr值
 
 
-## CSS预处理器Less、Sass
+
+PPI: 每英寸像素
+
+- 通常用来表示一个打印图像或者显示器上像素的密度
+- 1英寸=2.54厘米=96px
+
+## CSS预处理器Less、Scss
+
+CSS编写的痛点
+
+- 大量重复代码
+- 无法定义变量
+- 没有专门的作用域和嵌套，需要定义大量的id/class来保证选择器的准确性
+
+CSS预处理器：通过预处理器自己独有的语法，来生成css的程序，代码最终会转换为css来运行
+
+常见的css预处理器
+
+- Sass/Scss：最早也是最成熟的css预处理器，受less影响，已经全面兼容css的scss
+- less
+- stylus
 
 
+
+Less： 是一门css扩展语言，并且兼容css
+
+- less增加了很多相对于css更好用的特性
+- 比如定义变量，混入，嵌套，计算
+- less最终被编译css运行在浏览器中
+
+
+
+less代码编译
+
+- 方式1：下载node环境，通过npm包管理下载less工具，使用less工具对代码进行编译
+- 方式2：引入cdn的less编译代码，对less进行实时处理
+
+```le
+<link rel="stylesheet/less" href="./test.less">
+<script src="https://cdn.jsdelivr.net/npm/less@4"></script>
+```
+
+- 方式3：将less的js代码下载到本地引入
+
+less 语法
+
+- 语法一：兼容css语法
+
+- 语法二：- 变量(variables)
+
+  语法：@变量名：变量值
+
+  ```le
+  @themeColor: #f3c258;
+  @mainFontSize: 12px;
+  
+  .box{
+  	color: @themeColor;
+  	font-size: @mainFontSize;
+  }
+  
+  //支持选择器嵌套
+  .box{
+  	.pel{
+  		color: @themeColor;
+  	}
+  }
+  ```
+
+- 语法三：特殊符合： &表示当前选择器的父级
+
+  ```le
+  p{
+  	a.link{
+  		color: @themeColor;
+  	}
+  	&:hover {
+  		color: #00f;
+  	}
+  }
+  ```
+
+- 语法四：运算（Operations）（了解）
+  - 在less中，算术运算符可以对任何数字、颜色或变量进行运算
+
+- 语法五：混合（mixins）
+
+  - 我们希望将一些公共的css代码独立抽取到一个新的地方，任何选择器都可以进行复用
+  - 混入是一种将一组属性从一个规则集混入到另外一个规则集的方法
+  - 混入也可以传递参数
+
+  ```less
+  .nowrap_ellipsis{
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+  }
+  
+  .box_border(@borderWidth: 5px,@borderColor:purple){
+      border: @borderWidth solid @borderColor;
+  }
+  
+  .box1{
+      width: 100px;
+      background-color: #f00;
+      .nowrap_ellipsis();
+      .box_border(10px,orange);
+  }
+  .box2{
+      width: 150px;
+      background-color: #0f0;
+      .nowrap_ellipsis();
+  }
+  
+  ```
+
+  - 语法六：继承
+
+    ```
+    .bordered{
+    	border-bottom: 10px solid #000;
+    }
+    
+    .box{
+    	&:extend(.bordered);
+    }
+    ```
+
+  - 语法七：less内置函数
+
+
+
+  Sass:  直接学习scss,完全兼容css的
+
+- scss的语法包括变量、嵌套、混入、函数、操作符、作用域
+- 也包括更强大的控制语句，更灵活的函数，插值语法
 
 ## 浏览器视口viewport
 
+在一个浏览器中，我们可以看到的区域就是视口
 
+在pc端页面，我们是不需要对视口进行区分，因为我们的布局视口和视觉视口是同一个
+
+但是在移动端不一样，在移动端通常将视口划分三种
+
+- 布局视口
+
+  - 默认情况下，一个在pc端的网页在移动端会如何显示呢？
+    - 第一，它会按照宽度980px来布局一个页面的盒子和内容
+    - 第二，为了显示可以完整的显示在页面中，对整个页面进行缩小
+
+     我们相对于980px布局的这个视口，称之为布局视口，布局视口的默认宽度是980px
+
+- 视觉视口
+
+  - 默认情况下，我们按照980px显示内容，那么右侧有一部分区域就会无法显示，所以手机端浏览器会默认对页面进行缩放以显示
+
+    到用户的可见区域中
+
+  - 那么显示在可见区域的这个视口，就是视觉视口
+
+- 理想视口
+
+  - 默认情况下的layout viewport并不适合我们进行布局
+  - 我们可以对layout viewport进行宽度和缩放的设置，以满足正常在一个移动端窗口的布局
+  - 这个时候可以设置meta中的viewport
+
+  | 值            | 可能的附加值                       | 描述                                     |
+  | ------------- | ---------------------------------- | ---------------------------------------- |
+  | width         | 一个正整数，或者字符串device-width | 定义viewport的宽度                       |
+  | height        | 一个正整数，或者字符串device-width | 定义高度，未被任何浏览器使用             |
+  | initial-scale | 一个0.0到10.0之间的正数            | 定义设备宽度与viewport大小之间的缩放比例 |
+  | maximum-scale | 一个0.0到10.0之间的正数            | 定义缩放的最大值                         |
+  | minimum-scale | 一个0.0到10.0之间的正数            | 定义缩放的最小值                         |
+  | user-scalable | yes或者no                          | 默认为yes,设置为no,将无法缩放当前页面    |
+
+  
+
+  
 
 ## 移动端适配rem方案
 
