@@ -3,9 +3,9 @@ home: true
 layout: BlogHome
 icon: shouye
 title: 首页
-heroImage: /pwa/144.png
+# heroImage: 
 bgImage: //file.mo7.cc/api/public/bz?idx=1
-heroText: 辰心编码
+# heroText: 
 heroFullScreen: true
 tagline: 轻舟已过万重山，长路漫漫亦灿灿。
 description: 辰心编码,博客,记录,分享

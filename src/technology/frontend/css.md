@@ -2949,7 +2949,7 @@ text-overflow: 用于设置文字溢出时的行为
 
 ### CSS常见的函数扩展
 
-css函数通常可以帮助威明更加灵活的来编写样式的值
+css函数通常可以帮助我们更加灵活的来编写样式的值
 
 几个非常好用的css函数
 
@@ -3278,7 +3278,7 @@ px是pixel的缩写
 DPR: 设备像素比
 
 - Retina屏幕：视网膜显示屏，在Retina屏幕中，一个逻辑像素长度对应两个物理像素，这个比例称之为设备像素比
-- 可以通过window,devicePixelRatio获取当前屏幕的dpr值
+- 可以通过window.devicePixelRatio获取当前屏幕的dpr值
 
 
 
@@ -3365,7 +3365,7 @@ less 语法
 
 - 语法四：运算（Operations）（了解）
   
-- 在less中，算术运算符可以对任何数字、颜色或变量进行运算
+  在less中，算术运算符可以对任何数字、颜色或变量进行运算
   
 - 语法五：混合（mixins）
 
@@ -3487,15 +3487,49 @@ less 语法
   - 问题一：针对不同的屏幕，设置html不同的font-size
   - 问题二：将原来要设置的尺寸，转化成rem单位
 
-rem的font-size
+ rem的单位换算
+
+方案一：手动换算, 麻烦
+
+方案二：less/sacc函数
+
+```
+.pxToRem(@px){
+	result: 1rem *(@px /37.5)
+}
+
+.box{
+	width: .pxToRem(100)[result];
+}
+
+p{
+	font-size: .pxToRem(14)[result];
+}
+
+
+```
+
+方案三： postcss-pxtorem
+
+方案四：vscode插件-->px to rem
 
 
 
-## 移动端适配rem方案
 
 
+## 移动端适配vm方案（推荐使用）
 
-## 移动端适配vm方案
+vm 和rem对比
 
+- rem事实上是作为一种过渡方案，它利用的也是vm的思想
+  - 前面不管我们自己编写的js, 还是flexible的源码
+  - 都是将1rem等同于设计稿的1/10, 在利用1rem计算相对于整个屏幕的尺寸大小
+  - 那么我们来思考，1vw不是刚好等于屏幕的1/100吗？
+  - 而且相对于rem还更加有优势
 
-
+- vm相对于rem的优势
+  - 不需要去计算html的font-size大小，也不需要给html设置这样一个font-size
+  - 不会因为设置html的font-size大小，而必须给body再设置一个font-size，防止继承
+  - 因为不依赖font-size的尺寸，所以不用担心某些原因html的font-size尺寸被篡改，页面尺寸混乱
+  - vw相对于rem更加语义化，1vw刚好是1/100的viewport的大小
+  - 可以具备rem之前所有的优点

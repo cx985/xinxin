@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, nextTick } from 'vue';
+import { nextTick, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const BlogBg = () => {

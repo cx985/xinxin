@@ -59,7 +59,7 @@ hr {
     top: -0.4rem;
     left: 1%;
     font-family: 'iconfont';
-    content: '\e66c';
+    content: '\e6f7';
     z-index: 2;
     font-size: 1.6rem;
     transition: 1s;
