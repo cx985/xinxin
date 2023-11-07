@@ -19,5 +19,6 @@ order: 1
 - [JAVA集合](./javaCollect.md)
 - [JUC](./juc.md)
 - [Spring](./spring.md)
+- [算法](./algorithm.md)
 
 ---
