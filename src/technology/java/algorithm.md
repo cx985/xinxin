@@ -93,6 +93,104 @@ public static int[] twoSum(int[] arr,int target){
 
 
 
+#### 2.1.3 方法二：哈希表
+
+```java
+public static int[] twoSum(int[] arr,int target){
+    //创建一个hashmap存储数组元素和对应的索引
+    Map<Integer,Integer> map = new HashMap<>();
+    
+    //遍历数组元素
+    for(int i=0; i<arr.length;i++){
+        int complement = target - arr[i];
+        //检测是否存在与当前元素配对的差值
+        if(map.containsKey(complement)){
+            //返回两个数的索引
+            return new int[]{map.get(complement),i};
+        }
+        
+        //将当前元素和索引存入hashmap中
+        map.put(nums[i],i);
+    }
+    
+    //如果没有找到符合条件的两个数，返回空数组
+    return new int[0];
+}
+```
+
+
+
+### 2.2 三数之和
+
+#### 2.2.1 题目说明
+
+给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+**示例**:
+
+给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+
+[
+
+ [-1, 0, 1],
+
+ [-1, -1, 2]
+
+]
+
+
+
+#### 2.2.2 解题（推荐双指针法）
+
+1. 将数组排序：首先，对给定的数组进行排序，以便更方便地使用双指针方法。排序的时间复杂度为O(n log n)，其中n是数组的长度。
+2. 遍历数组：遍历排序后的数组，在每个位置上选择一个数字作为第一个数（最左边的指针）。
+3. 使用双指针查找另外两个数：在选择的第一个数后面的子数组部分中，使用双指针方法来查找另外两个数，使得它们的和等于0减去第一个数。一个指针从第一个数的右边开始移动，即左指针，另一个指针从数组尾部向左移动，即右指针。
+4. 调整指针位置：根据双指针所指的三个数之和与目标和比较的结果，调整指针的位置。如果三数之和小于目标和，将左指针向右移动一位；如果三数之和大于目标和，将右指针向左移动一位；如果三数之和等于目标和，将这三个数添加到结果集中。
+5. 继续遍历：重复步骤3和步骤4，直到遍历完整个数组。
+6. 返回结果：返回找到的所有满足条件的三个数的组合
+
+```java
+public List<List<Integer>> threeSum(int[] nums){
+int n = nums.length;
+List<List<Integer>> result = new ArrayList<>();
+
+// 先对数组进行排序
+    Arrays.sort(nums);
+    
+    for( int i = 0; i < n; i++ ){
+        if( nums[i] > 0 )
+            break;
+        if( i > 0 && nums[i] == nums[i-1] )
+            continue;
+        // 定义左右指针（索引位置）
+        int lp = i + 1;
+        int rp = n - 1;
+        // 只要左右不重叠，就继续移动指针
+        while( lp < rp ){
+            int sum = nums[i] + nums[lp] + nums[rp];
+            if( sum == 0 ){
+                result.add(Arrays.asList(nums[i], nums[lp], nums[rp]));
+                lp ++;
+                rp --;
+                while( lp < rp && nums[lp] == nums[lp - 1] )
+                    lp ++;
+                while( lp < rp && nums[rp] == nums[rp + 1] )
+                    rp --;
+            }
+            else if( sum < 0 )
+                lp ++;
+            else
+                rp --;
+        }
+    }
+    return result;
+}
+```
+
 
 
 
