@@ -154,41 +154,135 @@ public static int[] twoSum(int[] arr,int target){
 6. 返回结果：返回找到的所有满足条件的三个数的组合
 
 ```java
-public List<List<Integer>> threeSum(int[] nums){
-int n = nums.length;
-List<List<Integer>> result = new ArrayList<>();
+public static List<List<Integer>> threeSum(int[] nums) {
+		// 对输入数组进行排序
+		Arrays.sort(nums);
 
-// 先对数组进行排序
-    Arrays.sort(nums);
-    
-    for( int i = 0; i < n; i++ ){
-        if( nums[i] > 0 )
-            break;
-        if( i > 0 && nums[i] == nums[i-1] )
-            continue;
-        // 定义左右指针（索引位置）
-        int lp = i + 1;
-        int rp = n - 1;
-        // 只要左右不重叠，就继续移动指针
-        while( lp < rp ){
-            int sum = nums[i] + nums[lp] + nums[rp];
-            if( sum == 0 ){
-                result.add(Arrays.asList(nums[i], nums[lp], nums[rp]));
-                lp ++;
-                rp --;
-                while( lp < rp && nums[lp] == nums[lp - 1] )
-                    lp ++;
-                while( lp < rp && nums[rp] == nums[rp + 1] )
-                    rp --;
+		// 创建一个 ArrayList 用于存储满足条件的三元组
+		List<List<Integer>> result = new ArrayList<>();
+
+		// 遍历数组，略过最后两个元素，因为我们需要至少三个元素来形成一个三元组
+		for (int i = 0; i < nums.length - 2; i++) {
+			// 排序后的数组，如果当前元素大于0，不可能再找到和为0的三元组，因为left=i+1
+			if (nums[i] > 0) {
+				break;
+			}
+
+			// 跳过重复元素，以避免重复的三元组
+			if (i > 0 && nums[i] == nums[i - 1]) {
+				continue;
+			}
+
+			// 初始化双指针，一个指针从当前元素的下一个开始，另一个指针从数组的最后一个元素开始
+			int left = i + 1;
+			int right = nums.length - 1;
+
+			// 当左指针小于右指针时，继续寻找满足条件的三元组
+			while (left < right) {
+				int sum = nums[i] + nums[left] + nums[right];
+
+				// 根据三数之和与0的关系，移动左指针或右指针
+				if (sum == 0) {
+					// 找到一个满足条件的三元组，添加到结果列表中
+					result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+
+					// 跳过重复元素，以避免重复的三元组
+					while (left < right && nums[left] == nums[left + 1]) {
+						left++;
+					}
+					while (left < right && nums[right] == nums[right - 1]) {
+						right--;
+					}
+
+					// 找到一个满足条件的三元组后，同时移动左右指针继续寻找下一个三元组
+					left++;
+					right--;
+				} else if (sum < 0) {
+					// 如果和小于0，需要增加和的值，因此将左指针向右移动
+					left++;
+				} else {
+					// 如果和大于0，需要减小和的值，因此将右指针向左移动
+					right--;
+				}
+			}
+		}
+
+		// 返回包含满足条件的三元组的结果列表
+		return result;
+	}
+```
+
+
+
+### 2.3 下一个排列
+
+####  2.3.1 题目说明
+
+实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+
+如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+
+必须原地修改，只允许使用额外常数空间。
+
+ 
+
+以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+
+1,2,3 → 1,3,2
+
+3,2,1 → 1,2,3
+
+1,1,5 → 1,5,1
+
+
+
+#### 2.3.2 解题：一遍扫描
+
+解题思路：
+
+1. 先排除例外，如果数组是按照降序排列的，就没有升序的子序列了。 下一个排列就是将数组升序排列 比如[9,8,7]，下一个排列就是[7,8,9]
+2. 如果数组有一个升序的子序列，那么就一定可以找到它的下一个排列。 也就是说从右往左，找到第一对连续的数字 nums[i] 和 nums[i+1],满足nums[i+1] > nums[i]
+3. 比如 [1,5,7,4,2] 满足 nums[i+1] > nums[i] 则 i = 1, (num[2] = 7) > (num[1] = 5), 然后 从i+1到 数组结束，查找比5大，比7小的数字，
+4. 找到了6 , 那么就确定了前两个数字1,6 ， 后面的按正序排序就行了
+5. 如果没找到，则直接替换5和7的位置即可
+
+```java
+public void nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1) {
+            return;
+        }
+        
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--; // 从右向左找到第一个不满足递减顺序的元素
+        }
+        
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j > i && nums[j] <= nums[i]) {
+                j--; // 从右向左找到第一个大于nums[i]的元素
             }
-            else if( sum < 0 )
-                lp ++;
-            else
-                rp --;
+            
+            swap(nums, i, j); // 交换找到的两个元素
+        }
+        
+        reverse(nums, i + 1); // 翻转i之后的元素
+    }
+    
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    
+    private void reverse(int[] nums, int start) {
+        int i = start, j = nums.length - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
         }
     }
-    return result;
-}
 ```
 
 
