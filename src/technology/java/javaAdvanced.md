@@ -43,12 +43,130 @@ try(Scanner scanner = new Scanner(new File("test.txt"))) {
 
 
 ## 泛型
-1、泛型本质是为了将类型参数化
+  泛型本质是为了将类型参数化
 
-泛型通配符
+ 作用：
+
+- 泛型可以在编译时对类型进行安全检测，使得所有的强制转换都是自动隐式实现的，保证了类型的安全性；
+
+- 泛型作为”代码模板“，实现了 一套代码对各种类型的套用， 提高了代码的可重用性
+
+  
+
+使用场景：
+
+- 泛型集合
+
+   Collection 的源码
+
+  ```java
+  public interface Collection<E> extents Iterable<E>
+  ```
+
+  
+
+- 泛型方法
+
+- 泛型类
+
+  ```java
+  public class ClassName<T>{
+      private T first;
+      private T second;
+      
+      public ClassName(T first,T second){
+          this.first = first;
+          this.second = second;
+      }
+      
+      public T getFirst(){
+          return first;
+      }
+      
+      public T getSecond(){
+          return second;
+      }
+  }
+  ```
+
+  
+
+- 泛型接口
+
+  ```java
+  //在接口名称后面紧跟泛型<>
+  public interface InterfaceName<T>{
+      //接口的方法定义
+  }
+  
+  //可以同时定义多个泛型，多个泛型用“，”逗号分割
+  public interface InterfaceName2<M,N>{
+      //接口的方法定义
+  }
+  ```
+
+  
+
+- 泛型加反射
+
+
+
+**泛型字母解释**
+
+- E: Element(表示集合元素，常在集合中使用)
+- T：Type(表示java类，常在类和接口中使用)
+- K: key(表示健)
+- V: value(表示值)
+- N: Number(表示数值类型)
+- ?: 表示不确定的java类型
+
+
+
+
+
+**泛型通配符**
+
 1、<?>: 被称作无限定的通配符
 2、<? extends T>: 被称作有上届的通配符
 3、<? super T>: 被称作有下界的通配符
+
+
+
+需求：给定一个数组和目录值要求返回对应下标，兼容所有类型
+
+```java
+//int 标准版
+public static int seach(int[] arr,int target){
+        for(int i=0; i<arr.length;i++){
+            if(arr[i] == target){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+//泛型版
+public static <E> int seach1(E[] arr,E target){
+        for(int i=0; i<arr.length;i++){
+            if(arr[i].equals(target)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+public static void main(String[] args) {
+        String[] arr1 = {"8","7","9","ss","aa"};
+        int ss = Test.seach1(arr1, "ss");
+        System.out.println(ss);
+
+    }
+```
+
+
+
+
 
 
 ## java反射
@@ -66,20 +184,20 @@ try(Scanner scanner = new Scanner(new File("test.txt"))) {
    - 类.class
    - Class.forName()
 
-    
+
      Class class = Class.forName("com.cx.TargetObject")
-    
+
    - 通过对象实例instance.getClass() 获取
 
-    
+
       TargetObject o = new TargetObject();
       Class b = o.getClass();
-    
+
    - 通过类加载器xxxClassLoader.loadClass()传入类路径获取
 
-    
+
       ClassLoader.getSystemClassLoader().loadClass("cn.cx.TargetObject")
-    
+
 
 
 ## java 值传递
