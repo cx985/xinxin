@@ -303,6 +303,153 @@ public void nextPermutation(int[] nums) {
 
 ## 第九章：排序算法
 
+### 9.1 选择排序法
+
+#### 9.1.1 算法思路
+
+算法思路
+
+- 先把最小得拿出来
+- 剩下的，再把最新的拿出来
+- 剩下的再把最小的拿出来
+- 每次选择还没处理的元素里最小的元素
+
+如数组 6 4 2 3 1 5
+
+每次找数组最小的：1 2 3 4 5 6
+
+发现排序过程中占用了额外的空间
+
+可否原地完成？ 原地排序呢？可以
+
+#### 9.1.2  标准版（int类型）
+
+```java
+public static void selectSort(int[] arr){
+        for(int i=0;i<arr.length;i++){
+            //定义最小得值得索引
+            int minIndex = i;
+            for(int j=i; j<arr.length;j++){
+                if(arr[j]<arr[minIndex]){
+                    //如果比最小得索引小，则赋值最小索引
+                    minIndex = j;
+                }
+            }
+
+            //每次外层循环找到最小的，将i和最小的值交换位置
+            swap(arr,i,minIndex);
+        }
+    }
+
+    public static void swap(int arr[],int i,int j){
+        int t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+```
+
+
+
+#### 9.1.3 泛型版（兼容所有数据类型）
+
+```java
+public static  <E extends Comparable<E>> void selectSort1(E[] arr){
+        for(int i=0;i<arr.length;i++){
+            int minIndex = i;
+            for(int j=i; j<arr.length;j++){
+                if(arr[j].compareTo(arr[minIndex]) < 0){
+                    minIndex = j;
+                }
+            }
+
+            swap1(arr,i,minIndex);
+        }
+    }
+
+    public static <E> void swap1(E arr[],int i,int j){
+        E t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+    public static void main(String[] args) {
+        Integer arr[] = {6,4,1,3,2,5};
+        Test.selectSort1(arr);
+        System.out.println(Arrays.toString(arr));
+
+    }
+```
+
+注意：
+
+1. 接口泛型需要写在void前面，且需要继承Comparable
+2. Comparable 和 Comparator的区别
+
+
+
+### 9.2 插入排序法
+
+#### 9.2.1 算法思路
+
+插入排序类似生活中把牌按顺序排列
+
+已知数据 
+
+i= 0 
+
+6 4 2 3 1 5
+
+arr[0,i) 已经排好序的，arr[i,n) 未排序的
+
+把arr[i]放到合适的位置
+
+
+
+和选择排序的区别
+
+- 选择排序每次遍历i，最前面的元素总是最小的
+- 插入排序，对应没遍历完的数据是不会改变其位置，最前面的元素是i前面元素最小的
+
+#### 9.2.2 方式一
+
+```JAV
+{
+        for(int i=0;i<arr.length;i++){
+            for(int j=i; j-1>=0;j--){
+                if(arr[j].compareTo(arr[j-1]) < 0){
+                    swap1(arr,j,j-1);
+                }else{
+                    break;
+                }
+            }
+        }
+    }
+
+    public static <E> void swap1(E arr[],int i,int j){
+        E t = arr[i];
+        arr[i] = arr[j];
+        arr[j] = t;
+    }
+
+```
+
+#### 9.2.3 方式二
+
+```java
+public static <E extends Comparable<E>> void insertSort2(E[] arr){
+        for(int i=0;i<arr.length;i++){
+           E t = arr[i];
+           int j;
+           for(j= i; j-1 >= 0 && t.compareTo(arr[j-1]) < 0 ;j--){
+               arr[j] = arr[j-1];
+           }
+           arr[j] = t;
+        }
+    }
+```
+
+
+
 ## 第十章：二叉树及递归
 
 ## 第十一章：贪心算法
