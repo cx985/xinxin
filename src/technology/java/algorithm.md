@@ -301,6 +301,26 @@ public void nextPermutation(int[] nums) {
 
 ## 第八章：栈和队列
 
+### 8.1 栈
+
+栈也是一种线性结构，相比数组，栈对应的操作是数组的子集，只能从一端添加元素，也只能从一端取出元素，这一端称为栈顶
+
+
+
+栈是一种后进先出的结构  LIFO(Last in first out)
+
+
+
+栈的实现 Stack
+
+- void push(E)
+- E pop()
+- E peek()
+- int getSize()
+- boolean isEmpty()
+
+
+
 ## 第九章：排序算法
 
 ### 9.1 选择排序法
