@@ -301,15 +301,11 @@ public void nextPermutation(int[] nums) {
 
 ## 第八章：栈和队列
 
-### 8.1 栈
+### 8.1 栈的介绍
 
 栈也是一种线性结构，相比数组，栈对应的操作是数组的子集，只能从一端添加元素，也只能从一端取出元素，这一端称为栈顶
 
-
-
 栈是一种后进先出的结构  LIFO(Last in first out)
-
-
 
 栈的实现 Stack
 
@@ -318,6 +314,916 @@ public void nextPermutation(int[] nums) {
 - E peek()
 - int getSize()
 - boolean isEmpty()
+
+### 8.2 栈的实现
+
+1. Array类
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: Array
+    * @Author : chenxin
+    * @Date :2023/11/14  11:48
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public class Array {
+   
+       private int[] data;
+   
+       //数组元素的个数
+       private int size;
+   
+       //构造函数，传入数组的容量capacity构造Array
+       public Array(int capacity){
+           data = new int[capacity];
+           size = 0;
+       }
+   
+       //无参数的构造函数，默认数组的容量capation=10
+       public Array(){
+           this(10);
+       }
+   
+       //获取数组中的元素的个数
+       public int getSize(){
+           return this.size;
+       }
+   
+       //获取数组的容量
+       public int getCapacity(){
+           return data.length;
+       }
+   
+       //判断返回数组是否为空
+       public boolean isEmpty(){
+           return size == 0;
+       }
+   
+       //向所有元素后添加一个新元素
+       public void addLast(int e){
+           if(size == data.length){
+               throw new IllegalArgumentException("AddLast failed. Array is full");
+           }
+           data[size] = e;
+           size ++;
+       }
+   
+       //在第index个位置插入一个新元素e
+       public void add(int index,int e){
+           /*if(size == data.length){
+               throw new IllegalArgumentException("AddLast failed. Array is full");
+           }*/
+   
+           if(index <0 || index > size){
+               throw new IllegalArgumentException("Add failed. Require index >=0 and index >size");
+           }
+   
+           //扩容
+           if(size == data.length){
+               resize(2 * data.length);
+           }
+   
+           //从最后一个元素开始，只要i大于index,i减减，将当前元素的值赋值给后一个元素
+           for(int i = size -1; i>= index ; i--){
+               data[i + 1] = data[i];
+           }
+           data[index] = e ;
+           size ++;
+       }
+   
+       //在所有元素前添加一个新元素
+       public void addFirst(int e){
+           add(0,e);
+       }
+   
+       @Override
+       public String toString(){
+           StringBuilder res = new StringBuilder();
+           res.append(String.format("Array: size = %d , capacity= %d\n",size,data.length));
+           res.append('[');
+           for(int i=0; i<size; i++){
+               res.append(data[i]);
+               if(i != size -1){
+                   res.append(", ");
+               }
+           }
+           res.append(']');
+           return res.toString();
+       }
+   
+       //获取index索引位置的元素
+       int get(int index){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Get failed. Index is illegal");
+           }
+           return data[index];
+       }
+   
+       public int getLast(){
+           return get(size-1);
+       }
+   
+       public int getFirst(){
+           return get(0);
+       }
+   
+       void set(int index,int e){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Get failed. Index is illegal");
+           }
+           data[index] = e;
+       }
+   
+       //查找数组中是否有元素e
+       public boolean contains(int e){
+           for(int i=0;i<size;i++){
+               if(data[i] == e){
+                   return true;
+               }
+           }
+           return false;
+       }
+   
+       //查找数组中元素e所在的索引，如果不存在元素e,则返回-1
+       public int find(int e){
+           for(int i=0;i<size;i++){
+               if(data[i] == e){
+                   return i;
+               }
+           }
+           return -1;
+       }
+   
+       //从数组中删除index位置的元素，返回删除的元素
+       public int remove(int index){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Remove failed. Index is illegal");
+           }
+           int ret = data[index];
+           for(int i= index +1 ; i<size; i++){
+               data[i-1] = data[i];
+           }
+           size -- ;
+   
+           if(size == data.length /2){
+               resize(data.length /2);
+           }
+           return ret;
+       }
+   
+       public int removeFirst(){
+           return remove(0);
+       }
+   
+       public int removeLast(){
+           return remove(size - 1);
+       }
+   
+       public void removeElement(int e){
+           int index = find(e);
+           if(index != -1){
+               remove(index);
+           }
+       }
+   
+       private void resize(int newCapacity){
+           int[] newData = new int[newCapacity];
+           for(int i=0;i<size;i++){
+               newData[i] = data[i];
+           }
+           data = newData;
+       }
+   
+   
+       public static void main(String[] args) {
+           Array array = new Array();
+           for(int i=0; i< 10;i++){
+               array.addLast(i);
+           }
+           System.out.println(array);
+   
+           array.add(1,100);
+           System.out.println(array);
+   
+           array.addFirst(-1);
+           System.out.println(array);
+   
+       }
+   }
+   
+   ```
+
+   
+
+2. stack 接口
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: Stack
+    * @Author : chenxin
+    * @Date :2023/11/20  14:04
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public interface Stack {
+   
+       int getSize();
+   
+       boolean isEmpty();
+   
+       void push(int e);
+   
+       int pop();
+   
+       int peek();
+   }
+   
+   ```
+
+   
+
+3. ArrayStack类
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: ArrayStack
+    * @Author : chenxin
+    * @Date :2023/11/20  14:05
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public class ArrayStack implements Stack {
+   
+       Array array;
+   
+       public ArrayStack(int capacity){
+           array = new Array(capacity);
+       }
+   
+       public ArrayStack(){
+           array = new Array();
+       }
+   
+       public int getCapacity(){
+           return array.getCapacity();
+       }
+   
+       @Override
+       public int getSize() {
+           return array.getSize();
+       }
+   
+       @Override
+       public boolean isEmpty() {
+           return array.isEmpty();
+       }
+   
+       @Override
+       public void push(int e) {
+           array.addLast(e);
+       }
+   
+       @Override
+       public int pop() {
+           return array.removeLast();
+       }
+   
+       @Override
+       public int peek() {
+           return array.getLast();
+       }
+   
+       @Override
+       public String toString() {
+           StringBuilder res = new StringBuilder();
+           res.append("Stack: ");
+           res.append('[');
+           for(int i=0;i<array.getSize();i++){
+               res.append(array.get(i));
+               if(i != array.getSize() -1){
+                   res.append(",");
+               }
+           }
+           res.append("] top");
+           return res.toString();
+       }
+   
+       public static void main(String[] args) {
+           ArrayStack stack = new ArrayStack();
+           for(int i=0; i< 5; i++){
+               stack.push(i);
+               System.out.println(stack);
+           }
+   
+           stack.pop();
+           System.out.println(stack);
+       }
+   }
+   
+   ```
+
+4. 测试结果
+
+   ![image-20231120142710663](algorithm.assets/image-20231120142710663.png)
+
+### 8.3 栈的应用
+
+- undo操作- 编辑器
+
+- 系统调用栈-操作系统
+
+- 括号匹配-编译器
+
+  力扣：20
+
+  题目：给定一个只包括 `'('`，`')'`，`'{'`，`'}'`，`'['`，`']'` 的字符串 `s` ，判断字符串是否有效。
+
+  有效字符串需满足：
+
+  1. 左括号必须用相同类型的右括号闭合。
+  2. 左括号必须以正确的顺序闭合。
+  3. 每个右括号都有一个对应的相同类型的左括号
+
+    **示例 1：**
+
+  ```
+  输入：s = "()"
+  输出：true
+  ```
+
+  **示例 2：**
+
+  ```
+  输入：s = "()[]{}"
+  输出：true
+  ```
+
+  **示例 3：**
+
+  ```java
+  输入：s = "(]"
+  输出：false
+  ```
+
+​      利用栈解决
+
+     ```java
+     import java.util.Stack;
+     
+     /**
+      * @ClassName: Solution
+      * @Author : chenxin
+      * @Date :2023/11/20  15:44
+      * @Description: TODO
+      * @Version :1.0
+      */
+     public class Solution {
+     
+         public static boolean isValid(String s){
+             Stack<Character> stack = new Stack<>();
+             for(int i=0; i<s.length();i++){
+                 char c = s.charAt(i);
+                 if(c == '(' || c == '[' || c == '{'){
+                     stack.push(c);
+                 }else{
+                     if(stack.isEmpty()){
+                         return false;
+                     }
+                     Character topChar = stack.pop();
+                     if(c == ')' && topChar != '(' ){
+                         return false;
+                     }
+                     if(c == ']' && topChar != '['){
+                         return false;
+                     }
+                     if(c == '}' && topChar != '{'){
+                         return false;
+                     }
+                 }
+             }
+             return stack.isEmpty();
+         }
+     
+         public static void main(String[] args) {
+             String  s = "()[]{}";
+             boolean valid = Solution.isValid(s);
+             System.out.println(valid);
+         }
+     
+     }
+     ```
+
+
+
+### 8.4 队列介绍
+
+ 队列也是一种线性结构，相比数组，队列对应的操作是数组的子集
+
+ 队列只能从一端（队尾）添加元素，只能从另一端（队首）取出元素
+
+队列是一种先进先出的数据结构（先到先得） FIFO(First in First out)
+
+
+
+### 8.5 队列的实现
+
+Queue
+
+- void enqueue
+- E dequeue()
+- E getFront()
+- int getSize()
+- boolean isEmpty()
+
+
+
+1. Array类
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: Array
+    * @Author : chenxin
+    * @Date :2023/11/14  11:48
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public class Array {
+   
+       private int[] data;
+   
+       //数组元素的个数
+       private int size;
+   
+       //构造函数，传入数组的容量capacity构造Array
+       public Array(int capacity){
+           data = new int[capacity];
+           size = 0;
+       }
+   
+       //无参数的构造函数，默认数组的容量capation=10
+       public Array(){
+           this(10);
+       }
+   
+       //获取数组中的元素的个数
+       public int getSize(){
+           return this.size;
+       }
+   
+       //获取数组的容量
+       public int getCapacity(){
+           return data.length;
+       }
+   
+       //判断返回数组是否为空
+       public boolean isEmpty(){
+           return size == 0;
+       }
+   
+       //向所有元素后添加一个新元素
+       public void addLast(int e){
+           if(size == data.length){
+               throw new IllegalArgumentException("AddLast failed. Array is full");
+           }
+           data[size] = e;
+           size ++;
+       }
+   
+       //在第index个位置插入一个新元素e
+       public void add(int index,int e){
+           /*if(size == data.length){
+               throw new IllegalArgumentException("AddLast failed. Array is full");
+           }*/
+   
+           if(index <0 || index > size){
+               throw new IllegalArgumentException("Add failed. Require index >=0 and index >size");
+           }
+   
+           //扩容
+           if(size == data.length){
+               resize(2 * data.length);
+           }
+   
+           //从最后一个元素开始，只要i大于index,i减减，将当前元素的值赋值给后一个元素
+           for(int i = size -1; i>= index ; i--){
+               data[i + 1] = data[i];
+           }
+           data[index] = e ;
+           size ++;
+       }
+   
+       //在所有元素前添加一个新元素
+       public void addFirst(int e){
+           add(0,e);
+       }
+   
+       @Override
+       public String toString(){
+           StringBuilder res = new StringBuilder();
+           res.append(String.format("Array: size = %d , capacity= %d\n",size,data.length));
+           res.append('[');
+           for(int i=0; i<size; i++){
+               res.append(data[i]);
+               if(i != size -1){
+                   res.append(", ");
+               }
+           }
+           res.append(']');
+           return res.toString();
+       }
+   
+       //获取index索引位置的元素
+       int get(int index){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Get failed. Index is illegal");
+           }
+           return data[index];
+       }
+   
+       public int getLast(){
+           return get(size-1);
+       }
+   
+       public int getFirst(){
+           return get(0);
+       }
+   
+       void set(int index,int e){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Get failed. Index is illegal");
+           }
+           data[index] = e;
+       }
+   
+       //查找数组中是否有元素e
+       public boolean contains(int e){
+           for(int i=0;i<size;i++){
+               if(data[i] == e){
+                   return true;
+               }
+           }
+           return false;
+       }
+   
+       //查找数组中元素e所在的索引，如果不存在元素e,则返回-1
+       public int find(int e){
+           for(int i=0;i<size;i++){
+               if(data[i] == e){
+                   return i;
+               }
+           }
+           return -1;
+       }
+   
+       //从数组中删除index位置的元素，返回删除的元素
+       public int remove(int index){
+           if(index <0 || index >= size){
+               throw new IllegalArgumentException("Remove failed. Index is illegal");
+           }
+           int ret = data[index];
+           for(int i= index +1 ; i<size; i++){
+               data[i-1] = data[i];
+           }
+           size -- ;
+   
+           if(size == data.length /2){
+               resize(data.length /2);
+           }
+           return ret;
+       }
+   
+       public int removeFirst(){
+           return remove(0);
+       }
+   
+       public int removeLast(){
+           return remove(size - 1);
+       }
+   
+       public void removeElement(int e){
+           int index = find(e);
+           if(index != -1){
+               remove(index);
+           }
+       }
+   
+       private void resize(int newCapacity){
+           int[] newData = new int[newCapacity];
+           for(int i=0;i<size;i++){
+               newData[i] = data[i];
+           }
+           data = newData;
+       }
+   
+   
+       public static void main(String[] args) {
+           Array array = new Array();
+           for(int i=0; i< 10;i++){
+               array.addLast(i);
+           }
+           System.out.println(array);
+   
+           array.add(1,100);
+           System.out.println(array);
+   
+           array.addFirst(-1);
+           System.out.println(array);
+   
+       }
+   }
+   
+   ```
+
+   
+
+2. Queue接口
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: Queue
+    * @Author : chenxin
+    * @Date :2023/11/20  16:44
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public interface Queue {
+       int getSize();
+   
+       boolean isEmpty();
+   
+       void enqueue(int e);
+   
+       int dequeue();
+   
+       int getFront();
+   }
+   
+   ```
+
+   
+
+3. ArrayQueue类
+
+   ```java
+   package com.cx.study.algorithm.array;
+   
+   /**
+    * @ClassName: ArrayQueue
+    * @Author : chenxin
+    * @Date :2023/11/20  16:45
+    * @Description: TODO
+    * @Version :1.0
+    */
+   public class ArrayQueue implements Queue{
+   
+       private Array array;
+   
+       public ArrayQueue(int capacity){
+           array = new Array(capacity);
+       }
+   
+       public ArrayQueue(){
+           array = new Array();
+       }
+   
+       public int getCapcity(){
+           return array.getCapacity();
+       }
+   
+       @Override
+       public int getSize() {
+           return array.getSize();
+       }
+   
+       @Override
+       public boolean isEmpty() {
+           return array.isEmpty();
+       }
+   
+       //添加元素是队列尾元素
+       @Override
+       public void enqueue(int e) {
+           array.addLast(e);
+       }
+   
+       //取出元素是队列头的元素
+       @Override
+       public int dequeue() {
+           return array.removeFirst();
+       }
+   
+       @Override
+       public int getFront() {
+           return array.getFirst();
+       }
+   
+       @Override
+       public String toString() {
+           StringBuilder res = new StringBuilder();
+           res.append("Queue: ");
+           res.append("front [");
+           for(int i=0; i<array.getSize();i++){
+               res.append(array.get(i));
+               if(i != array.getSize() -1){
+                   res.append(", ");
+               }
+           }
+           res.append("] tail");
+           return res.toString();
+       }
+   
+       public static void main(String[] args) {
+           ArrayQueue arrayQueue = new ArrayQueue();
+           for(int i=0;i< 10;i++){
+               arrayQueue.enqueue(i);
+               System.out.println(arrayQueue);
+   
+               if(i % 3 == 2){
+                   arrayQueue.dequeue();
+                   System.out.println(arrayQueue);
+               }
+           }
+       }
+   
+   }
+   
+   ```
+
+4. 测试结果
+
+   ![image-20231120171333665](algorithm.assets/image-20231120171333665.png)
+
+### 8.6 循环队列
+
+定义： 
+
+front == tail 队列为空
+
+![image-20231120201529092](algorithm.assets/image-20231120201529092.png)
+
+tail +1 == front 队列满，即：(tail+1) % c == front 队列满
+
+![image-20231120201703977](algorithm.assets/image-20231120201703977.png)
+
+实现：
+
+- Queue 接口
+
+  ```java
+  public interface Queue<E> {
+      int getSize();
+  
+      boolean isEmpty();
+  
+      void enqueue(E e);
+  
+      E dequeue();
+  
+      E getFront();
+  }
+  ```
+
+  
+
+- LoopQueue类
+
+  ```java
+  package com.cx.study.algorithm.queue;
+  
+  /**
+   * @ClassName: LoopQueue
+   * @Author : chenxin
+   * @Date :2023/11/20  20:22
+   * @Description: TODO
+   * @Version :1.0
+   */
+  public class LoopQueue<E> implements Queue<E> {
+  
+      private E[] data;
+  
+      private int front,tail;
+  
+      private int size;
+  
+      public LoopQueue(int capacity){
+          data = (E[])new Object[capacity +1];
+          front = 0;
+          tail = 0;
+          size = 0;
+      }
+  
+      public LoopQueue(){
+          this(10);
+      }
+  
+      public int getCapacity(){
+          return data.length -1;
+      }
+  
+  
+  
+      @Override
+      public int getSize() {
+          return size;
+      }
+  
+      @Override
+      public boolean isEmpty() {
+          return front == tail;
+      }
+  
+      @Override
+      public void enqueue(E e) {
+          if((tail +1) % data.length == front){
+              resize(getCapacity() * 2);
+          }
+  
+          data[tail] =e;
+          tail = (tail +1) % data.length;
+          size ++ ;
+  
+      }
+  
+  
+      private void resize(int newCapacity){
+          E[] newData = (E[])new Object[newCapacity + 1];
+          for(int i=0;i<size;i++){
+              newData[i] = data[(i + front) % data.length];
+          }
+          data = newData;
+          front = 0;
+          tail = size;
+      }
+  
+      @Override
+      public E dequeue() {
+          if(isEmpty()){
+              throw new IllegalArgumentException("Cannot dequeue from an empty queue");
+          }
+          E ret = data[front];
+          data[front] = null;
+          front = (front +1) % data.length;
+          size --;
+          if(size == getCapacity() /4 && getCapacity() /2 != 0){
+              resize(getCapacity() /2);
+          }
+          return ret;
+      }
+  
+      @Override
+      public E getFront() {
+          if(isEmpty()){
+              throw new IllegalArgumentException("Cannot dequeue from an empty queue");
+          }
+          return data[front];
+      }
+  
+      @Override
+      public String toString() {
+          StringBuilder res = new StringBuilder();
+          res.append(String.format("Queue: size = %d , capacity= %d\n",size,getCapacity()));
+          res.append(" front [");
+          for(int i=0; i != tail; i = (i+1) % data.length){
+              res.append(data[i]);
+              if((i +1)   % data.length  != tail){
+                  res.append(", ");
+              }
+          }
+          res.append("] tail");
+          return res.toString();
+      }
+  
+      public static void main(String[] args) {
+          LoopQueue arrayQueue = new LoopQueue();
+          for(int i=0;i< 10;i++){
+              arrayQueue.enqueue(i);
+              System.out.println(arrayQueue);
+  
+              if(i % 3 == 2){
+                  arrayQueue.dequeue();
+                  System.out.println(arrayQueue);
+              }
+          }
+  
+      }
+  }
+  
+  ```
+
+  
+
+
 
 
 
