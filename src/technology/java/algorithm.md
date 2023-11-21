@@ -1221,9 +1221,446 @@ tail +1 == front 队列满，即：(tail+1) % c == front 队列满
   
   ```
 
+
+### 8.7 循环队列另一种实现方式(不浪费空间)
+
+```java
+public class LoopQueue implements Queue {
+private E[] data;
+private int front, tail;
+private int size;
+
+public LoopQueue(int capacity){
+    data = (E[])new Object[capacity]; // 由于不浪费空间，所以data静态数组的大小是capacity
+                                      // 而不是capacity + 1
+    front = 0;
+    tail = 0;
+    size = 0;
+}
+
+public LoopQueue(){
+    this(10);
+}
+
+public int getCapacity(){
+    return data.length;
+}
+
+@Override
+public boolean isEmpty(){
+    // 注意，我们不再使用front和tail之间的关系来判断队列是否为空，而直接使用size
+    return size == 0;
+}
+
+@Override
+public int getSize(){
+    return size;
+}
+
+@Override
+public void enqueue(E e){
+
+    // 注意，我们不再使用front和tail之间的关系来判断队列是否为满，而直接使用size
+    if(size == getCapacity())
+        resize(getCapacity() * 2);
+
+    data[tail] = e;
+    tail = (tail + 1) % data.length;
+    size ++;
+}
+
+@Override
+public E dequeue(){
+
+    if(isEmpty())
+        throw new IllegalArgumentException("Cannot dequeue from an empty queue.");
+
+    E ret = data[front];
+    data[front] = null;
+    front = (front + 1) % data.length;
+    size --;
+    if(size == getCapacity() / 4 && getCapacity() / 2 != 0)
+        resize(getCapacity() / 2);
+    return ret;
+}
+
+@Override
+public E getFront(){
+    if(isEmpty())
+        throw new IllegalArgumentException("Queue is empty.");
+    return data[front];
+}
+
+private void resize(int newCapacity){
+
+    E[] newData = (E[])new Object[newCapacity];
+    for(int i = 0 ; i < size ; i ++)
+        newData[i] = data[(i + front) % data.length];
+
+    data = newData;
+    front = 0;
+    tail = size;
+}
+
+@Override
+public String toString(){
+
+    StringBuilder res = new StringBuilder();
+    res.append(String.format("Queue: size = %d , capacity = %d\n", size, getCapacity()));
+    res.append("front [");
+
+    // 注意，我们的循环遍历打印队列的逻辑也有相应的更改 :-)
+    for(int i = 0; i < size; i ++){
+        res.append(data[(front + i) % data.length]);
+        if((i + front + 1) % data.length != tail)
+            res.append(", ");
+    }
+    res.append("] tail");
+    return res.toString();
+}
+
+public static void main(String[] args){
+
+    LoopQueue<Integer> queue = new LoopQueue<>();
+    for(int i = 0 ; i < 10 ; i ++){
+        queue.enqueue(i);
+        System.out.println(queue);
+
+        if(i % 3 == 2){
+            queue.dequeue();
+            System.out.println(queue);
+        }
+    }
+}
+}
+```
+
+### 8.8 循环队列另外一种实现方式二（浪费一个空间，但不使用size实现队列）
+
+```java
+public class LoopQueue implements Queue {
+private E[] data;
+private int front, tail;
+
+public LoopQueue(int capacity){
+    data = (E[])new Object[capacity + 1];
+    front = 0;
+    tail = 0;
+}
+
+public LoopQueue(){
+    this(10);
+}
+
+public int getCapacity(){
+    return data.length - 1;
+}
+
+@Override
+public boolean isEmpty(){
+    return front == tail;
+}
+
+@Override
+public int getSize(){
+    // 注意此时getSize的逻辑:
+    // 如果tail >= front，非常简单，队列中的元素个数就是tail - front
+    // 如果tail < front，说明我们的循环队列"循环"起来了，此时，队列中的元素个数为：
+    // tail - front + data.length
+    // 画画图，看能不能理解为什么？
+    //
+    // 也可以理解成，此时，data中没有元素的数目为front - tail,
+    // 整体元素个数就是 data.length - (front - tail) = data.length + tail - front
+    return tail >= front ? tail - front : tail - front + data.length;
+}
+
+@Override
+public void enqueue(E e){
+
+    if((tail + 1) % data.length == front)
+        resize(getCapacity() * 2);
+
+    data[tail] = e;
+    tail = (tail + 1) % data.length;
+}
+
+@Override
+public E dequeue(){
+
+    if(isEmpty())
+        throw new IllegalArgumentException("Cannot dequeue from an empty queue.");
+
+    E ret = data[front];
+    data[front] = null;
+    front = (front + 1) % data.length;
+    if(getSize() == getCapacity() / 4 && getCapacity() / 2 != 0)
+        resize(getCapacity() / 2);
+    return ret;
+}
+
+@Override
+public E getFront(){
+    if(isEmpty())
+        throw new IllegalArgumentException("Queue is empty.");
+    return data[front];
+}
+
+private void resize(int newCapacity){
+
+    E[] newData = (E[])new Object[newCapacity + 1];
+    int sz = getSize();
+    for(int i = 0 ; i < sz ; i ++)
+        newData[i] = data[(i + front) % data.length];
+
+    data = newData;
+    front = 0;
+    tail = sz;
+}
+
+@Override
+public String toString(){
+
+    StringBuilder res = new StringBuilder();
+    res.append(String.format("Queue: size = %d , capacity = %d\n", getSize(), getCapacity()));
+    res.append("front [");
+    for(int i = front ; i != tail ; i = (i + 1) % data.length){
+        res.append(data[i]);
+        if((i + 1) % data.length != tail)
+            res.append(", ");
+    }
+    res.append("] tail");
+    return res.toString();
+}
+
+public static void main(String[] args){
+
+    LoopQueue<Integer> queue = new LoopQueue<>();
+    for(int i = 0 ; i < 10 ; i ++){
+        queue.enqueue(i);
+        System.out.println(queue);
+
+        if(i % 3 == 2){
+            queue.dequeue();
+            System.out.println(queue);
+        }
+    }
+}
+}
+```
+
+### 8.9 双端队列的实现
+
+```java
+public class Deque {
+private E[] data;
+private int front, tail;
+private int size; // 方便起见，我们的 Deque 实现，将使用 size 记录 deque 中存储的元素数量
+
+public Deque(int capacity){
+    data = (E[])new Object[capacity]; // 由于使用 size，我们的 Deque 实现不浪费空间
+    front = 0;
+    tail = 0;
+    size = 0;
+}
+
+public Deque(){
+    this(10);
+}
+
+public int getCapacity(){
+    return data.length;
+}
+
+public boolean isEmpty(){
+    return size == 0;
+}
+
+public int getSize(){
+    return size;
+}
+
+// addLast 的逻辑和我们之前实现的队列中的 enqueue 的逻辑是一样的
+public void addLast(E e){
+
+    if(size == getCapacity())
+        resize(getCapacity() * 2);
+
+    data[tail] = e;
+    tail = (tail + 1) % data.length;
+    size ++;
+}
+
+// addFront 是新的方法，请大家注意
+public void addFront(E e){
+
+    if(size == getCapacity())
+        resize(getCapacity() * 2);
+
+    // 我们首先需要确定添加新元素的索引位置
+    // 这个位置是 front - 1 的地方
+    // 但是要注意，如果 front == 0，新的位置是 data.length - 1 的位置
+    front = front == 0 ? data.length - 1 : front - 1;
+    data[front] = e;
+    size ++;
+}
+
+// removeFront 的逻辑和我们之前实现的队列中的 dequeue 的逻辑是一样的
+public E removeFront(){
+
+    if(isEmpty())
+        throw new IllegalArgumentException("Cannot dequeue from an empty queue.");
+
+    E ret = data[front];
+    data[front] = null;
+    front = (front + 1) % data.length;
+    size --;
+    if(getSize() == getCapacity() / 4 && getCapacity() / 2 != 0)
+        resize(getCapacity() / 2);
+    return ret;
+}
+
+// removeLast 是新的方法，请大家注意
+public E removeLast(){
+
+    if(isEmpty())
+        throw new IllegalArgumentException("Cannot dequeue from an empty queue.");
+
+    // 计算删除掉队尾元素以后，新的 tail 位置
+    tail = tail == 0 ? data.length - 1 : tail - 1;
+    E ret = data[tail];
+    data[tail] = null;
+    size --;
+    if(getSize() == getCapacity() / 4 && getCapacity() / 2 != 0)
+        resize(getCapacity() / 2);
+    return ret;
+}
+
+public E getFront(){
+    if(isEmpty())
+        throw new IllegalArgumentException("Queue is empty.");
+    return data[front];
+}
+
+// 因为是双端队列，我们也有一个 getLast 的方法，来获取队尾元素的值
+public E getLast(){
+    if(isEmpty())
+        throw new IllegalArgumentException("Queue is empty.");
+
+    // 因为 tail 指向的是队尾元素的下一个位置，我们需要计算一下真正队尾元素的索引
+    int index = tail == 0 ? data.length - 1 : tail - 1;
+    return data[index];
+}
+
+private void resize(int newCapacity){
+
+    E[] newData = (E[])new Object[newCapacity];
+    for(int i = 0 ; i < size ; i ++)
+        newData[i] = data[(i + front) % data.length];
+
+    data = newData;
+    front = 0;
+    tail = size;
+}
+
+@Override
+public String toString(){
+
+    StringBuilder res = new StringBuilder();
+    res.append(String.format("Queue: size = %d , capacity = %d\n", getSize(), getCapacity()));
+    res.append("front [");
+    for(int i = 0 ; i < size ; i ++){
+        res.append(data[(i + front) % data.length]);
+        if(i != size - 1)
+            res.append(", ");
+    }
+    res.append("] tail");
+    return res.toString();
+}
+
+public static void main(String[] args){
+
+    // 在下面的双端队列的测试中，偶数从队尾加入；奇数从队首加入
+    Deque<Integer> dq = new Deque<>();
+    for(int i = 0 ; i < 16 ; i ++){
+        if(i % 2 == 0) dq.addLast(i);
+        else dq.addFront(i);
+        System.out.println(dq);
+    }
+
+		 // 之后，我们依次从队首和队尾轮流删除元素
+    System.out.println();
+    for(int i = 0; !dq.isEmpty(); i ++){
+        if(i % 2 == 0) dq.removeFront();
+        else dq.removeLast();
+        System.out.println(dq);
+    }
+}
+}
+```
+
+### 8.10 java的stack有什么问题？
+
+- 在java中，不推荐使用stack类？
+
+  答： 是的，java官方说的
+
+  ![image-20231121195948004](algorithm.assets/image-20231121195948004.png)
+
+ 简单翻译：一个更加完整，一致的，后进先出的栈相关的操作，应该由 Deque 接口提供。并且，也推荐使用 **Deque** 这种数据结构（比如 ArrayDeque）来实现。
+
+因此，如果你想使用栈这种数据结构，Java 官方推荐的写法是这样的（假设容器中的类型是 Integer）：
+
+下面，我们先来看看 Stack 到底怎么了？再来看看为什么使用 Deque？
+
+- java的stack类到底怎么了？
+
+  答：java的stack最大的问题是继承了Vector这个类，使得子类继承了父类所有公有方法，而vector作为动态数组，是有能力在数组中的任何位置添加或删除元素的，因此，Stack继承了Vector，Stack也有这样的能力，如以下代码在java是正确的
+
+  ```java
+  Stack<Integer> stack = new Stack<>();
+  stack.push(1);
+  stack.push(2);
   
+  //在stack的1，2元素中间插入666
+  stack.add(1,666);
+  ```
 
+  但是很显然，我们不希望对于栈来说，可以在1这个位置插入一个666，这一点也不666，而是破坏了栈这种数据结构的封装
 
+- 问题出在哪里？
+
+  答：它犯了面向设计领域的一个基本错误：Stack和Vector之间的关系，不应该是继承关系，而应该是组合关系
+
+  继承关系描述的是 **is-a** 的关系，即“是一个”的关系。
+
+  猫是一个动物，所以猫这个类可以继承动物类；
+
+  程序员是一个雇员，所以程序员这个类可以继承雇员类。
+
+   
+
+  而组合关系描述的是 **has-a** 的关系，即“有一个”的关系。
+
+  车里有一台发动机，所以发动机这个类和车这个类之间，应该是组合关系，即车中包含一个成员变量，是发动机这个类的对象；
+
+  电脑里有 CPU，内存，显卡。所以 CPU，内存，显卡，这些类和电脑类之间的关系，都应该是组合关系。
+
+  所有一个更好的，基于vector的栈的实现，应该是这样的：
+
+  ```java
+  public class Stack<E>{
+      private Vector<E> V = new Vector<E>();
+      
+      //实现栈的方法
+  }
+  
+  ```
+
+- 什么是Deque接口？
+
+  Deque 是双端队列的意思。所谓的双端队列，就是能在线性数据结构的两段，进行插入和删除操作。
+
+  大家可以想象，由于 Stack 的定义是在同一端进，同一端出。所以，如果 Deque 可以满足在两段进行插入和删除，自然也能在同一端进    行插入和删除，也就是可以以此为基础，做成一个 stack。
 
 
 
