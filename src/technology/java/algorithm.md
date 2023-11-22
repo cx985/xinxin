@@ -309,11 +309,11 @@ public void nextPermutation(int[] nums) {
 
 栈的实现 Stack
 
-- void push(E)
-- E pop()
-- E peek()
-- int getSize()
-- boolean isEmpty()
+- void push(E) （入栈）
+- E pop()  （出栈）
+- E peek()   (获取栈顶元素)
+- int getSize()  （获取栈的大小）
+- boolean isEmpty() （判断栈是否为空）
 
 ### 8.2 栈的实现
 
