@@ -41,8 +41,44 @@ try(Scanner scanner = new Scanner(new File("test.txt"))) {
 }
 ```
 
+## 枚举
+
+### 1. 枚举作为数据存储标准写法
+
+```java
+public enum DeleteEnum {
+
+    YES("1", "已删除"),
+    NO("0", "未删除");
+
+    public String code;
+
+    public String name;
+
+    DeleteEnum(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public static String getNameByCode(String code) {
+        for(DeleteEnum type : values()){
+            if(type.code.equals(code)){
+                return type.name;
+            }
+        }
+        return "";
+    }
+
+
+}
+```
+
+
+
+
 
 ## 泛型
+
   泛型本质是为了将类型参数化
 
  作用：

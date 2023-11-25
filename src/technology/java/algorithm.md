@@ -1664,6 +1664,312 @@ public static void main(String[] args){
 
 
 
+### 8.11 用队列实现栈
+
+- 方式一（两个队列）: 入栈，出栈，获取栈顶元素时间复杂度都是o(n)
+
+  ```java
+  package com.cx.study.algorithm.arrayQueue;
+  
+  import java.util.LinkedList;
+  import java.util.Queue;
+  
+  /**
+   * @ClassName: MyStack
+   * @Author : chenxin
+   * @Date :2023/11/22  10:28
+   * @Description: 队列实现栈
+   * 思路：
+   * 1.入栈：假设给定的队列入队一端是栈顶，那么自己封装的入栈操作：直接把元素放入队列就好了
+   * 2.出栈：如何拿到队列尾的那个元素?
+   * 要想拿到队尾的元素，我们就必须先把现在队列中的 n - 1 个元素都取出来。剩下的那一个元素，就是队尾的元素
+   * 可是，取出的 n - 1 个元素我们不能扔掉，问题又限制我们必须使用队列这种数据结构，所以，此时，
+   * 我们可以使用另外一个队列 q2，来存储从 q 中取出的所有元素。最后，q 里只剩下一个元素，
+   * 就是我们要拿出的“栈顶元素”。将这个元素删除后，q2 里的数据就是原始的数据，
+   * 我们用 q2 覆盖 q 就好
+   * 3. 时间复杂度分析
+   * 入栈，出栈，获取栈顶元素都是o(n)
+   *
+   * @Version :1.0
+   */
+  public class MyStack {
+  
+      private Queue<Integer> q;
+  
+      public MyStack(){
+          q = new LinkedList<>();
+      }
+  
+      /**
+       * 判断栈是否为空
+       * @return
+       */
+      public boolean isEmpty(){
+          return q.isEmpty();
+      }
+  
+      /**
+       * 返回栈中元素的数量
+       * @return
+       */
+      public int size(){
+          return q.size();
+      }
+  
+      /**
+       * 入栈
+       * @param x
+       */
+      public void push(int x) {
+          q.add(x);
+      }
+  
+  
+      /**
+       * 出栈
+       * @return
+       */
+      public int pop(){
+          //创建另外一个队列q2
+          Queue<Integer> q2 = new LinkedList<>();
+  
+          //除了最后一个元素，将q中的所有元素放入q2
+          while (q.size() > 1){
+              q2.add(q.remove());
+          }
+  
+          //q中剩下的最后一个元素就是栈顶元素
+          int ret = q.remove();
+  
+          //此时q2 是整个数据结构存储的所有其他数据，赋值给q
+          q = q2;
+  
+          //返回栈顶元素
+          return ret;
+  
+      }
+  
+  
+      /**
+       * 获取栈顶元素
+       * @return
+       */
+      public int peek() {
+          int ret = pop();
+          push(ret);
+          return ret;
+      }
+  
+  
+  
+  }
+  
+  ```
+
+- 方式二： 两个队列，push 是 O(1) 的，pop 是 O(n)
+
+  ```java
+  package com.cx.study.algorithm.arrayQueue;
+  
+  import java.util.LinkedList;
+  import java.util.Queue;
+  
+  /**
+   * @ClassName: MyStack2
+   * @Author : chenxin
+   * @Date :2023/11/22  13:45
+   * @Description: 用队列实现栈：push 是 O(1) 的，pop 是 O(n)
+   * @Version :1.0
+   */
+  public class MyStack2 {
+      private Queue<Integer> q;
+  
+      //追踪记录栈顶元素
+      private int top;
+  
+      public void push(int x) {
+          q.add(x);
+          top = x;
+      }
+  
+      public int pop() {
+          Queue q2 = new LinkedList<>();
+          while (q.size() > 1){
+          // 每从 q 中取出一个元素，都给 top 赋值
+          // top 最后存储的就是 q 中除了队尾元素以外的最后一个元素
+          // 即新的栈顶元素
+              top = q.peek();
+              q2.add(q.remove());
+          }
+          int ret = q.remove();
+          q = q2;
+          return ret;
+      }
+  
+      public int top() {
+          return top;
+      }
+  
+      public boolean empty() {
+          return q.isEmpty();
+      }
+  }
+  
+  ```
+
+- 方式三：两个队列，pop，时间复杂度是 O(1) 的；push，时间复杂度是 O(n)
+
+  ```java
+  package com.cx.study.algorithm.arrayQueue;
+  
+  import java.util.LinkedList;
+  import java.util.Queue;
+  
+  /**
+   * @ClassName: MyStack3
+   * @Author : chenxin
+   * @Date :2023/11/22  13:48
+   * @Description: 用队列实现栈： pop，时间复杂度是 O(1) 的；push，时间复杂度是 O(n)
+   * @Version :1.0
+   */
+  public class MyStack3 {
+  
+      private Queue<Integer> q;
+  
+      /** Initialize your data structure here. */
+      public MyStack3() {
+          q = new LinkedList<>();
+      }
+  
+      /** Push element x onto stack. */
+      public void push(int x) {
+  
+          Queue<Integer> q2 = new LinkedList<>();
+  
+          q2.add(x);
+          while(!q.isEmpty())
+              q2.add(q.remove());
+  
+          q = q2;
+      }
+  
+      /** Removes the element on top of the stack and returns that element. */
+      public int pop() {
+          return q.remove();
+      }
+  
+      /** Get the top element. */
+      public int top() {
+          return q.peek();
+      }
+  
+      /** Returns whether the stack is empty. */
+      public boolean empty() {
+          return q.isEmpty();
+      }
+  }
+  
+  ```
+
+- 方式四：只使用一个队列
+
+  ```java
+  package com.cx.study.algorithm.arrayQueue;
+  
+  import java.util.LinkedList;
+  import java.util.Queue;
+  
+  /**
+   * @ClassName: MyStack4
+   * @Author : chenxin
+   * @Date :2023/11/22  13:51
+   * @Description: 用队列实现栈：只使用一个队列
+   * @Version :1.0
+   */
+  public class MyStack4 {
+  
+      private Queue<Integer> q;
+  
+      /** Initialize your data structure here. */
+      public MyStack4() {
+          q = new LinkedList<>();
+      }
+  
+      /** Push element x onto stack. */
+      public void push(int x) {
+  
+          // 首先，将 x 入队
+          q.add(x);
+  
+          // 执行 n - 1 次出队再入队的操作
+          for(int i = 1; i < q.size(); i ++)
+              q.add(q.remove());
+      }
+  
+      /** Removes the element on top of the stack and returns that element. */
+      public int pop() {
+          return q.remove();
+      }
+  
+      /** Get the top element. */
+      public int peek() {
+          return q.peek();
+      }
+  
+      /** Returns whether the stack is empty. */
+      public boolean isEmpty() {
+          return q.isEmpty();
+      }
+  
+      /**
+       * 返回栈中元素的数量
+       * @return
+       */
+      public int size(){
+          return q.size();
+      }
+  
+      public static void main(String[] args) {
+          Queue<Integer> q = new LinkedList();
+          q.add(1);
+          q.add(2);
+          q.add(3);
+          q.add(4);
+          System.out.println(q);
+          for(int i = 1; i < q.size(); i ++){
+              q.add(q.remove());
+              System.out.println(q);
+          }
+          System.out.println(q);
+          System.out.println(q.peek());
+      }
+  }
+  
+  ```
+
+- 测试类
+
+  ```java
+  public class MyStackTest {
+  
+      public static void main(String[] args) {
+          MyStack4 myStack = new MyStack4();
+          myStack.push(1);
+          myStack.push(2);
+          myStack.push(3);
+          myStack.push(4);
+          System.out.println(myStack.peek());//4
+          System.out.println(myStack.pop());//4
+          System.out.println(myStack.pop());//3
+          System.out.println(myStack.isEmpty()); //false
+          System.out.println(myStack.size()); //2
+  
+      }
+  }
+  ```
+
+  
+
 ## 第九章：排序算法
 
 ### 9.1 选择排序法
