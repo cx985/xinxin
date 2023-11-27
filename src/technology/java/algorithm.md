@@ -295,7 +295,126 @@ public void nextPermutation(int[] nums) {
 
 ## 第五章：滑动窗口问题
 
-## 第六章：链表问题
+## 第六章：链表
+
+### 6.1 为什么链表很重要
+
+链表： 真正的动态数据结构，是最简单的动态数据结构，更深入的理解指针，更深入的理解递归；辅助组成其他数据结构
+
+### 6.2 认识链表
+
+- 数据存储在节点(Node)中
+
+  ```java
+  class Node {
+      E e;
+      Node next;
+  }
+  
+  1-->2--->3-->Null
+  ```
+
+- 优点：真正的动态，不需要处理固定容量的问题
+- 缺点：丧失了随机访问的能力
+
+
+
+  ![image-20231127203727223](algorithm.assets/image-20231127203727223.png)
+
+
+
+![image-20231127203803696](algorithm.assets/image-20231127203803696.png)
+
+```java
+package com.cx.study.algorithm.linkedlist;
+
+/**
+ * @ClassName: LinkedList
+ * @Author : chenxin
+ * @Date :2023/11/27  20:21
+ * @Description: TODO
+ * @Version :1.0
+ */
+public class LinkedList<E> {
+
+    private class Node{
+        public E e;
+        public Node next;
+
+        public Node(E e,Node next){
+            this.e = e;
+            this.next = next;
+        }
+
+        public Node(E e){
+            this(e,null);
+        }
+
+        public Node(){
+            this(null,null);
+        }
+
+        @Override
+        public String toString(){
+            return e.toString();
+        }
+    }
+
+    private Node head;
+    int size;
+
+    public LinkedList(){
+        head = null;
+        size = 0;
+    }
+
+    //获取链表中的元素个数
+    public int getSize(){
+        return this.size;
+    }
+
+    public boolean isEmpty(){
+        return this.size == 0;
+    }
+
+    //在链表头添加新的元素e
+    public void addFirst(E e){
+//        Node node = new Node(e);
+//        node.next = head;
+//        head = node;
+        head = new Node(e,head);
+        size ++;
+    }
+
+    //在链表的index(0-based)位置添加新的元素e
+    public void add(int index, E e){
+        if(index <0 || index >0){
+            throw new IllegalArgumentException("Add faild");
+        }
+        if(index == 0){
+            addFirst(e);
+        }else{
+            Node prev = head;
+            for(int i=0;i<index -1 ;i++){
+                prev = prev.next;
+            }
+//            Node node = new Node(e);
+//            node.next = prev.next;
+//            prev.next = node;
+            prev.next = new Node(e,prev.next);
+            size++;
+        }
+
+    }
+
+    public void addLast(E e){
+        add(size,e);
+    }
+}
+
+```
+
+
 
 ## 第七章：哈希表
 
@@ -1964,6 +2083,205 @@ public static void main(String[] args){
           System.out.println(myStack.isEmpty()); //false
           System.out.println(myStack.size()); //2
   
+      }
+  }
+  ```
+
+
+### 8.11 用栈实现队列
+
+- 方式一
+
+  ```java
+  package com.cx.study.algorithm.queueArray;
+  
+  import java.util.Stack;
+  
+  /**
+   * @ClassName: MyQueue
+   * @Author : chenxin
+   * @Date :2023/11/25  17:06
+   * @Description: 用栈实现队列
+   * @Version :1.0
+   */
+  public class MyQueue {
+  
+      private Stack<Integer> stack;
+  
+      public MyQueue(){
+          stack = new Stack<>();
+      }
+  
+      public boolean isEmpty(){
+          return stack.isEmpty();
+      }
+  
+      public int pop() {
+          return stack.pop();
+      }
+      /** Get the front element. */
+      public int peek() {
+          return stack.peek();
+      }
+  
+      public int size(){
+          return stack.size();
+      }
+  
+      public void push(int x) {
+          // 创建一个新的 stack2
+          Stack<Integer> stack2 = new Stack<>();
+  
+          // 将 stack 的元素暂存进 stack2
+          while(!stack.empty())
+              stack2.push(stack.pop());
+  
+          // 在 stack 中添加新元素 x
+          stack.push(x);
+  
+          // 把 stack2 中的元素放回 stack
+          while(!stack2.isEmpty())
+              stack.push(stack2.pop());
+      }
+  }
+  
+  ```
+
+  
+
+- 方式二
+
+  ```java
+  package com.cx.study.algorithm.queueArray;
+  
+  import java.util.Stack;
+  
+  
+  /**
+   * @ClassName: MyQueue2
+   * @Author : chenxin
+   * @Date :2023/11/27  9:35
+   * @Description: TODO
+   * @Version :1.0
+   */
+  public class MyQueue2 {
+  
+      private Stack<Integer> stack;
+      int front;
+  
+      public MyQueue2(){
+          stack = new Stack<>();
+      }
+  
+      public void push(int x) {
+          if(isEmpty()) front = x;
+          stack.push(x);
+      }
+  
+      public int peek() {
+          return front;
+      }
+  
+      public int pop() {
+          Stack<Integer> stack2 = new Stack<>();
+  
+          while(stack.size() > 1) {
+              front = stack.peek();
+              stack2.push(stack.pop());
+          }
+  
+          int ret = stack.pop();
+  
+          while(!stack2.isEmpty())
+              stack.push(stack2.pop());
+  
+          return ret;
+      }
+  
+      public boolean isEmpty(){
+          return stack.isEmpty();
+      }
+  
+  
+  }
+  
+  ```
+
+  
+
+- 方式三
+
+  ```java
+  package com.cx.study.algorithm.queueArray;
+  
+  import java.util.Stack;
+  
+  /**
+   * @ClassName: MyQueue3
+   * @Author : chenxin
+   * @Date :2023/11/27  9:44
+   * @Description: TODO
+   * @Version :1.0
+   */
+  public class MyQueue3 {
+  
+      private Stack<Integer> stack1;
+      private Stack<Integer> stack2;
+  
+      int front;
+  
+      public MyQueue3(){
+          stack1 = new Stack<>();
+          stack2 = new Stack<>();
+      }
+  
+      public void push(int x){
+          if(stack1.isEmpty()){
+              front = x;
+          }
+          stack1.push(x);
+      }
+  
+      public int pop(){
+          if(!stack2.isEmpty()){
+              return stack2.pop();
+          }
+          while (stack1.size() >1){
+              stack2.push(stack1.pop());
+          }
+  
+          return stack1.pop();
+      }
+  
+      public int peek(){
+          if(!stack2.isEmpty()){
+              return stack2.peek();
+          }
+          return front;
+      }
+  
+      public boolean isEmpty(){
+          return stack1.isEmpty() && stack2.isEmpty();
+      }
+  }
+  
+  ```
+
+- 测试类
+
+  ```java
+  public class MyQueueTest {
+      public static void main(String[] args) {
+          MyQueue3 myQueue = new MyQueue3();
+          myQueue.push(1);
+          myQueue.push(2);
+          myQueue.push(3);
+          myQueue.push(4);
+  
+          System.out.println(myQueue.peek());//1
+          System.out.println(myQueue.pop());//1
+          System.out.println(myQueue.pop());//2
+          System.out.println(myQueue.isEmpty()); //false
       }
   }
   ```
