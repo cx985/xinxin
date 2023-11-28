@@ -316,10 +316,17 @@ public void nextPermutation(int[] nums) {
 
 - 优点：真正的动态，不需要处理固定容量的问题
 - 缺点：丧失了随机访问的能力
+- 在链表头添加元素图例
+
+![image-20231128212140857](algorithm.assets/image-20231128212140857.png)
 
 
 
-  ![image-20231127203727223](algorithm.assets/image-20231127203727223.png)
+  ![image-20231128212241092](algorithm.assets/image-20231128212241092.png)![image-20231127203727223](algorithm.assets/image-20231127203727223.png)
+
+
+
+- 在链表中间添加元素
 
 
 
