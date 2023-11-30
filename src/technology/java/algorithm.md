@@ -332,6 +332,8 @@ public void nextPermutation(int[] nums) {
 
 ![image-20231127203803696](algorithm.assets/image-20231127203803696.png)
 
+### 6.3 链表的增删改查
+
 ```java
 package com.cx.study.algorithm.linkedlist;
 
@@ -367,11 +369,13 @@ public class LinkedList<E> {
         }
     }
 
-    private Node head;
+    //private Node head;
+    private Node dummyHead; //虚拟头节点
     int size;
 
     public LinkedList(){
-        head = null;
+        //head = null;
+        dummyHead = new Node(null,null);
         size = 0;
     }
 
@@ -384,25 +388,18 @@ public class LinkedList<E> {
         return this.size == 0;
     }
 
-    //在链表头添加新的元素e
-    public void addFirst(E e){
-//        Node node = new Node(e);
-//        node.next = head;
-//        head = node;
-        head = new Node(e,head);
-        size ++;
-    }
+
 
     //在链表的index(0-based)位置添加新的元素e
     public void add(int index, E e){
-        if(index <0 || index >0){
+        if(index <0 || index >size){
             throw new IllegalArgumentException("Add faild");
         }
-        if(index == 0){
+       /* if(index == 0){
             addFirst(e);
-        }else{
-            Node prev = head;
-            for(int i=0;i<index -1 ;i++){
+        }else{*/
+            Node prev = dummyHead;
+            for(int i=0;i < index ;i++){
                 prev = prev.next;
             }
 //            Node node = new Node(e);
@@ -410,16 +407,372 @@ public class LinkedList<E> {
 //            prev.next = node;
             prev.next = new Node(e,prev.next);
             size++;
-        }
+        /*}*/
 
+    }
+
+    //在链表头添加新的元素e
+    public void addFirst(E e){
+//        Node node = new Node(e);
+//        node.next = head;
+//        head = node;
+//        head = new Node(e,head);
+//        size ++;
+        add(0,e);
     }
 
     public void addLast(E e){
         add(size,e);
     }
+
+    //获取链表的第index个元素的位置
+    public E get(int index){
+        if(index <0 || index >size){
+            throw new IllegalArgumentException("Get faild");
+        }
+
+        //从索引为0开始
+        Node cur = dummyHead.next;
+        for(int i=0;i<index;i++){
+            cur = cur.next;
+        }
+        return cur.e;
+    }
+
+    public E getFirst(){
+      return get(0);
+    }
+
+    public E getLast(){
+        return get(size-1);
+    }
+
+    //修改链表的第index个位置的元素e
+    public void set(int index,E e){
+        if(index <0 || index >size){
+            throw new IllegalArgumentException("Set faild");
+        }
+        Node cur = dummyHead.next;
+        for(int i=0;i<index;i++){
+            cur = cur.next;
+        }
+        cur.e = e;
+
+    }
+
+    public boolean contains(E e){
+        Node cur = dummyHead.next;
+        while (cur != null){
+            if(cur.e.equals(e)){
+                return true;
+            }
+            cur = cur.next;
+        }
+        return false;
+    }
+
+    //在链表中删除index位置的元素，返回删除的元素
+    public E remove(int index){
+        if(index <0 || index >size){
+            throw new IllegalArgumentException("Remove failed");
+        }
+        Node prev = dummyHead;
+        for(int i=0; i<index;i++){
+            prev = prev.next;
+        }
+        Node retNode = prev.next;
+        prev.next = retNode.next;
+        retNode.next = null;
+        size --;
+
+        return retNode.e;
+
+    }
+
+    //删除第一个元素
+    public E removeFirst(){
+        return remove(0);
+    }
+
+    public E removeLast(){
+        return remove(size -1);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        Node cur = dummyHead.next;
+        while (cur != null){
+            res.append(cur + "->");
+            cur = cur.next;
+        }
+        res.append("NULL");
+        return res.toString();
+    }
 }
 
 ```
+
+### 6.4 用链表实现栈
+
+```java
+public interface Stack<E> {
+
+    int getSize();
+
+    boolean isEmpty();
+
+    void push(E e);
+
+    E pop();
+
+    E peek();
+}
+```
+
+
+
+```java
+package com.cx.study.algorithm.linkedlist;
+
+/**
+ * @ClassName: LinkedListStack
+ * @Author : chenxin
+ * @Date :2023/11/30  14:41
+ * @Description: 用链表实现栈
+ * @Version :1.0
+ */
+public class LinkedListStack<E> implements Stack<E>{
+
+    private LinkedList<E> list;
+
+    public LinkedListStack(){
+        list = new LinkedList<>();
+    }
+
+    @Override
+    public int getSize() {
+        return list.getSize();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return list.isEmpty();
+    }
+
+    @Override
+    public void push(E e) {
+        list.addFirst(e);
+    }
+
+    @Override
+    public E pop() {
+        return list.removeFirst();
+    }
+
+    @Override
+    public E peek() {
+        return list.getFirst();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        res.append("Stack:top");
+        res.append(list);
+        return res.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedListStack<Integer> stack = new LinkedListStack<>();
+        for(int i=0;i<5;i++){
+            stack.push(i);
+            System.out.println(stack);
+        }
+        stack.pop();
+        System.out.println(stack);
+    }
+}
+
+```
+
+- 性能测试
+
+  ```java
+  package com.cx.study.algorithm.linkedlist;
+  
+  import java.util.Random;
+  
+  /**
+   * @ClassName: LinkedListStackMain
+   * @Author : chenxin
+   * @Date :2023/11/30  14:53
+   * @Description: 用链表实现栈和用数组实现栈性能测试
+   * @Version :1.0
+   */
+  public class LinkedListStackMain {
+  
+      private static double testStack(Stack<Integer> stack,int opCount){
+          long startTime = System.nanoTime();
+          Random random = new Random();
+          for(int i=0;i<opCount;i++){
+              stack.push(random.nextInt(Integer.MAX_VALUE));
+          }
+          for(int i=0;i<opCount;i++){
+              stack.pop();
+          }
+          long endTime = System.nanoTime();
+          return (endTime -startTime) / 1000000000.0;
+      }
+  
+      public static void main(String[] args) {
+          int opCount = 100000;
+          LinkedListStack<Integer> linkedListStack = new LinkedListStack<>();
+          double time2 = testStack(linkedListStack, opCount);
+          System.out.println("LinkedListStack,time:"+time2 + "s");
+      }
+  
+  }
+  
+  ```
+
+### 6.5 用链表实现队列
+
+```java
+public interface Queue<E> {
+    int getSize();
+
+    boolean isEmpty();
+
+    void enqueue(E e);
+
+    E dequeue();
+
+    E getFront();
+}
+```
+
+```java
+package com.cx.study.algorithm.linkedlist;
+
+
+/**
+ * @ClassName: LinkedListQueue
+ * @Author : chenxin
+ * @Date :2023/11/30  15:16
+ * @Description: TODO
+ * @Version :1.0
+ */
+public class LinkedListQueue<E> implements Queue<E>{
+    private class Node{
+        public E e;
+        public Node next;
+
+        public Node(E e, Node next){
+            this.e = e;
+            this.next = next;
+        }
+
+        public Node(E e){
+            this(e,null);
+        }
+
+        public Node(){
+            this(null,null);
+        }
+
+        @Override
+        public String toString(){
+            return e.toString();
+        }
+    }
+
+
+    private Node head,tail;
+    private int size;
+
+    public LinkedListQueue(){
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    @Override
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    @Override
+    public void enqueue(E e) {
+        if(tail == null){
+            tail = new Node(e);
+            head = tail;
+        }else{
+            tail.next = new Node(e);
+            tail = tail.next;
+        }
+        size ++;
+    }
+
+    @Override
+    public E dequeue() {
+        if(isEmpty()){
+            throw new IllegalArgumentException("Cannot dequeue");
+        }
+        Node retNode = head;
+        head = head.next;
+        retNode.next = null;
+        if(head == null){
+            tail = null;
+        }
+        size --;
+        return retNode.e;
+    }
+
+    //队首元素
+    @Override
+    public E getFront() {
+        if(isEmpty()){
+            throw new IllegalArgumentException("queue is empty");
+        }
+        return head.e;
+    }
+
+    @Override
+    public String toString() {
+       StringBuilder res = new StringBuilder();
+       res.append("Queue: front ");
+       Node cur = head;
+       while (cur != null){
+           res.append(cur + "->");
+           cur = cur.next;
+       }
+       res.append("NULL tail");
+       return res.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedListQueue<Integer> queue = new LinkedListQueue();
+        for(int i =0;i< 10; i++){
+            queue.enqueue(i);
+            System.out.println(queue);
+
+            if(i % 3 == 2){
+                queue.dequeue();
+                System.out.println(queue);
+            }
+        }
+
+    }
+}
+```
+
+
 
 
 
