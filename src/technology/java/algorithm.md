@@ -772,6 +772,75 @@ public class LinkedListQueue<E> implements Queue<E>{
 }
 ```
 
+### 6.6 力扣题目：删除链表中的元素
+
+题目：删除链表中等于给定值val的所有元素
+
+示例：1-->2-->3-->4-->6--->5-->6,val =6
+
+返回：1--2>-->3-->4-->5
+
+解题1：不使用虚拟头节点
+
+```java
+public class ListNode {
+    int val;
+    ListNode next;
+    ListNode(int x){
+        val = x;
+    }
+}
+```
+
+```java
+public class Solution {
+    public ListNode removeElements(ListNode head,int val){
+        while (head !=null && head.val == val){
+            ListNode delNode = head;
+            head = head.next;
+            delNode.next = null;
+        }
+
+        if(head == null){
+            return null;
+        }
+
+        ListNode prev = head;
+        while (prev.next != null){
+            if(prev.next.val == val){
+                ListNode delNode = prev.next;
+                prev.next = delNode.next;
+                delNode.next = null;
+            }else{
+                prev = prev.next;
+            }
+        }
+        return head;
+    }
+}
+```
+
+解题二：使用虚拟头节点
+
+```java
+public class Solution2 {
+    public ListNode removeElements(ListNode head,int val){
+        ListNode dummyHead = new ListNode(-1);
+        dummyHead.next = head;
+
+        ListNode prev = dummyHead;
+        while (prev.next != null){
+            if(prev.next.val == val){
+                prev.next = prev.next.next;
+            }else{
+                prev = prev.next;
+            }
+        }
+        return dummyHead.next;
+    }
+}
+```
+
 
 
 
