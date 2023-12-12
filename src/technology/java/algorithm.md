@@ -883,7 +883,65 @@ public class Solution2 {
 }
 ```
 
+### 6.7 递归实现链表
 
+todo
+
+
+
+### 6.8 反转链表
+
+1. 不使用递归实现
+
+   ```java
+   public class ListNode{
+       int val;
+       ListNode next;
+       ListNode(int x){val = x;}
+   }
+   
+   class Solution{
+       public ListNode reverseList(ListNode head){
+           ListNode pre = null;
+           ListNode cur = head;
+           while(cur != null){
+               ListNode next = cur.next;
+               cur.next = pre;
+               pre = cur;
+               cur = next;
+           }
+           return pre;
+       }
+   }
+   
+   
+   ```
+
+   
+
+2. 使用递归实现
+
+   ```java
+   public class ListNode{
+       int val;
+       ListNode next;
+       ListNode(int x){val = x;}
+   }
+   
+   class Solution{
+       public ListNode reverseList(ListNode head){
+          if(head == null || head.next == null){
+              return head;
+          }
+           ListNode rev = reverseList(head.next);
+           head.next.next = head;
+           head.next = null;
+           return rev;
+       }
+   }
+   ```
+
+   
 
 
 
