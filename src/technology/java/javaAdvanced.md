@@ -10,7 +10,7 @@ tag:
 # JAVA进阶
 
 ::: tip java进阶总结
-这里对java中异常总结
+这里对java中基础的进阶总结
 ::: 
 
 ## 异常：
@@ -24,10 +24,10 @@ Error: 程序无法处理的错误，如java虚拟机运行错误
 不受检查异常： 如空指针异常，数组越界
 
 
-### finally 里面的代码一定会执行吗
+### 1. finally 里面的代码一定会执行吗
 答：不一定，在catch里面执行System.exit(1)
 
-### try-with-resource
+### 2. try-with-resource
 使用Java7之后的try-with-resources 语句改造上面的代码
 
 ```
@@ -39,11 +39,13 @@ try(Scanner scanner = new Scanner(new File("test.txt"))) {
 }catch(FileNotFoundException fnfe){
   fnfe.printStackTrace();
 }
+
+备注：语句可以直接写在try后面
 ```
 
-## 枚举
+## 3. 枚举
 
-### 1. 枚举作为数据存储标准写法
+### 3.1. 枚举作为数据存储标准写法
 
 ```java
 public enum DeleteEnum {
@@ -77,11 +79,11 @@ public enum DeleteEnum {
 
 
 
-## 泛型
+## 4. 泛型
 
-  泛型本质是为了将类型参数化
+ ### 4.1 泛型本质是为了将类型参数化
 
- 作用：
+ ### 4.2 作用：
 
 - 泛型可以在编译时对类型进行安全检测，使得所有的强制转换都是自动隐式实现的，保证了类型的安全性；
 
@@ -89,7 +91,7 @@ public enum DeleteEnum {
 
   
 
-使用场景：
+### 4.3 使用场景：
 
 - 泛型集合
 
@@ -147,7 +149,7 @@ public enum DeleteEnum {
 
 
 
-**泛型字母解释**
+### 4.4 **泛型字母解释**
 
 - E: Element(表示集合元素，常在集合中使用)
 - T：Type(表示java类，常在类和接口中使用)
@@ -160,7 +162,7 @@ public enum DeleteEnum {
 
 
 
-**泛型通配符**
+### 4.5 **泛型通配符**
 
 1、<?>: 被称作无限定的通配符
 2、<? extends T>: 被称作有上届的通配符
@@ -168,7 +170,7 @@ public enum DeleteEnum {
 
 
 
-需求：给定一个数组和目录值要求返回对应下标，兼容所有类型
+### 4.6 需求：给定一个数组和目录值要求返回对应下标，兼容所有类型
 
 ```java
 //int 标准版
@@ -205,18 +207,19 @@ public static void main(String[] args) {
 
 
 
-## java反射
+## 5. java反射
 
-  ### 序列化和反序列化
+  ### 5.1 序列化和反序列化
  - 序列化：将数据结构或对象转换成二进制字节流的过程
  - 反序列化： 将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程
 如果有些字段不想被序列化可以用transient 修饰
 
-  ### 反射优缺点
+  ### 5.2 反射优缺点
+
   - 优点：代码更加灵活，
   - 缺点：增加了安全问题
 
-  ### 获取class的四种方式
+  ### 5.3获取class的四种方式
    - 类.class
    - Class.forName()
 
@@ -236,7 +239,7 @@ public static void main(String[] args) {
 
 
 
-## java 值传递
+## 6. java 值传递
 ### 值传递：方法接收的是实参的拷贝，会创建副本
 ### 引用传递：方法接收的直接是实参所引用的对象在堆中的地址，不会创建副本，对形参的修改将影响到实参
 
@@ -269,7 +272,7 @@ a = 20
 b = 10 
 ```
 
-## jdk代理
+## 7. jdk代理
 1. 定义一个接口及其实现类；
 2. 自定义 InvocationHandler 并重写invoke方法，在 invoke 方法中我们会调用原生方法（被代理类的方法）并自定义一些处理逻辑；
 3. 通过 Proxy.newProxyInstance(ClassLoader loader,Class<?>[] interfaces,InvocationHandler) 方法创建代理对象
@@ -351,7 +354,7 @@ jdk动态代理(默认)：**运行时创建接口的代理实例，通过接口�
 cglib代理：**采用底层的字节码技术，当目标对象不存在接口时，创建子类代理的实例，通过继承实现**
 
 
-## unsafe类
+## 8. unsafe类
 
 **可以直接操作内存，使用要慎重**
 
