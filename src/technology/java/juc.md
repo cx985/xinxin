@@ -177,13 +177,147 @@ ReentrantLock 用来实现分组唤醒需要唤醒的线程们，可以精确唤
 
 ​    
 
- 
+ ## 14 ThreadLocal
+
+作用：每一个线程都有自己的专属本地变量，存放私有的数据
+
+方法： get()  set()
+
+```java
+private static final ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(()->new SimpleDateFormat("yyyyMMdd HHmmm"));
+```
+
+原理：
+
+Thread类源码
+
+```java
+public class Thread implements Runnable {
+    //......
+    //与此线程有关的ThreadLocal值。由ThreadLocal类维护
+    ThreadLocal.ThreadLocalMap threadLocals = null;
+
+    //与此线程有关的InheritableThreadLocal值。由InheritableThreadLocal类维护
+    ThreadLocal.ThreadLocalMap inheritableThreadLocals = null;
+    //......
+}
+
+```
+
+
+
+**最终的变量是放在了当前线程的 `ThreadLocalMap` 中，并不是存在 `ThreadLocal` 上，`ThreadLocal` 可以理解为只是`ThreadLocalMap`的封装，传递了变量值**
+
+ **每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为 key ，Object 对象为 value 的键值对**
 
  
 
- 
+ 内存泄露问题
 
- 
+`ThreadLocalMap` 中使用的 key 为 `ThreadLocal` 的弱引用，而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉 
+
+使用完 `ThreadLocal`方法后最好手动调用`remove()`方法
+
+补充：
+
+- 强引用：死都不收
+
+- 软引用：系统内存充足不会被回收，不足会被回收
+
+  ```java
+  public class ReferenceDemo
+  {
+      public static void main(String[] args)
+      {
+          //当我们内存不够用的时候，soft会被回收的情况，设置我们的内存大小：-Xms10m -Xmx10m
+          SoftReference<MyObject> softReference = new SoftReference<>(new MyObject());
+  
+          System.gc();
+          try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+          System.out.println("-----gc after内存够用: "+softReference.get());
+  
+          try
+          {
+              byte[] bytes = new byte[9 * 1024 * 1024];
+          }catch (Exception e){
+              e.printStackTrace();
+          }finally {
+              System.out.println("-----gc after内存不够: "+softReference.get());
+          }
+      }
+  
+      public static void strongReference()
+      {
+          MyObject myObject = new MyObject();
+          System.out.println("-----gc before: "+myObject);
+  
+          myObject = null;
+          System.gc();
+          try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          System.out.println("-----gc after: "+myObject);
+      }
+  }
+  
+  ```
+
+  
+
+- 弱引用：都会回收
+
+  ```java
+  public class ReferenceDemo
+  {
+      public static void main(String[] args)
+      {
+          WeakReference<MyObject> weakReference = new WeakReference<>(new MyObject());
+          System.out.println("-----gc before内存够用: "+weakReference.get());
+  
+          System.gc();
+          try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          System.out.println("-----gc after内存够用: "+weakReference.get());
+      }
+  
+      public static void softReference()
+      {
+          //当我们内存不够用的时候，soft会被回收的情况，设置我们的内存大小：-Xms10m -Xmx10m
+          SoftReference<MyObject> softReference = new SoftReference<>(new MyObject());
+  
+          System.gc();
+          try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+          System.out.println("-----gc after内存够用: "+softReference.get());
+  
+          try
+          {
+              byte[] bytes = new byte[9 * 1024 * 1024];
+          }catch (Exception e){
+              e.printStackTrace();
+          }finally {
+              System.out.println("-----gc after内存不够: "+softReference.get());
+          }
+      }
+  
+      public static void strongReference()
+      {
+          MyObject myObject = new MyObject();
+          System.out.println("-----gc before: "+myObject);
+  
+          myObject = null;
+          System.gc();
+          try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          System.out.println("-----gc after: "+myObject);
+      }
+  }
+  
+  ```
+
+  
+
+- 虚引用：在任何时候都可能被回收
+
+
 
  
 
