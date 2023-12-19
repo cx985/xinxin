@@ -127,17 +127,22 @@ HashSet 底层就是基于 HashMap 实现的,个别方法是自己特有的
 ### 6、HashMap遍历方式
 ```
 Map<Integer,String> map = new HashMap();
-(1). ketSet
+(1) map.ketSet
 for(Integer key:map.keySet()){
     System.out.println(key);
    System.out.println(map.get(key));
 }
+
+备注：使用map.ketSet遍历，for循环第一个参数为map集合的第一个类型
+
  
-(2). entrySet
+(2) map.entrySet
 for(Map.Entry<Integer,String> entry: map.entrySet()){
    System.out.println(entry.getKey());
    System.out.println(entry.getValue());
 }
+
+备注：使用map.entrySet遍历，for循环第一个参数为Map.Entry<> 泛型里面填上map对应的类型
  
 (3).lambda表达式
 map.forEach((key,value) ->{
@@ -155,7 +160,9 @@ map.forEach((key,value) ->{
 
  
 
- 
+ ## 待更新
+
+- [ ] HashMap源码深入分析
 
 
 

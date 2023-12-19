@@ -105,6 +105,38 @@ public enum DeleteEnum {
 
 - 泛型方法
 
+   ```java
+   // 泛型方法
+   public <T> void printArray(T[] array) {
+       for (T element : array) {
+           System.out.print(element + " ");
+       }
+       System.out.println();
+   }
+   
+   public static <E> int seach1(E[] arr,E target){
+       
+   }
+   
+   备注：在方法void 或返回值前面需要加泛型<E>
+   ```
+
+- 泛型接口
+
+   ```java
+   //在接口名称后面紧跟泛型<>
+   public interface InterfaceName<T>{
+       //接口的方法定义
+   }
+   
+   //可以同时定义多个泛型，多个泛型用“，”逗号分割
+   public interface InterfaceName2<M,N>{
+       //接口的方法定义
+   }
+   ```
+
+   
+
 - 泛型类
 
   ```java
@@ -126,24 +158,6 @@ public enum DeleteEnum {
       }
   }
   ```
-
-  
-
-- 泛型接口
-
-  ```java
-  //在接口名称后面紧跟泛型<>
-  public interface InterfaceName<T>{
-      //接口的方法定义
-  }
-  
-  //可以同时定义多个泛型，多个泛型用“，”逗号分割
-  public interface InterfaceName2<M,N>{
-      //接口的方法定义
-  }
-  ```
-
-  
 
 - 泛型加反射
 
@@ -216,7 +230,7 @@ public static void main(String[] args) {
 
   ### 5.2 反射优缺点
 
-  - 优点：代码更加灵活，
+  - 优点：代码更加灵活
   - 缺点：增加了安全问题
 
   ### 5.3获取class的四种方式
@@ -240,8 +254,8 @@ public static void main(String[] args) {
 
 
 ## 6. java 值传递
-### 值传递：方法接收的是实参的拷贝，会创建副本
-### 引用传递：方法接收的直接是实参所引用的对象在堆中的地址，不会创建副本，对形参的修改将影响到实参
+值传递：方法接收的是实参的拷贝，会创建副本
+引用传递：方法接收的直接是实参所引用的对象在堆中的地址，不会创建副本，对形参的修改将影响到实参
 
 
 结论：如果参数是基本类型的话，很简单，传递的就是基本类型的字面量值的拷贝，会创建副本。
@@ -358,7 +372,7 @@ cglib代理：**采用底层的字节码技术，当目标对象不存在接口�
 
 **可以直接操作内存，使用要慎重**
 
-unsafe类：作用
+unsafe类左右
 内存操作
 内存屏障
 对象操作
