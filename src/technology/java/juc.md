@@ -179,15 +179,15 @@ ReentrantLock 用来实现分组唤醒需要唤醒的线程们，可以精确唤
 
  ## 14 ThreadLocal
 
-作用：每一个线程都有自己的专属本地变量，存放私有的数据
+- 作用：每一个线程都有自己的专属本地变量，存放私有的数据
 
-方法： get()  set()
+- 方法： get()  set()
 
 ```java
 private static final ThreadLocal<SimpleDateFormat> formatter = ThreadLocal.withInitial(()->new SimpleDateFormat("yyyyMMdd HHmmm"));
 ```
 
-原理：
+- 原理：
 
 Thread类源码
 
@@ -210,9 +210,21 @@ public class Thread implements Runnable {
 
  **每个`Thread`中都具备一个`ThreadLocalMap`，而`ThreadLocalMap`可以存储以`ThreadLocal`为 key ，Object 对象为 value 的键值对**
 
+
+
+- Thread ThreadLocal ThreadLocalMap关系
+
+![image-20231220092323293](juc.assets/image-20231220092323293.png)
+
  
 
- 内存泄露问题
+- 内存泄露问题
+
+  什么是内存泄漏？
+
+  不再会被使用的对象或者变量占用的内存不能被回收，就是内存泄露
+
+  
 
 `ThreadLocalMap` 中使用的 key 为 `ThreadLocal` 的弱引用，而 value 是强引用。所以，如果 `ThreadLocal` 没有被外部强引用的情况下，在垃圾回收的时候，key 会被清理掉，而 value 不会被清理掉 
 
@@ -225,6 +237,17 @@ public class Thread implements Runnable {
 - 软引用：系统内存充足不会被回收，不足会被回收
 
   ```java
+  class MyObject
+  {
+      //一般开发中不用调用这个方法，本次只是为了讲课演示
+      @Override
+      protected void finalize() throws Throwable
+      {
+          System.out.println(Thread.currentThread().getName()+"\t"+"---finalize method invoked....");
+      }
+  }
+  
+  
   public class ReferenceDemo
   {
       public static void main(String[] args)
@@ -316,6 +339,10 @@ public class Thread implements Runnable {
   
 
 - 虚引用：在任何时候都可能被回收
+
+
+
+  为什么要用弱引用，不用如何？弱引用就万事大吉了么
 
 
 
