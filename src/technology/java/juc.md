@@ -346,6 +346,126 @@ public class Thread implements Runnable {
 
 
 
- 
+ ## 15 线程池
+
+1. 为什么要使用线程池
+
+   - 池化技术思想，如数据库连接池，Http连接池
+   - 减少每次获取资源的消耗，提高对资源的利用率
+   - 提高线程的可管理性
+
+2. 如何创建线程池
+
+   - 通过ThreadPoolExector 构造函数来创建（推荐）
+
+   - 通过Executor框架的工具类Executors来创建（不推荐）
+
+     - 里面默认的任务队列是Integer.MAX_VALUE,容易导致oom
+
+       ```java
+       Executors.newFixedThreadPool(int)   固定数线程
+       Executors.newSingleThreadExecutor()  一池一线程
+       Executors.newCachedThreadPool()      一池多线程
+       
+       Executors.newScheduledThreadPool() 了解
+       
+       jdk1.8后
+       Executors.newWorkStealingPool(int)
+       ```
+
+       
+
+3. 线程池常见的参数
+
+   - corePoolSize: 线程池的核心线程数量
+   - maximumPoolSize: 线程池的最大线程数
+   - keepAliveTime: 当线程数大于核心线程数时，多余的空闲线程存活的最长时间
+   - unit: 时间单位
+   - workQueue：任务队列，用来储存等待执行任务的队列
+   - threadFactory： 线程工厂，用来创建线程，一般默认即可
+   - RejectedExecutionHandler： 拒绝策略
+
+   ```java
+    public ThreadPoolExecutor(int corePoolSize,
+                                 int maximumPoolSize,
+                                 long keepAliveTime,
+                                 TimeUnit unit,
+                                 BlockingQueue<Runnable> workQueue,
+                                 ThreadFactory threadFactory,
+                                 RejectedExecutionHandler handler
+                                  ) 
+   
+   ```
+
+4. 线程池的拒绝策略
+   - **`AbortPolicy`**：抛出异常来拒绝新任务的处理
+   - **`CallerRunsPolicy`**： 调用执行自己的线程运行任务，也就是直接在调用`execute`方法的线程中运行(`run`)被拒绝的任务，如果执行程序已关闭，则会丢弃该任务 （推荐使用）
+   - **`DiscardPolicy`**：不处理新任务，直接丢弃掉
+   - **`DiscardOldestPolicy`**：此策略将丢弃最早的未处理的任务请求
+
+5. 线程池工作流程？
+
+​    工作流程： 
+
+- 核心数，能干活的 
+
+- 核心数满了，阻塞队列待着 
+
+- 阻塞队列满了，扩容，扩到线程池所能达到的最高极限 
+
+- 两种情况：线程数大多启动拒绝策略；无事可做超过一定时间就会收缩到corePoolSize大小    
+
+6.  如何设置最大线程数？
+   - **CPU 密集型任务**：N（CPU 核心数）+1
+   - **I/O 密集型任务(2N)**：2N
+
+7. 代码实操
+
+   ```java
+   public class CustomThreadPool {
+       private static class ThreadPoolHolder{
+           private static ExecutorService threadPool = new ThreadPoolExecutor(10,
+                   20,
+                   30,
+                   TimeUnit.SECONDS,
+                   new LinkedBlockingQueue<>(),
+                   Executors.defaultThreadFactory(),
+                   new ThreadPoolExecutor.CallerRunsPolicy());
+       }
+   
+       public  CustomThreadPool(){
+   
+       }
+   
+       public static ExecutorService getInstance(){
+           return ThreadPoolHolder.threadPool;
+       }
+   
+   
+   
+   }
+   
+   
+   使用
+   ExecutorService threadPoolExecutor = CustomThreadPool.getInstance();
+                       Runnable runnable = ()->{
+                           customMethods();
+                       };
+                       threadPoolExecutor.execute(runnable);
+   ```
+
+
+
+## 16 AQS
+
+1. AQS是什么？
+
+   字面意思是抽象的队列同步器，主要用来构建锁和同步器
+
+2. AQS的原理？
+
+   
+
+
 
  
