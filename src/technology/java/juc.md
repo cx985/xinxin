@@ -460,12 +460,174 @@ public class Thread implements Runnable {
 
 1. AQS是什么？
 
-   字面意思是抽象的队列同步器，主要用来构建锁和同步器
+   - 字面意思：AbstractQueuedSynchronizer是抽象的队列同步器，主要用来构建锁和同步器 
+
+   - 技术解释：是用来构建锁或者其它同步器组件的重量级基础框架及整个JUC体系的基石，
+     通过内置的FIFO队列来完成资源获取线程的排队工作，并通过一个int类变量
+     表示持有锁的状态
 
 2. AQS的原理？
 
-   
+   有阻塞就需要排队，实现排队必然需要队列
+  
+  - AQS使用一个volatile的int类型的成员变量来表示同步状态，通过内置的
+    FIFO队列来完成资源获取的排队工作将每条要去抢占资源的线程封装成
+    一个Node节点来实现锁的分配，通过CAS完成对State值的修改
+  - state变量+CLH双端队列
 
 
 
- 
+ ## 17 Semaphore
+
+- 作用： 信号量主要用于两个目的，一个是用于多个共享资源的互斥使用，另一个用于 并发线程数的控制 
+
+- 生活例子：抢车位
+
+- 方法
+
+  - acquire()：获取一个许可
+  - release()：释放一个许可 
+
+- 案例：模拟6个车抢三个车位
+
+  ```java
+  public static void main(String[] args) {
+          Semaphore semaphore = new Semaphore(3);
+          for (int i = 0; i < 6; i++) {
+              new Thread(() -> {
+                  try {
+                      semaphore.acquire();
+                      System.out.println(Thread.currentThread().getName() + "抢到车位");
+                      try {
+                          TimeUnit.SECONDS.sleep(3);
+                      } catch (InterruptedException e) {
+                          e.printStackTrace();
+                      }
+                      System.out.println(Thread.currentThread().getName() + "停车3秒后离开车位");
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  } finally {
+                      semaphore.release();
+                  }
+              }, String.valueOf(i)).start();
+  
+  
+          }
+      }
+  ```
+
+  ​               
+
+## 18 CountDownLatch
+
+- 定义： 让一些线程阻塞直到另一些线程完成一系列操作后才被唤醒              
+
+- 通过一个计数器实现，计数器的初始值是线程的数量，每当一个线程执行完毕后，计数器的值就-1，当计数器的值为0时，表示所有的线程都执行完毕
+- 方法
+  - await(): 调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+  - await(long timeout,TimeUnit unit): 等待一定的时间后count值还没变为0的话就会继续执行
+  - countDown(): 将count值减1
+
+- 案例
+
+  ```
+  6个同学，班长最后关灯走人
+  
+  public class CountDownLatchTest {
+      public static void main(String[] args) throws InterruptedException {
+          CountDownLatchTest countDownLatchTest = new CountDownLatchTest();
+          countDownLatchTest.test1();
+          System.out.println("===========================");
+          countDownLatchTest.test2();
+  
+      }
+  
+      /**
+       * 没用countdownlatch之前, main线程会先执行
+       */
+      public void test1(){
+          for(int i=0;i<6;i++){
+              new Thread(()->{
+                  System.out.println(Thread.currentThread().getName()+"\t上完自习,离开教室");
+              },String.valueOf(i)).start();
+          }
+          System.out.println(Thread.currentThread().getName()+"\t***********班长最后关门走人");
+      }
+  
+      /**
+       * 用countdownlatch
+       */
+      public void test2() throws InterruptedException {
+          CountDownLatch countDownLatch = new CountDownLatch(6);
+          for(int i=0;i<6;i++){
+              new Thread(()->{
+                  countDownLatch.countDown();
+                  System.out.println(Thread.currentThread().getName()+"\t上完自习，离开教室");
+              },String.valueOf(i)).start();
+          }
+  
+          countDownLatch.await();
+          System.out.println(Thread.currentThread().getName()+"\t***********班长最后关门走人");
+  
+      }
+  
+  }
+  
+  备注：注意countDownLatch.countDown()的位置是在线程里面，不是for循环里面
+  ```
+
+- 扩展：使用CompletableFuture也可以实现countdownLatch功能
+
+  ```java
+  public void test3() throws Exception {
+          CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> {
+              System.out.println("Task 1 running");
+          });
+  
+          CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> {
+              System.out.println("Task 2 running");
+          });
+  
+          CompletableFuture<Void> future3 = CompletableFuture.runAsync(() -> {
+              System.out.println("Task 3 running");
+          });
+  
+          CompletableFuture<Void> allFutures = CompletableFuture.allOf(future1, future2, future3);
+  
+          allFutures.get(); // 等待所有任务完成
+  
+          System.out.println("All tasks completed");
+      }
+  ```
+
+  
+
+## 19 CyclicBarrier
+
+- 字面意思：可循环(Cyclic) 使用的屏障(Barrier)  
+- 理解： **集齐7颗龙珠就能召唤神龙**，它要做的事情是，让一组线程到达一个屏障 （也可以叫同步点）时被阻塞，直到最后一个线程到达屏障时，屏障才会开门，所用被 屏障拦截的线程才能干活，线程进入屏障通过CyclicBarrier的await()方法              
+
+- 代码示例
+
+  ```java
+  public static void main(String[] args) {
+          CyclicBarrier cyclicBarrier = new CyclicBarrier(7,()->{
+              System.out.println("召唤神龙");
+          });
+          for(int i=0;i<7;i++){
+              int finalI = i;
+              new Thread(()->{
+                  System.out.println("收集到第"+(finalI +1)+"颗龙珠");
+                  try {
+                      cyclicBarrier.await();
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
+                  } catch (BrokenBarrierException e) {
+                      e.printStackTrace();
+                  }
+              },String.valueOf(i)).start();
+          }
+      }
+  ```
+
+  

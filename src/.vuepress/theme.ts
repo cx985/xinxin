@@ -65,7 +65,9 @@ export default hopeTheme({
   },
 
   encrypt: {
+    // 文章加密配置
     config: {
+      "/technology/java/juc": ["xinxin"]
     },
   },
 
