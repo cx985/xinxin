@@ -406,7 +406,25 @@ public class Thread implements Runnable {
 
 2. 如何创建线程池
 
-   - 通过ThreadPoolExector 构造函数来创建（推荐）
+   - 通过ThreadPoolExecutor 构造函数来创建（推荐）
+
+     ```java
+     //推荐使用spring的
+     @Bean("commonServiceExecutor")
+         public ThreadPoolTaskExecutor commonServiceExecutor() {
+             ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+             executor.setCorePoolSize(30);
+             executor.setQueueCapacity(60);
+             executor.setMaxPoolSize(100);
+             executor.setKeepAliveSeconds(60);
+             executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+             executor.setThreadNamePrefix("common-task-worker-");
+             executor.initialize();
+             return executor;
+         }
+     ```
+
+     
 
    - 通过Executor框架的工具类Executors来创建（不推荐）
 
@@ -423,7 +441,20 @@ public class Thread implements Runnable {
        Executors.newWorkStealingPool(int)
        ```
 
-       
+     
+     ```java
+     //代码示例
+     ExecutorService executor = Executors.newFixedThreadPool(20);
+             for (int i = 0; i < 20; i++) {
+                 executor.submit(() -> {
+                       dosome();
+                     }
+                 });
+             }
+             executor.shutdown();
+     ```
+     
+     
 
 3. 线程池常见的参数
 
@@ -703,7 +734,6 @@ public class Thread implements Runnable {
   - 共享资源每次只给一个线程使用，其他线程阻塞，用完后再把资源
   - 代表：synchronized 和 reentrantlock
   - 高并发场景下，激烈的锁竞争会造成线程阻塞
-
 - 公平锁
 - 非公平锁
 - 可重入锁（递归锁）
@@ -713,3 +743,23 @@ public class Thread implements Runnable {
 - 自旋锁SpinLock
 - 无锁->独占锁->读写锁->邮戳锁
 - 无锁->偏向锁->轻量锁->重量锁
+
+
+
+## 21 CompletableFuture
+
+1. 为啥要有CompletableFuture？
+
+   先说说FutureTask的弊端
+
+   - get(): 会导致阻塞，要获取结果必须等待
+   - get(1L,TimeUnit.SECONDS): 过时不候，有时结果没出来，就得不到结果
+
+
+
+## 22 LockSupport 与线程中断
+
+
+
+## 23 Synchronized 与锁升级
+
