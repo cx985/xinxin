@@ -753,7 +753,104 @@ public class Thread implements Runnable {
    先说说FutureTask的弊端
 
    - get(): 会导致阻塞，要获取结果必须等待
+
    - get(1L,TimeUnit.SECONDS): 过时不候，有时结果没出来，就得不到结果
+
+     
+
+2. completableFuture 是什么？
+
+   completableFuture 实现了Future和CompletionStage接口
+
+   ```java
+   public class CompletableFuture<T> implements Future<T>,CompletionStage<T>
+   ```
+
+   CompletionStage是什么？
+
+   - 代表异步计算过程中的某一个阶段，一个阶段完成后可能会触发另外一个阶段，有点类似linux系统的管道分隔符传参数
+   - 一个阶段的执行可能是被单个阶段的完成触发，也可能是由多个阶段一起触发
+
+​      在java8中，CompletableFuture提供了非常强大的Future的扩展功能，可以帮助我们简化异步编程的复杂性，并且提供了函数式编程能力，可以通过回调的方式处理计算结果，也提供了转换和组合的方法
+
+它可以代表一个明确完成的Future, 也可能代表一个完成阶段，它支持在计算完成以后触发一些函数或执行某些动作
+
+​	
+
+3. 核心的静态方法
+
+- 无返回值
+
+  - runAsync
+
+    - 参数1：runAsync(Runnable runnable)
+    - 参数2：runAsync(Runnable runnable,Executor executor)
+
+    ```java
+    CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
+                System.out.println("11");
+            });
+            System.out.println(task.get());
+    ```
+
+    
+
+- 有返回值
+
+  -  supplyAsync
+
+    - 参数1：supplyAsync(Supplier<U> supplier)
+    - 参数2：supplyAsync(Supplier<U> supplier,Executor executor)
+
+    ```java
+    CompletableFuture<String> task = CompletableFuture.supplyAsync(() -> {
+                System.out.println("11");
+                return "22";
+            });
+            System.out.println(task.get());
+    ```
+
+    
+
+  上述executor 参数说明
+
+  - 没有指定Executor的方法，直接使用默认的ForkJoinPool.commonPool() 作为它的线程池执行异步代码
+  - 如果指定线程池，则使用我们自定义的或者特别指定的线程池执行异步代码
+
+4.  减少阻塞和轮询
+
+   ```java
+   public static void main(String[] args) {
+           CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+               System.out.println(Thread.currentThread().getName() + "\t" + "come in");
+               int result = ThreadLocalRandom.current().nextInt(10);
+               try {
+                   TimeUnit.SECONDS.sleep(1);
+               } catch (InterruptedException e) {
+                   throw new RuntimeException(e);
+               }
+               System.out.println("计算结束，耗时1秒，结果为：" + result);
+               if (result > 6) {
+                   int age = 10 / 0;
+               }
+               return result;
+           }).whenComplete((v, e) -> {
+               if (e == null) {
+                   System.out.println("---result=" + v);
+               }
+           }).exceptionally(e -> {
+               System.out.println("异常：" + e.getCause());
+               return -44;
+           });
+           try {
+               TimeUnit.SECONDS.sleep(3);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
+       }
+   ```
+
+   
 
 
 
