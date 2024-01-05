@@ -799,9 +799,18 @@ public class Thread implements Runnable {
 
   -  supplyAsync
 
-    - 参数1：supplyAsync(Supplier<U> supplier)
-    - 参数2：supplyAsync(Supplier<U> supplier,Executor executor)
-
+    - 参数1：
+    
+      ```java
+      supplyAsync(Supplier<U> supplier)
+      ```
+    
+    - 参数2：
+    
+      ```java
+      supplyAsync(Supplier<U> supplier,Executor executor)
+      ```
+    
     ```java
     CompletableFuture<String> task = CompletableFuture.supplyAsync(() -> {
                 System.out.println("11");
@@ -809,11 +818,11 @@ public class Thread implements Runnable {
             });
             System.out.println(task.get());
     ```
-
     
-
+    
+  
   上述executor 参数说明
-
+  
   - 没有指定Executor的方法，直接使用默认的ForkJoinPool.commonPool() 作为它的线程池执行异步代码
   - 如果指定线程池，则使用我们自定义的或者特别指定的线程池执行异步代码
 
@@ -850,11 +859,612 @@ public class Thread implements Runnable {
        }
    ```
 
+
+5. **CompletableFuture性能测试(重要)**
+
+   需求：假设一个方法执行需要1秒，同时有三个方法，要求三个方法执行都只需要1秒
+
+    ```java
+    public class CompletablePerformanceTest {
+    
+        public static void main(String[] args) {
+            querySync();
+            queryAsync();
+            querySimpleAsync();
+        }
+    
+        /**
+         * 正常执行版，耗时3秒
+         */
+        public static void querySync(){
+            long startTime = System.currentTimeMillis();
+            // 未使用CompletableFuture前的代码
+            queryInterface1();
+            queryInterface2();
+            queryInterface3();
+            long endTime = System.currentTimeMillis();
+            System.out.println("Sync Total time: " + (endTime - startTime) + "ms");
+        }
+    
+        /**
+         * 异常执行版，耗时1秒钟
+         */
+        public static void queryAsync(){
+            long startTime = System.currentTimeMillis();
+            CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> queryInterface1());
+            CompletableFuture<Void> future2 = CompletableFuture.runAsync(() -> queryInterface2());
+            CompletableFuture<Void> future3 = CompletableFuture.runAsync(() -> queryInterface3());
+            CompletableFuture.allOf(future1,future2,future3).join();
+            long endTime = System.currentTimeMillis();
+            System.out.println("ASync Total time: " + (endTime - startTime) + "ms");
+    
+        }
+    
+        /**
+         * 异步简洁版，适用于方法多的场景
+         */
+        public static void querySimpleAsync(){
+            long startTime = System.currentTimeMillis();
+            CompletableFuture<Void> allOf = CompletableFuture.allOf(
+                    CompletableFuture.runAsync(() -> queryInterface1()),
+                    CompletableFuture.runAsync(() -> queryInterface2()),
+                    CompletableFuture.runAsync(() -> queryInterface3()));
+            allOf.join();
+            long endTime = System.currentTimeMillis();
+            System.out.println("Simple ASync Total time: " + (endTime - startTime) + "ms");
+        }
+    
+        private static void queryInterface1() {
+            // 模拟查询接口1需要1秒钟
+            try {
+                Thread.sleep(1000);
+                System.out.println("方法1执行了");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    
+        private static void queryInterface2() {
+            // 模拟查询接口2需要1秒钟
+            try {
+                Thread.sleep(1000);
+                System.out.println("方法2执行了");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    
+        private static void queryInterface3() {
+            // 模拟查询接口3需要1秒钟
+            try {
+                Thread.sleep(1000);
+                System.out.println("方法3执行了");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    ```
+
+![image-20240103094946571](juc.assets/image-20240103094946571.png)
+
+6. CompletableFuture常用方法
+   - 获得结果和触发计算
+     - 获取结果
+       - public T get()   不见不散
+       
+       - public T get(long timeout,TimeUnit unit) 过时不侯
+       
+       - public T join()
+       
+         ```java
+         System.out.println(CompletableFuture.supplyAsync(()->"abc").thenApply(r->r+"123").join());
+         
+         输出：abc123
+         ```
+       
+         
+     
+   - 对计算结果进行处理
    
-
-
+     - thenApply
+       - 计算结果存在依赖关系，这两个线程串行化
+       
+       - 由于存在依赖关系，报错不走下一步
+       
+       - **任务 A 执行完执行 B，B 需要 A 的结果，同时任务 B 有返回值**
+       
+         ```java
+         public static void thenApply(){
+                 CompletableFuture.supplyAsync(()->{
+                     try {
+                         TimeUnit.SECONDS.sleep(1);
+                     } catch (InterruptedException e) {
+                         throw new RuntimeException(e);
+                     }
+                     System.out.println("111");
+                     return 1024;
+                 }).thenApply(f->{
+                     int age = 10/0;
+                     System.out.println("222");
+                     return f+1;
+                 }).thenApply(f->{
+         
+                     System.out.println("333");
+                     return f+1;
+                 }).whenCompleteAsync((v,e)->{
+                     System.out.println("完成，v:"+v);
+                 }).exceptionally(e->{
+                     e.printStackTrace();
+                     return null;
+                 });
+         
+                 System.out.println("主线程结束");
+         
+                 try {
+                     TimeUnit.SECONDS.sleep(2);
+                 } catch (InterruptedException e) {
+                     throw new RuntimeException(e);
+                 }
+         
+             }
+         ```
+       
+         ![image-20240103200926330](juc.assets/image-20240103200926330.png)
+       
+     - handle
+   
+       - 有异常也可以往下一步走，根据带的异常参数可以进一步处理
+   
+         ```java
+         public static void handle(){
+                 CompletableFuture.supplyAsync(()->{
+                     try {
+                         TimeUnit.SECONDS.sleep(1);
+                     } catch (InterruptedException e) {
+                         throw new RuntimeException(e);
+                     }
+                     System.out.println("111");
+                     return 1024;
+                 }).handle((f,e)->{
+                     int age = 10/0;
+                     System.out.println("222");
+                     return f+1;
+                 }).handle((f,e)->{
+                     System.out.println("333");
+                     return f+1;
+                 }).whenCompleteAsync((v,e)->{
+                     System.out.println("完成，v:"+v);
+                 }).exceptionally(e->{
+                     e.printStackTrace();
+                     return null;
+                 });
+         
+                 System.out.println("主线程结束");
+         
+                 try {
+                     TimeUnit.SECONDS.sleep(2);
+                 } catch (InterruptedException e) {
+                     throw new RuntimeException(e);
+                 }
+             }
+         ```
+   
+         ![image-20240103201122547](juc.assets/image-20240103201122547.png)
+   
+   - 对计算结果进行消费
+     - thenAccept
+     
+       - 接收任务的处理结果，并消费处理，无返回结果
+     
+       - **任务 A 执行完执行 B，B 需要 A 的结果，但是任务 B 无返回值**
+     
+         ```java
+          public static  void thenAccept(){
+                 CompletableFuture.supplyAsync(()->{
+                     return 1;
+                 }).thenApply(f->{
+                     return f+2;
+                 }).thenApply(f->{
+                     return f+3;
+                 }).thenAccept(r-> System.out.println(r));
+             }
+         ```
+     
+     - thenRun
+     
+       - 任务A执行完执行B,并且B不需要A的结果
+     
+         ```java
+         System.out.println(CompletableFuture.supplyAsync(() -> "resultA").thenRun(() -> {}).join());
+         
+         输出：null
+         ```
+     
+         
+     
+   - 对计算速度进行选用
+     
+     - applyToEither(了解)
+     
+   - 对计算结果进行合并
+     - thenCombine
+     
+       - 两个CompletionStage任务都完成后，最终能把两个任务的结果一起交给thenCombine 来处理
+       - 先完成的先等着，等待其它分支任务
+     
+       ```java
+       public static void main(String[] args) throws ExecutionException, InterruptedException
+           {
+               CompletableFuture<Integer> completableFuture1 = CompletableFuture.supplyAsync(() -> {
+                   System.out.println(Thread.currentThread().getName() + "\t" + "---come in ");
+                   return 10;
+               });
+       
+               CompletableFuture<Integer> completableFuture2 = CompletableFuture.supplyAsync(() -> {
+                   System.out.println(Thread.currentThread().getName() + "\t" + "---come in ");
+                   return 20;
+               });
+       
+               CompletableFuture<Integer> thenCombineResult = completableFuture1.thenCombine(completableFuture2, (x, y) -> {
+                   System.out.println(Thread.currentThread().getName() + "\t" + "---come in ");
+                   return x + y;
+               });
+               
+               System.out.println(thenCombineResult.get());
+           }
+       
+       ```
+     
+       
 
 ## 22 LockSupport 与线程中断
+
+1. **线程中断机制**
+
+   如何停止、中断一个运行中的线程？
+
+   中断：用于停止线程的机制，中断只是一种协作机制，Java没有给中断增加任何语法，中断的过程完全需要程序员自己实现。若要中断一个线程，你需要手动调用该线程的interrupt方法，该方法也仅仅是将线程对象的中断标识设成true；
+
+
+
+- 中断相关的api方法
+
+  - void interrupt()
+
+    - 实例方法interrupt()仅仅是设置线程的中断状态为true，不会停止线程
+
+  - static boolean interrupted()
+
+    - 静态方法，Thread.interrupted();  
+      判断线程是否被中断，并清除当前中断状态
+      这个方法做了两件事：
+      1 返回当前线程的中断状态
+      2 将当前线程的中断状态设为false
+
+      返回当前线程的中断状态(boolean类型)且将当前线程的中断状态设为false，此方法调用之后会清除当前线程的中断标志位的状态（将中断标志置为false了），返回当前值并清零置false
+
+  -  boolean isInterrupted()
+    - 判断当前线程是否被中断（通过检查中断标志位）
+
+- 如何使用中断标识停止线程
+
+  - 通过volatile变量实现
+
+    ```java
+    private static volatile boolean isStop = false;
+    
+    public static void main(String[] args)
+    {
+        new Thread(() -> {
+            while(true)
+            {
+                if(isStop)
+                {
+                    System.out.println(Thread.currentThread().getName()+"线程------isStop = true,自己退出了");
+                    break;
+                }
+                System.out.println("-------hello interrupt");
+            }
+        },"t1").start();
+    
+        //暂停几秒钟线程
+        try { TimeUnit.SECONDS.sleep(1); } catch (InterruptedException e) { e.printStackTrace(); }
+        isStop = true;
+    }
+    
+    ```
+
+    
+
+  - 通过AtomicBoolean
+
+    ```java
+    private final static AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+    
+        public static void main(String[] args)
+        {
+            Thread t1 = new Thread(() -> {
+                while(atomicBoolean.get())
+                {
+                    try { TimeUnit.MILLISECONDS.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+                    System.out.println("-----hello");
+                }
+            }, "t1");
+            t1.start();
+    
+            try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); }
+    
+            atomicBoolean.set(false);
+        }
+    
+    ```
+
+    
+
+  - 通过Thread类自带的中断api方法实现
+
+- 当前线程的中断标识为true，是不是就立刻停止？
+  - 中断只是一种协同机制，修改中断标识位仅此而已，不是立刻stop打断
+
+2. LockSupport
+
+- 是什么？
+  - LockSupport是用来创建锁和其他同步类的基本线程阻塞原语
+  - LockSupport中的park() 和 unpark() 的作用分别是阻塞线程和解除阻塞线程
+
+3. **线程等待唤醒机制**
+
+- 方式1：使用Object中的wait()方法让线程等待，使用Object中的notify()方法唤醒线程
+
+  - wait和notify方法必须要在同步块或者方法里面，且成对出现使用
+  - 先wait后notify才OK
+
+   ```java
+   public class ObjectWaitAndNoTify {
+   
+       public static void main(String[] args) {
+           //normal();
+           //error1();
+           error2();
+       }
+   
+       //正常
+       public static void normal(){
+           Object objectLock = new Object();
+   
+           new Thread(()->{
+               synchronized (objectLock){
+                   try {
+                       objectLock.wait();
+                   } catch (InterruptedException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+               System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒了");
+           },"t1").start();
+   
+           try {
+               TimeUnit.SECONDS.sleep(3);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
+   
+           new Thread(()->{
+               synchronized (objectLock){
+                   objectLock.notify();
+               }
+           },"t2").start();
+       }
+   
+   
+       //异常展示1-去掉同步代码块(报错：Exception in thread "t1" java.lang.IllegalMonitorStateException)
+       public static void error1(){
+           Object objectLock = new Object(); //同一把锁，类似资源类
+   
+           new Thread(() -> {
+               try {
+                   objectLock.wait();
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+               System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒了");
+           },"t1").start();
+   
+           //暂停几秒钟线程
+           try { TimeUnit.SECONDS.sleep(3L); } catch (InterruptedException e) { e.printStackTrace(); }
+   
+           new Thread(() -> {
+               objectLock.notify();
+           },"t2").start();
+       }
+   
+       //异常情况2：将notify放在wait方法前面(无法唤醒)
+       public static void error2(){
+           Object objectLock = new Object(); //同一把锁，类似资源类
+   
+           new Thread(() -> {
+               synchronized (objectLock) {
+                   objectLock.notify();
+               }
+               System.out.println(Thread.currentThread().getName()+"\t"+"通知了");
+           },"t1").start();
+   
+           //t1先notify了，3秒钟后t2线程再执行wait方法
+           try { TimeUnit.SECONDS.sleep(3L); } catch (InterruptedException e) { e.printStackTrace(); }
+   
+           new Thread(() -> {
+               synchronized (objectLock) {
+                   try {
+                       objectLock.wait();
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }
+               System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒了");
+           },"t2").start();
+       }
+   
+   
+   }
+   ```
+
+  
+
+- 方式2：使用JUC包中Condition的await()方法让线程等待，使用signal()方法唤醒线程
+
+  - Condtion中的线程等待和唤醒方法之前，需要先获取锁
+  - 一定要先await后signal，不要反了
+
+  ```java
+  public class ConditionAwaitAndSignal {
+  
+      public static void main(String[] args) {
+         // normal();
+          // error1();
+          error2();
+      }
+  
+      public static void normal(){
+          Lock lock = new ReentrantLock();
+          Condition condition = lock.newCondition();
+  
+          new Thread(()->{
+              lock.lock();
+              System.out.println(Thread.currentThread().getName()+"\t"+"start");
+              try {
+                  condition.await();
+                  System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒");
+              } catch (InterruptedException e) {
+                  throw new RuntimeException(e);
+              }finally {
+                  lock.unlock();
+              }
+  
+          },"t1").start();
+  
+  
+          try {
+              TimeUnit.SECONDS.sleep(3);
+          } catch (InterruptedException e) {
+              throw new RuntimeException(e);
+          }
+  
+          new Thread(()->{
+              lock.lock();
+              try{
+                  condition.signal();
+              }catch (Exception e){
+                  e.printStackTrace();
+              }finally {
+                  lock.unlock();
+              }
+              System.out.println(Thread.currentThread().getName()+"\t"+"通知了");
+          },"t2").start();
+  
+  
+      }
+  
+      //异常：去掉lock/unlock(condition.await();和 condition.signal();都触发了 IllegalMonitorStateException异常。)
+      public static void error1(){
+          Lock lock = new ReentrantLock();
+          Condition condition = lock.newCondition();
+  
+          new Thread(() -> {
+              try
+              {
+                  System.out.println(Thread.currentThread().getName()+"\t"+"start");
+                  condition.await();
+                  System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒");
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          },"t1").start();
+  
+          //暂停几秒钟线程
+          try { TimeUnit.SECONDS.sleep(3L); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          new Thread(() -> {
+              try
+              {
+                  condition.signal();
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+              System.out.println(Thread.currentThread().getName()+"\t"+"通知了");
+          },"t2").start();
+  
+  
+      }
+  
+      //异常2，先signal后await（等待被唤醒）
+      public static void error2(){
+          Lock lock = new ReentrantLock();
+          Condition condition = lock.newCondition();
+  
+          new Thread(() -> {
+              lock.lock();
+              try
+              {
+                  condition.signal();
+                  System.out.println(Thread.currentThread().getName()+"\t"+"signal");
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }finally {
+                  lock.unlock();
+              }
+          },"t1").start();
+  
+          //暂停几秒钟线程
+          try { TimeUnit.SECONDS.sleep(3L); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          new Thread(() -> {
+              lock.lock();
+              try
+              {
+                  System.out.println(Thread.currentThread().getName()+"\t"+"等待被唤醒");
+                  condition.await();
+                  System.out.println(Thread.currentThread().getName()+"\t"+"被唤醒");
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }finally {
+                  lock.unlock();
+              }
+          },"t2").start();
+      }
+  }
+  ```
+
+  
+
+- 方式3：LockSupport类可以阻塞当前线程以及唤醒指定被阻塞的线程**（都可以用无限制，推荐）**
+
+  - park() : 阻塞当前线程或者阻塞传入的具体线程
+  - unpark(): 唤醒处于阻塞状态的指定线程
+
+  ```java
+  public static void main(String[] args)
+      {
+          //正常使用+不需要锁块
+          Thread t1 = new Thread(() -> {
+              System.out.println(Thread.currentThread().getName()+" "+"1111111111111");
+              LockSupport.park();
+              System.out.println(Thread.currentThread().getName()+" "+"2222222222222------end被唤醒");
+          },"t1");
+          t1.start();
+  
+  //暂停几秒钟线程
+          try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); }
+  
+          LockSupport.unpark(t1);
+          System.out.println(Thread.currentThread().getName()+"   -----LockSupport.unparrk() invoked over");
+  
+      }
+  ```
+
+  
+
+
 
 
 
