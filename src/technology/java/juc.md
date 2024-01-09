@@ -1,8 +1,9 @@
 ---
 icon: tag
 order: 4
+date: 2023-12-20
 category:
-  - 使用指南
+  - juc内容
 tag:
   - java
 ---

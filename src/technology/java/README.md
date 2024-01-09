@@ -21,5 +21,7 @@ order: 1
 - [Spring](./spring.md)
 - [算法](./algorithm.md)
 - [ES](./es.md)
+- [JVM](./jvm.md)
+- [Redis](./redis.md)
 
 ---

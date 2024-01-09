@@ -64,6 +64,37 @@ PUT statistic_result_detailinfo
 }
 ```
 
+生产环境常用
+
+- 1.建立create-template.sh文件
+
+- 2.内容如下
+
+  ```she
+  #!/bin/bash
+   
+  cd ./
+   
+  #这样就会把所有的文件名保存到 ls.log 文件中
+  ls *.json > ls.log
+  
+  for i in $(cat ls.log)
+  do
+    echo $i
+    #有用户名密码的执行方式
+    #curl -k --user gaonaite:Ceye.123 -H "Content-Type: application/json" -X PUT -d @$i "https://127.0.0.1:24100/_template/${i/.json/}"
+    #无密码执行方式
+    curl -H "Content-Type: application/json" -X PUT -d @$i "http://127.0.0.1:9200/_template/${i/.json/}"
+  done
+  
+  rm -f ls.log
+  
+  echo 'done!!!'
+  
+  ```
+
+  
+
 ### 2. 复杂查询
 
 ```java
