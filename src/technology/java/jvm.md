@@ -392,14 +392,124 @@ tag:
   - **`AppClassLoader`(应用程序类加载器)**
     - 面向我们用户的加载器，负责加载当前应用 classpath 下的所有 jar 包和类
 
+ #### 8.4 双亲委派机制
+
+- 定义
+  - 如果一个类加载器在接到加载类的请求时，它首先不会自己尝试去加载这个类，而是把这个请求任务委托给父类加载器去完成，依次递归，如果父类加载器可以完成类加载任务，就成功返回。只有父类加载器无法完成此加载任务时，才自己去加载
+- 本质
+  - 引导类加载器先加载，若加载不到，由扩展类加载器加载，若还加载不到，才会由系统类加载器或自定义的类加载器进行加载
+- 源码分析
+  - 双亲委派机制在java.lang.ClassLoader**.loadClass**(String,boolean)接口中体现
+    - 先在当前加载器的缓存中查找有无目标类，如果有，直接返回
+    - 判断当前加载器的父加载器是否为空，如果不为空，则调用parent.loadClass(name, false)接口进行加载
+    - 反之，如果当前加载器的父类加载器为空，则调用findBootstrapClassOrNull(name)接口，让引导类加载器进行加载
+    - 如果通过以上3条路径都没能成功加载，则调用findClass(name)接口进行加载。该接口最终会调用java.lang.ClassLoader接口的defineClass系列的native接口加载目标Java类
+- 优点
+  - 避免类的重复加载，确保一个类的全局唯一性
+  - 保护程序安全，防止核心API被随意篡改
+- 弊端
+  - 顶层的ClassLoader无法访问底层的ClassLoader所加载的类
 
 
 
+#### 8.5 tomcat 为啥要破坏双亲委派机制
+
+- 为啥？
+
+  - 在某些情况下，应用程序可能需要加载自己的特定版本的类库而不使用父类加载器提供的版本
+  - 一个web容器可能要部署两个或者多个应用程序，不同的应用程序，可能会依赖同一个第三方类库的不同版本，因此要保证每一个应用程序的类库都是独立、相互隔离的
+
+- tomcat类加载机制
+
+  ![img](jvm.assets/386835-20181209103430371-1364545241.png)
 
 
+
+- CommonClassLoader：tomcat最基本的类加载器，加载路径中的class可以被tomcat和各个webapp访问
+
+- CatalinaClassLoader：tomcat私有的类加载器，webapp不能访问其加载路径下的class，即对webapp不可见
+
+- SharedClassLoader：各个webapp共享的类加载器，对tomcat不可见
+
+- WebappClassLoader：webapp私有的类加载器，只对当前webapp可见
+- 每一个web应用程序对应一个WebappClassLoader，每一个jsp文件对应一个JspClassLoader，所以这两个类加载器有多个实例
+- 每个webappClassLoader加载自己的目录下的class文件，不会传递给父类加载器
 
 ####          
 
-​      
+### 9. jvm常见参数总结
+
+
+
+#### 9.1 -Xms -Xmx
+
+
+
+#### 9.2 -XX:+UseG1GC
+
+
+
+#### 9.3 -XX:+PrintGCDetails
+
+
+
+### 10. jdk监控和故障工具总结
+
+#### 10.1 jps
+
+- 查看所有java进程
+- 命令
+  - jps -l
+    - 输出主类的全名，如果进程执行的是 Jar 包，输出 Jar 路径
+  - jps -v
+    - 输出虚拟机进程启动时 JVM 参数
+  - jps -m
+    - 输出传递给 Java 进程 main() 函数的参数
+
+
+
+#### 10.2 jstat
+
+- 监视虚拟机各种运行状态信息
+
+
+
+#### 10.3 jinfo
+
+- 实时查看和调整虚拟机各项参数
+
+#### 10.4 jmap
+
+- 生成堆转储快照
+
+#### 10.5 jhat
+
+- 分析heapdump文件
+
+#### 10.6 jstack
+
+- 生成虚拟机当前时刻的线程快照
+
+
+
+#### 10.7 jconsole
+
+- java监视与管理控制台
+
+
+
+#### 10.8 Visual VM
+
+- 多合一故障处理工具
+
+
+
+
+
+
+
+
+
+
 
 ​                                            
