@@ -463,6 +463,7 @@ tag:
     - 输出主类的全名，如果进程执行的是 Jar 包，输出 Jar 路径
   - jps -v
     - 输出虚拟机进程启动时 JVM 参数
+    - 比如：-Xms20m -Xmx50m是启动程序指定的jvm参数
   - jps -m
     - 输出传递给 Java 进程 main() 函数的参数
 
@@ -470,13 +471,92 @@ tag:
 
 #### 10.2 jstat
 
+- JVM Statistics Monitoring Tool 简称jstat
+
 - 监视虚拟机各种运行状态信息
+
+- 可以显示本地或者远程虚拟机进程中的类装载、内存、垃圾收集、JIT编译等运行数据
+
+- 基本语法
+
+   ```java
+   jstat -<option> [-t] [-h<lines>] <vmid> [<interval> [<count>]]
+   ```
+
+  - option参数
+    - 类加载相关的
+      - -class: 显示ClassLoader的相关信息：类的装载、卸载数量、总空间、类装载所消耗的时间等
+    - 垃圾回收相关的
+      - -gc: 显示与GC相关的堆信息。包括Eden区、两个Survivor区、老年代、永久代等的容量、已用空间、GC时间合计等信息
+    - JIT相关的
+      - -compiler：显示JIT编译器编译过的方法、耗时等信息
+  - interval参数
+    - 用于指定输出统计数据的周期，单位为毫秒。即：查询间隔
+  - count参数
+    - 用于指定查询的总次数
+  - -t参数
+    - 可以在输出信息前加上一个Timestamp列，显示程序的运行时间。单位：秒
+  - -h参数
+    - 可以在周期性数据输岀时，输出多少行数据后输出一个表头信息
+
+- 常见使用
+
+  ```java
+  jstat -gc <pid> 1000 10
+      
+  说明：这里的<pid>是Java进程的进程ID。该命令将每隔1秒（1000毫秒）输出一次垃圾回收相关的数据，共输出10次
+      
+  jstat -gcutil <pid> <interval> <count>：显示各代的内存使用情况
+  ```
+
+  ![image-20240118171400373](jvm.assets/image-20240118171400373.png)
 
 
 
 #### 10.3 jinfo
 
 - 实时查看和调整虚拟机各项参数
+
+- 基本语法
+
+  ```java
+  jinfo  [ options ] pid
+      
+  说明：java 进程ID 必须要加上
+  ```
+
+  - options
+    - no option
+      - 输出全部的参数和系统熟悉
+    - -flag name
+      - 输出对应名称的参数
+    - -flag [+-]name
+      - 开启或关闭对应名称的参数
+    - -flag name=value
+      - 设定对应名称的参数
+    - -flags
+      - 输出全部的参数
+
+- 查看
+
+  - 查看曾经赋值的参数
+
+    - jinfo -flags pid
+
+    ![image-20240118202937978](jvm.assets/image-20240118202937978.png)
+
+  - 查看某个java进程的具体参数的值
+
+    - jinfo -flag 具体参数 pid
+
+      ![image-20240118203345937](jvm.assets/image-20240118203345937.png)
+
+- 修改
+
+  - boolean 类型
+    - jinfo -flag [+|-]具体参数 PID
+  - 非boolean类型
+    - jinfo -flag 具体参数=具体参数值 PID
 
 #### 10.4 jmap
 
