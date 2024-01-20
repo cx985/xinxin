@@ -12,8 +12,6 @@ tag:
 
 ## jvm知识梳理
 
-- [ ] 待更新......
-
 ### 1. 整体图
 
 ![image-20240110203713386](jvm.assets/image-20240110203713386.png)
@@ -439,19 +437,102 @@ tag:
 
 ### 9. jvm常见参数总结
 
+#### 9.1 打印设置的XX选项及值
+
+- -XX:+PrintCommandLineFlags
+
+  - 可以让在程序运行前打印出用户手动设置或者JVM自动设置的XX选项
+
+  - java -XX:+PrintCommandLineFlags -version 
+
+    ![image-20240120153240638](jvm.assets/image-20240120153240638.png)
+
+- -XX:+PrintFlagsInitial
+
+  - 表示打印出所有XX选项的默认值
+
+  - java -XX:+PrintFlagsInitial
+
+    ![image-20240120153435513](jvm.assets/image-20240120153435513.png)
+
+- -XX:+PrintFlagsFinal
+
+  - 表示打印出XX选项在运行程序时生效的值
+
+  - java -XX:+PrintFlagsFinal -version
+
+    ![image-20240120154037590](jvm.assets/image-20240120154037590.png)
+
+- -XX:+PrintVMOptions
+  - 打印jvm的参数
+  - java -XX:+PrintVMOptions -version
+
+​           ![image-20240120154300730](jvm.assets/image-20240120154300730.png)
 
 
-#### 9.1 -Xms -Xmx
 
+#### 9.2 栈
 
+- -Xss128k
+  - 设置每个线程的栈大小为128k
+  - 等价于 -XX:ThreadStackSize = 128k
+  - jinfo -flag +Xss128k 1234
 
-#### 9.2 -XX:+UseG1GC
+#### 9.3 堆
 
+- -Xms4000m
 
+  - 设置jvm初始堆内存为4000m
+  - 等价于：-XX:InitialHeapSize
 
-#### 9.3 -XX:+PrintGCDetails
+- -Xmx4000m
 
+  - 设置jvm最大堆内存为4000m
+  - 等价于：-XX:MaxHeapSize
 
+  - eg：设置某个服务的初始堆内存和最大堆内存的大小
+    - java -Xms2g -Xmx4g -jar YourApplication.jar
+  - eg: 查看某个服务的初始堆内存和最大堆内存的大小
+    - jinfo -flags  pid(对应的进程编号)
+
+- -XX:MaxTenuringThreshold=15
+
+  - 默认值是15
+  - 新生代每次MinorGC后，还存活的对象年龄+1，当对象的年龄大于设置的这个值时就进入老年代
+
+- -Xmn2g
+
+  - 设置年轻代大小为2g
+  - 官方推荐配置为整个堆大小的3/8
+
+#### 9.4 方法区
+
+- 元空间
+  - -XX:MetaspaceSize
+    - 初始空间大小
+
+#### 9.5 垃圾回收器相关
+
+- 查看默认垃圾回收器
+
+  - jinfo -flags pid
+
+    ![image-20240120162145438](jvm.assets/image-20240120162145438.png)
+
+- 串行回收
+  - -XX:+UseSerialGC
+- ParNew
+  - -XX:+UseSerialGC
+- G1
+  - -XX：+UseG1GC 
+
+#### 9.6 GC相关的内容
+
+- -XX:+PrintGCDetails
+  - 在发生垃圾回收时打印内存回收详细的日志，
+    并在进程退出时输出当前内存各区域分配情况
+  - eg
+    - java -XX:+PrintGCDetails -jar your_application.jar
 
 ### 10. jdk监控和故障工具总结
 
@@ -536,6 +617,8 @@ tag:
       - 设定对应名称的参数
     - -flags
       - 输出全部的参数
+      
+      ![image-20240120100855312](jvm.assets/image-20240120100855312.png)
 
 - 查看
 
@@ -562,25 +645,124 @@ tag:
 
 - 生成堆转储快照
 
+- 基本语法
+
+  - ````java
+    jmap [option] <pid>
+    ````
+
+  - option 包括
+
+    - -dump: 生成dump文件
+    - -heap: 输出整个堆空间的详细信息，包括GC的使用、堆配置信息
+
+- 使用1
+
+  - 导出内存映像文件
+
+    - 手动方式
+
+      ```java
+      jmap -dump:format=b,file=<filename.hprof> <pid>
+          
+      jmap -dump:live,format=b,file=<filename.hprof> <pid>
+      ```
+
+    
+    ​      eg: jmap -dump:format=b,file=test.hprof 11101
+  
+- 使用2
+
+  - 显示堆内存相关信息
+
+    - jmap -heap pid
+
+    - jmap -histo pid
+
+      
+
 #### 10.5 jhat
 
+- 全称：jvm heap analysis tool
+
 - 分析heapdump文件
+- jdk9以后已经被删除
 
 #### 10.6 jstack
 
 - 生成虚拟机当前时刻的线程快照
+- 基本语法
+  - jstack option pid
+  - option参数
+    - -F: 当正常输出的请求不被响应时，强制输出线程堆栈
+    - -l: 除堆栈外，显示关于锁的附加信息
+    - -m: 如果调用到本地方法的话，可以显示C/C++的堆栈
+    - -h: 帮助操作
+- eg
+  - jstack -l 11121
 
 
 
 #### 10.7 jconsole
 
 - java监视与管理控制台
+- 启动
+  - jdk/bin目录下，启动jconsole.exe命令
+  - 不需要使用jps命令来查询
+- 主要作用
+  - 监控内存
+  - 监控线程
+  - 监控死锁
+  - 类加载与虚拟机信息
 
 
 
 #### 10.8 Visual VM
 
 - 多合一故障处理工具
+
+
+
+### 11. 性能调优
+
+#### 11.1 排查问题
+
+- 打印GC日志，通过GCviewer或者 http://gceasy.io来分析日志信息
+- 灵活运用 命令行工具，jstack，jmap，jinfo等
+- dump出堆文件，使用内存分析工具分析文件
+- 使用阿里Arthas，或jconsole，JVisualVM来实时查看JVM状态
+- jstack查看堆栈信息
+
+#### 11.2 解决问题
+
+- 适当增加内存，根据业务背景选择垃圾回收器
+- 优化代码，控制内存使用
+- 增加机器，分散节点压力
+- 合理设置线程池线程数量
+- 使用中间件提高程序效率，比如缓存，消息队列等
+
+#### 11.3 案例分析
+
+- 案例1：堆溢出
+- 案例2：元空间溢出
+- 案例3：GC overhead limit exceeded
+- 案例4：线程溢出
+
+
+
+#### 11.4 性能调优案例
+
+- 案例1：调整堆大小提高服务的吞吐量
+- 案例2：jvm优化之JIT优化
+- 案例3：合理配置堆内存
+- 案例4：CPU占用很高排查方案
+- 案例5：G1并发执行的线程数对性能的影响
+- 案例6：调整垃圾回收器提高服务的吞吐量
+- 案例7：日均百万级订单交易系统如何设置JVM参数
+
+
+
+
 
 
 
