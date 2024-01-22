@@ -22,6 +22,8 @@ order: 1
 - [算法](./algorithm.md)
 - [ES](./es.md)
 - [JVM](./jvm.md)
+- [Mysql](./mysql.md)
 - [Redis](./redis.md)
+- [计算机基础](./computerBase.md)
 
 ---

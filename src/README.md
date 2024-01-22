@@ -27,6 +27,11 @@ projects:
     desc: JAVA高级知识
     link: /technology/java/juc
 
+  - icon: zhaoxiangji
+    name: 人像摄影
+    desc: 不看后悔系列
+    link: /life/人像摄影.html
+
 footer: true
 permalink: /
 ---
