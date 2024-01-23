@@ -2,17 +2,18 @@
 icon: markdown
 order: 6
 category:
-  - 使用指南
+  - mysql
 tag:
   - mysql
 ---
 
-# Mysql
+# 数据库
+## MYSQL
 mysql知识总结汇总
 
-## 常见脚本创建
+## 1. 常见脚本创建
 
-### 创建表
+### 1.1 创建表
 ```sql
 create table if not exists `test_table` (
   id bigint(20) unsigned not null auto_increment comment '主键id',
@@ -29,9 +30,9 @@ create table if not exists `test_table` (
 
 ```
 
-### 更新表
+### 1.2 更新表
 
-### 修改表字段(可以重复执行，线上环境推荐)
+### 1.3 修改表字段(可以重复执行，线上环境推荐)
 
 - 新增字段
 ```mysql
@@ -70,9 +71,11 @@ drop procedure if exists modify_field_test_table;
 ```
 
 
-# ORACLE
+## ORACLE
 
-## 创建表
+## 1. 常见脚本创建
+
+### 1.1  创建表
 - 标准写法
 ```sql
 CREATE TABLE test_table(
@@ -116,7 +119,7 @@ COMMENT ON COLUMN test_table.name IS '测试姓名';
 
   ![Alt text](image.png)
 
-## 更新表
+### 1.2 更新表
 
 - 修改表字段varchar为clob
   ```
@@ -139,7 +142,7 @@ COMMENT ON COLUMN test_table.name IS '测试姓名';
 
 - 修改表字段长度
   ```sql
-
+  
   alter table test_table modify (bkry_id varchar2(50));
-
+  
   ```
