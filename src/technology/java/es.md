@@ -82,17 +82,18 @@ PUT statistic_result_detailinfo
   do
     echo $i
     #有用户名密码的执行方式
-    #curl -k --user gaonaite:Ceye.123 -H "Content-Type: application/json" -X PUT -d @$i "https://127.0.0.1:24100/_template/${i/.json/}"
+    #curl -k --user gaonaite:Ceye.123 -H "Content-Type: application/json" -X PUT -d @$i "https://154.154.0.88:24100/_template/${i/.json/}"
     #无密码执行方式
-    curl -H "Content-Type: application/json" -X PUT -d @$i "http://127.0.0.1:9200/_template/${i/.json/}"
+    curl -H "Content-Type: application/json" -X PUT -d @$i "http://192.168.3.203:9200/_template/${i/.json/}"
   done
   
   rm -f ls.log
   
   echo 'done!!!'
   
+  
   ```
-
+  
   
 
 ### 2. 复杂查询

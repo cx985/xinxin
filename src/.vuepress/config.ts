@@ -18,7 +18,6 @@ export default defineUserConfig({
       description: '辰心编码 - 轻舟已过万重山，长路漫漫亦灿灿。',
     },
   },
-
   plugins: [
     searchProPlugin({
       // 索引全部内容
