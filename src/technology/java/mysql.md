@@ -22,7 +22,7 @@ tag:
 
   ![image-20240129101219200](mysql.assets/image-20240129101219200.png)
 
-  ### 1.2 数据库三大范式
+### 1.2 数据库三大范式
 
 - 第一范式
   - 属性不可再分
@@ -46,6 +46,33 @@ tag:
 - truncation
   - truncate table 表名
   - 只删除表中的数据
+
+### 1.4 having 和 where的区别
+
+- where: 过滤指定的行，后面不能加聚合函数，where在group by 前
+- having: 过滤分组，一般都是和group by 连用，不能单独使用。having在group by之后
+
+```sql
+select cust_name,count(*) as num
+from customs
+where cust_age is not null
+group by cust_name
+having count(*) >= 1
+```
+
+### 1.5 ON 和 WHERE的区别
+
+- 连接表时，sql会根据连接条件生成一张新的临时表。on就是连接条件，它决定临时表的生成
+- where是在临时表生成后，再对临时表中的数据进行过滤，生成最终的结果集
+- 总结
+  - on是生成一张临时表，where是对临时表进行筛选
+
+### 1.6 LEFT/RIGHT JOIN
+
+- left join .. on
+  - 返回左表中的所有行，即使右表中没有满足条件的行也是如此
+- right join ..on
+  - 返回右表中的所有行，即使左表中没有满足条件的行也是如此
 
 ## 二、MYSQL
 
@@ -110,11 +137,96 @@ drop procedure if exists modify_field_test_table;
 
 ```
 
+### 2.1.4 添加列
+
+```sql
+alter table user add age int(10);
+```
+
+
+
+### 2.1.5 修改列
+
+```java
+alter table user modify column age tinyint;
+```
+
+
+
+### 2.1.5 删除列
+
+```java
+alter table user drop column age;
+```
+
+### 2.1.6 创建索引
+
+```sql
+create index user_index on user(id);
+```
+
+### 2.1.7 添加索引
+
+```java
+alter table user add index user_index(id);
+```
+
+### 2.1.8 创建唯一索引
+
+```java
+create unique index user_index on user(id);
+```
+
+### 2.1.9 删除索引
+
+```java
+alter table user drop index user_index;
+```
+
+
+
+
+
 ## 2.2 mysql字符集
 
 ### 2.2.1 字符集
 
 - 创建统一使用utf8mb4字符集
+
+
+
+## 2.3 mysql基础
+
+### 1. NULL 和 ‘’的区别是什么？
+
+- NULL 代表一个不确定的之，就算是两个NULL,它两也不一定相等
+- ‘’的长度是0，是不占用空间的，而NULL是需要占用空间的
+- NULL会影响聚合函数的结果
+- 查询NUL值时，必须使用is null 或is not null来判断
+
+### 2. MyISAM 和InnoDB有什么区别？
+
+1. 是否支撑行级锁
+2. 是否支持事务
+3. 是否支持外键
+4. 是否支持mvcc
+
+  总结：innodb都支持，myisam都不支持
+
+
+
+
+
+## 2.4 mysql事务(重要)
+
+### 1. 事务的特性
+
+- 原子性
+- 隔离性
+- 持久性
+- 一致性
+
+
 
 
 
