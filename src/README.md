@@ -17,17 +17,17 @@ projects:
     desc: 站内文章索引和分类
     link: /article
 
-  - icon: youlian
+  - icon: jichu
     name: JAVA基础
     desc: JAVA基础知识
     link: /technology/java/javaBase
 
-  - icon: liuyan
-    name: JAVA基础
+  - icon: shujuchuli
+    name: JAVA高级
     desc: JAVA高级知识
     link: /technology/java/juc
 
-  - icon: zhaoxiangji
+  - icon: renxiangsheying
     name: 人像摄影
     desc: 不看后悔系列
     link: /life/人像摄影.html

@@ -1,6 +1,7 @@
 ---
-icon: markdown
+icon: jinjie
 order: 2
+date: 2023-09-15
 category:
   - 使用指南
 tag:

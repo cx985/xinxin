@@ -1,6 +1,6 @@
 ---
-icon: interview
-order: 8
+icon: Redis
+order: 7
 date: 2024-02-20
 category:
   - 使用指南

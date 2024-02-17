@@ -1,6 +1,7 @@
 ---
-icon: markdown
+icon: jichu
 order: 1
+date: 2023-09-10
 category:
   - 使用指南
 tag:

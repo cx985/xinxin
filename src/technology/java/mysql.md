@@ -1,5 +1,5 @@
 ---
-icon: markdown
+icon: Database
 order: 6
 category:
   - mysql
@@ -606,7 +606,7 @@ COMMENT ON COLUMN test_table.name IS '测试姓名';
 
   ```
 
-  ![Alt text](image.png)
+  ![Alt text](mysql.assets/image.png)
 
 ### 1.2 更新表
 
