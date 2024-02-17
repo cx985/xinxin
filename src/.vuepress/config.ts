@@ -14,8 +14,8 @@ export default defineUserConfig({
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: '辰心编码',
-      description: '辰心编码 - 轻舟已过万重山，长路漫漫亦灿灿。',
+      title: '辰晨沉',
+      description: '辰晨沉 - 轻舟已过万重山，长路漫漫亦灿灿。',
     },
   },
   plugins: [

@@ -1,6 +1,6 @@
 export const friend = [
   {
-    name: '辰心编码',
+    name: '辰晨沉',
     desc: '博客 & 知识 & 生活',
     href: 'https://cx985.github.io/xinxin',
     cover: 'https://file.mo7.cc/static/lxh_gif/lxh_71.gif',

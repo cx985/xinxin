@@ -8,7 +8,7 @@ bgImage: //file.mo7.cc/api/public/bz?idx=1
 # heroText: 
 heroFullScreen: true
 tagline: 轻舟已过万重山，长路漫漫亦灿灿。
-description: 辰心编码,博客,记录,分享
+description: 辰晨沉,博客,记录,分享
 article: false
 index: false
 projects:

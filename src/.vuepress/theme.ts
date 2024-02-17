@@ -57,7 +57,7 @@ export default hopeTheme({
       navbar: zhNavbar,
       sidebar: zhSidebar,
       blog: {
-        name: '辰心编码',
+        name: '辰晨沉',
         description: '轻舟已过万重山，长路漫漫亦灿灿。',
         intro: '/about/me.html',
         timeline: '美好的事情即将发生',
@@ -164,8 +164,8 @@ export default hopeTheme({
         ],
         shortcuts: [
           {
-            name: '辰心编码',
-            short_name: '辰心编码',
+            name: '辰晨沉',
+            short_name: '辰晨沉',
             url: '/',
             icons: [
               {
