@@ -25,5 +25,6 @@ order: 1
 - [Mysql](./mysql.md)
 - [Redis](./redis.md)
 - [计算机基础](./computerBase.md)
+- [SpringCloud](./springcloud.md)
 
 ---
