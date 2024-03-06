@@ -184,23 +184,130 @@ map.forEach((key,value) ->{
 
  
 
- 
+ ### 2. 有没有一种方式整合上面两种数据结构的优势？
+
+- 散列表，也称hash
+
+  ![image-20240306213702402](javaCollect.assets/image-20240306213702402.png)
+
+- hash的核心理论
+  - 就是把任意长度的输入，通过hash算法变成固定长度的输出。
+
+- Hash的特点
+  - 从hash值不可以反向推导出原始的数据
+  - 输入数据的微小变化会得到完全不同的hash值，相同的数据会得到相同的值
+  - 哈希算法的执行效率要高效，长的文本也能快速地计算出哈希值
+  - hash算法的冲突概率要小
+  - 注意：由于hash的原理是将输入空间的值映射成hash空间内，而hash值的空间远小于输入的空间，因此一定会存在不同的输入被映射成相同输出的情况
+
+
+
+### 3. hashmap 底层数据结构？
+
+![image-20240306215048127](javaCollect.assets/image-20240306215048127.png)
+
+
+
+### 4. put数据原理分析？
+
+1. put key value值
+2. 计算key的hash值
+3. 经过hash值扰动函数，使此hash值更散列
+4. 构建出node对象
+5. 路由算法，找出node应存放在数组的位置
+   - （table.length -1）& node.hash
+
+### 5. 什么是哈希碰撞？
+
+- 经过hash运算后得到的值一样
+- 带来的问题
+  - 会使得链表越来越长，get起来性能变差
+
+### 6. 为啥引入红黑树
+
+- 解决链化很长的问题
+
+### 7. hashmap 扩容原理？
+
+- 扩容触发条件
+  - 当hashmap中的元素数量超过当前容量乘以0.75的值时候，会发生扩容
+- 扩容通常是扩大原来数量的2倍
 
  
 
+### 8. hashmap源码之-类的属性
+
+```java
+public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneable, Serializable {
+    // 序列号
+    private static final long serialVersionUID = 362498820763181265L;
+    // 默认的初始容量是16
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
+    // 最大容量
+    static final int MAXIMUM_CAPACITY = 1 << 30;
+    // 默认的负载因子
+    static final float DEFAULT_LOAD_FACTOR = 0.75f;
+    // 当桶(bucket)上的结点数大于等于这个值时会转成红黑树
+    static final int TREEIFY_THRESHOLD = 8;
+    // 当桶(bucket)上的结点数小于等于这个值时树转链表
+    static final int UNTREEIFY_THRESHOLD = 6;
+    // 桶中结构转化为红黑树对应的table的最小容量,当数组长度大于64时才会转换红黑树
+    static final int MIN_TREEIFY_CAPACITY = 64;
+    // 存储元素的数组，总是2的幂次倍
+    transient Node<k,v>[] table;
+    // 存放具体元素的集
+    transient Set<map.entry<k,v>> entrySet;
+    // 存放元素的个数，注意这个不等于数组的长度。
+    transient int size;
+    // 每次扩容和更改map结构的计数器
+    transient int modCount;
+    // 阈值(容量*负载因子) 当实际大小超过阈值时，会进行扩容
+    int threshold;
+    // 负载因子
+    final float loadFactor;
+}
+
+```
 
 
 
+ ### 9. hashmap源码之-类的构造方法
+
+```java 
+    // 默认构造函数。
+    public HashMap() {
+        this.loadFactor = DEFAULT_LOAD_FACTOR; // all   other fields defaulted
+     }
+
+     // 包含另一个“Map”的构造函数
+     public HashMap(Map<? extends K, ? extends V> m) {
+         this.loadFactor = DEFAULT_LOAD_FACTOR;
+         putMapEntries(m, false);//下面会分析到这个方法
+     }
+
+     // 指定“容量大小”的构造函数
+     public HashMap(int initialCapacity) {
+         this(initialCapacity, DEFAULT_LOAD_FACTOR);
+     }
+
+     // 指定“容量大小”和“负载因子”的构造函数
+     public HashMap(int initialCapacity, float loadFactor) {
+         if (initialCapacity < 0)
+             throw new IllegalArgumentException("Illegal initial capacity: " + initialCapacity);
+         if (initialCapacity > MAXIMUM_CAPACITY)
+             initialCapacity = MAXIMUM_CAPACITY;
+         if (loadFactor <= 0 || Float.isNaN(loadFactor))
+             throw new IllegalArgumentException("Illegal load factor: " + loadFactor);
+         this.loadFactor = loadFactor;
+         // 初始容量暂时存放到 threshold ，在resize中再赋值给 newCap 进行table初始化
+         this.threshold = tableSizeFor(initialCapacity);
+     }
 
 
+注意： tableSizeFor 将其扩容到与 initialCapacity 最接近的 2 的幂次方大小
+```
 
 
-
-
-
- 
-
- 
 
  
 
