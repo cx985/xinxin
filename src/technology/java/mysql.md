@@ -202,7 +202,7 @@ alter table user drop index user_index;
 - NULL 代表一个不确定的之，就算是两个NULL,它两也不一定相等
 - ‘’的长度是0，是不占用空间的，而NULL是需要占用空间的
 - NULL会影响聚合函数的结果
-- 查询NUL值时，必须使用is null 或is not null来判断
+- 查询NULL值时，必须使用is null 或is not null来判断
 
 ### 2. MyISAM 和InnoDB有什么区别？
 
@@ -560,6 +560,24 @@ alter table user drop index user_index;
 
 
 
+## 2.9 什么是回表？
+
+当SQL查询仅依赖于非聚集索引（又称二级索引、辅助索引）时，如果查询所需要的数据不在该非聚集索引中完全包含，那么数据库需要借助索引中存储的主键值，回到聚集索引（主键索引）中查找对应的完整行记录。
+
+
+
+具体来说，假设一个表有主键`id`和若干其他列如`name`、`age`等，若存在一个基于`name`的非聚集索引。当执行如下查询：
+
+Sql
+
+```sql
+1SELECT * FROM table WHERE name = 'John';
+```
+
+如果数据库首先使用`name`的索引来定位到`name='John'`的记录，但该索引只包含了`name`和对应的`id`值，并没有存储`age`等其他列的信息。为了得到完整的行数据，数据库就需要根据索引中查找到的主键`id`值，进一步回到聚集索引中去检索对应主键的行，这个过程就被形象地称为“回表”。
+
+
+
 ## 三、ORACLE
 
 ## 3.1. 常见脚本创建
@@ -617,7 +635,7 @@ alter table test_table rename column name to name_clob;
   alter table test_table drop column name_clob;
   comment  on  column  test_table.name   is  '测试修改';
   ```
-  
+
   ```
 - 表后面新增字段
   ```sql

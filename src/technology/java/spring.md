@@ -99,13 +99,15 @@ tag:
 Spring框架中的bean生命周期包括以下几个阶段：
 
 1. 实例化（Instantiation）：当Spring容器启动时，会根据配置文件或注解来实例化bean对象。
-
+   - 通俗理解
+     - 内存中申请一块内存空间
+     - 租赁好房子，自己的家具东西还没搬家进去
 2. 属性设置（Population）：在实例化之后，Spring容器会通过依赖注入或者调用setter方法来设置bean的属性。
-
 3. 初始化（Initialization）：在属性设置完成后，Spring容器会调用bean的初始化方法（可以通过@PostConstruct注解或实现InitializingBean接口来定义初始化方法）。
-
+   - 通俗理解
+     - 完成属性的各种赋值
+     - 装修、家电家具进场
 4. 使用（In Use）：此时bean已经初始化完成，可以被其他bean或组件使用。
-
 5. 销毁（Destruction）：当Spring容器关闭时，会调用bean的销毁方法（可以通过@PreDestroy注解或实现DisposableBean接口来定义销毁方法）。
 
 通过实现InitializingBean和DisposableBean接口、使用@PostConstruct和@PreDestroy注解、配置init-method和destroy-method属性等方式，可以对bean的初始化和销毁过程进行定制化操作。
@@ -458,3 +460,47 @@ springboot 将自动装配的类放在spring-boot-autoconfigure包的META-INF/sp
 - Spring Boot 通过`@EnableAutoConfiguration`开启自动装配，通过 SpringFactoriesLoader 最终加载`META-INF/spring.factories`中的自动配置类实现自动装配，自动配置类其实就是通过`@Conditional`按需加载的配置类，想要其生效必须引入`spring-boot-starter-xxx`包实现起步依赖
 
   
+
+
+
+## 8. Spring 循环依赖？
+
+- 定义
+  - 多个bean之间相互依赖，形成了一个闭环。比如：A依赖B,B依赖C、C依赖于A   
+- 两种依赖方式
+  - 构造器循环依赖
+    - spring 容器无法解决构造器级别的循环依赖，因为构造器注入必须在实例化阶段完成，而在实例化过程中遇到循环依赖会导致死锁，spring会抛出BeanCurrentlyInCreationException异常
+  - setter属性循环依赖
+    - setter属性循环依赖是指Bean A通过setter方法注入依赖于Bean B，而Bean B也通过setter方法注入依赖于Bean A
+    - spring 通过三级缓存机制巧妙地解决了setter注入的循环依赖问题
+- 两种注入方式对循环依赖的影响？
+  - AB循环依赖问题只要A的注入方式是setter且singleton,就不会有循环依赖问题              
+
+​           
+
+
+
+## 9. Spring 三级缓存
+
+- DefaultSingletonBeanRegistry 类
+
+- 三个map 
+  - 第一级缓存（也叫单例池）singletonObjects:存放已经经历 了完整生命周期的Bean对象 （成品）
+  - 第二级缓存：earlySingletonObjects,存放早期暴露出来的Bean 对象，Bean的生命周期未结束  （半成品）
+  - 第三级缓存：Map<String,ObjectFactory> singletonFactories, 存放可以生成Bean的工厂 （工厂）
+  
+  ![image-20240318160307799](spring.assets/image-20240318160307799.png)
+  
+- spring内部通过三级缓存来解决循环依赖 
+
+- A/B两对象在三级缓存中的迁移说明
+
+  - A创建过程中需要B，于是A将自己放到三级缓存里面，去实例化B
+  - B实例化的时候发现需要A,于是B先查一级缓存，没有，再查二级缓存，还没没有，再查三级缓存，找到了A然后把三级缓存里面的这个A放到二级缓存里面，并删除三级缓存里面的A
+  - B顺利初始化完毕，将自己放到一级缓存里面（此时B里面的A依然是创建中状态），然后回来接着创建A,此时B已经创建结束，直接从一级缓存里面拿到B, 然后完成创建，并将A自己放到一级缓存里面
+
+- 四个方法 
+  - getSingleton 
+  - doCreateBean 
+  - populateBean 
+  - addSingleton               
