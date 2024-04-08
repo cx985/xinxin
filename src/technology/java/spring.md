@@ -504,3 +504,49 @@ springboot 将自动装配的类放在spring-boot-autoconfigure包的META-INF/sp
   - doCreateBean 
   - populateBean 
   - addSingleton               
+
+## 10. springboot的启动流程
+
+Spring Boot 的启动流程可以概括为以下几个关键步骤：
+
+1. 
+
+2. 
+
+3. 
+
+4. 
+
+5. 
+
+6. **启动入口点**：
+   - Spring Boot 应用程序的启动始于 `public static void main(String[] args)` 方法，其中通常会调用 `SpringApplication.run(Application.class, args)` 方法。
+
+7. **初始化SpringApplication**：
+   - 创建 `SpringApplication` 实例，构造函数中会做一些基本的初始化工作，包括检测和决定应用程序类型（如Servlet容器、反应式容器或无容器）、初始化一些基础的ApplicationContext Initializer 和 ApplicationListener。
+
+8. **加载环境和外部配置**：
+   - Spring Boot 会创建一个 `Environment` 对象，它封装了应用程序运行时的所有环境属性。环境配置来源于多个地方，包括命令行参数、系统环境变量、JVM系统属性、application.properties 或 application.yml 配置文件等。
+
+9. **Spring Boot 的 Auto-Configuration**：
+   - 自动配置是Spring Boot的核心特性之一，它会根据项目类路径（classpath）上的 jar 包和类来智能地决定哪些 beans 应该被添加到 ApplicationContext 中。这个过程通过扫描 `META-INF/spring.factories` 文件中声明的 `EnableAutoConfiguration` 类来实现。
+
+10. **创建ApplicationContext**：
+   - `SpringApplication` 通过调用 `createApplicationContext()` 方法来创建 `ApplicationContext`，这一步会依据应用程序类型选择合适的上下文实现，如 `AnnotationConfigServletWebServerApplicationContext`（用于Servlet环境）或 `AnnotationConfigReactiveWebServerApplicationContext`（用于响应式环境）。
+
+11. **加载Spring Beans**：
+    - 创建好 `ApplicationContext` 之后，Spring Boot 开始加载和注册所有的 Spring Beans，包括用户自定义的和通过自动配置生成的bean。
+
+12. **启动监听器**：
+    - 加载并初始化从 `META-INF/spring.factories` 文件中声明的 `ApplicationListener` 实现，这些监听器将在应用生命周期的不同阶段被触发。
+
+13. **启动嵌入式Web服务器**：
+    - 如果是Web应用程序，Spring Boot会根据配置自动创建和配置嵌入式Web服务器，如Tomcat或Jetty，并将Spring容器注册到Web容器中，使其能够对外提供HTTP服务。
+
+14. **执行ApplicationRunner/CommandLineRunner**：
+    - Spring Boot 会查找并执行实现了 `ApplicationRunner` 或 `CommandLineRunner` 接口的bean，这些接口定义的方法会在所有Spring Beans初始化完成后被执行，通常用于应用启动后的额外初始化任务。
+
+15. **启动完成**：
+    - 当所有准备工作完成后，Spring Boot 应用程序便处于启动完成并等待处理请求的状态。
+
+以上就是Spring Boot启动的大致流程，每个步骤都涉及众多细节，但核心思路是简化应用配置、自动装配和启动过程，使得开发者可以快速构建和部署微服务应用。

@@ -68,7 +68,8 @@ export default hopeTheme({
   encrypt: {
     // 文章加密配置
     config: {
-      "/technology/java/juc": ["xinxin"]
+      "/technology/java/juc": ["xinxin"],
+      "/manager/自我介绍": ["xinxin"]
     },
   },
 

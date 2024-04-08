@@ -13,26 +13,23 @@ tag:
 
 ## 1. springcloud 对应的组件？
 
-- eureka
-  - 注册中心
-- ribbon
-  - 负载均衡
-- openfeign
-  - 服务调用
-- hystrix
-  - 断路器
-- zuul
-  - 网关
-- gateway
-  - 新一代网关
-- SpringCloud Config
-  - 分布式配置中心
-- SpringCloud Bus
-  - 消息总线
-- SpringCloud Stream
-  - 消息驱动
-- SpringCloud Sleuth
-  - 分布式请求链路追踪
+- 服务注册发现
+  - nacos   （cloud alibaba）
+  - consul （cloud最新）
+  - eureka   (淘汰)
+
+- 负载均衡
+  - LoadBalancer (cloud最新)
+  - ribbon (淘汰)
+- 服务调用
+  - openFeign
+- 断路器
+  - CircuitBreaker （cloud最新）
+  - hystrix (淘汰)
+- 网关
+  - gateway
+- 分布式链路追踪
+  - Sleuth(Micrometer) + ZipKin
 - SpringCloud Alibaba Nacos
   - 服务注册和配置中心
 - SpringCloud Alibaba Sentinel
@@ -411,4 +408,46 @@ public class PaymentHystirxController{}
   - TM 结束分布式事务，事务一阶段结束（TM 通知 TC 提交/回滚分布式事务）；
   - TC 汇总事务信息，决定分布式事务是提交还是回滚；
   - TC 通知所有 RM 提交/回滚 资源，事务二阶段结束。
+
+
+
+## 13 . nacos
+
+### 1. nacos的心跳机制？
+
+1. **客户端心跳**
+   - 对于临时实例（租约模式），Nacos 使用客户端主动上报心跳的方式。每个服务实例在其启动后，通过集成的 Nacos 客户端 SDK 向 Nacos Server 发送心跳，通常是周期性的 HTTP 请求或者 TCP 协议的数据包。
+   - 心跳包通常包含服务实例的基本信息和当前状态，比如服务ID、IP地址、端口、权重等信息。
+   - 如果服务实例在指定的时间间隔内没有向 Nacos Server 报告心跳，则会被标记为不健康或下线，不再对外提供服务发现，从而防止客户端调用已失效的服务实例。
+2. **服务端探测**
+   - 对于持久实例（非租约模式），Nacos 采用服务端主动探测的方式来进行健康检查。服务端会按照预设的时间间隔向服务实例发起探测请求，例如发送 HTTP GET 或者 TCP PING 请求。
+   - 如果服务实例能正确响应探测请求，那么认为该实例是健康的；如果连续多次探测失败，则服务端会认为该实例不健康，并从服务列表中剔除。
+
+
+
+   nacos的心跳默认是5秒，即服务实例默认每隔5秒向nacos服务器发送一次心跳。默认超时时间可能是15秒或者30秒，那么如何通过配置文件修改呢
+
+```java
+# Spring Boot 应用中的 application.yml 或 application.properties 文件
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # 设置服务实例心跳间隔
+        heartbeat:
+          interval: 5000 # 单位：毫秒，这里设置为5秒，可根据实际需要调整
+          timeout: 15000 # 单位：毫秒，这是心跳超时时间，超过这个时间未收到心跳，服务将被视为不健康
+
+        # 根据某些版本或特定场景的配置项，可能会使用如下形式：
+        # metadata:
+        #   preserved.heart.beat.interval: 5000 # 用于设置心跳间隔
+        #   preserved.heart.beat.timeout: 15000 # 设置心跳超时时间
+
+        # Nacos 服务注册中心地址
+        server-addr: localhost:8848
+
+注意：上述配置的具体键值可能会随着 Nacos 和 Spring Cloud Alibaba 版本的变化而变化，请根据所使用的 Nacos 客户端版本文档进行准确配置。
+
+如果你不是使用 Spring Cloud 集成而是直接使用 Nacos 客户端 SDK，则需要参考对应的 SDK 文档来配置心跳间隔等参数，通常是在初始化客户端时通过 API 进行设置。
+```
 
