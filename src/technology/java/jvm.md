@@ -76,10 +76,10 @@ tag:
 
 ![image-20240110204942188](jvm.assets/image-20240110204942188.png)
 
-#### 2.6 内存分配和回收原则
+#### 2.6 什么情况下对象会进入老年代
 
 - 大对象直接进入老年代
-- 长期存活的对象将进入老年代
+- 对象经历15次Minor GC后（可通过`-XX:MaxTenuringThreshold`参数调整），若仍然存活，则会被晋升到老年代（Old Generation）
 
 ### 3. 垃圾判别阶段算法
 
@@ -901,6 +901,9 @@ tag:
 - 案例7：日均百万级订单交易系统如何设置JVM参数
 
   - 初始堆和最大堆Xms Xmx 要相对较高
+    - xms和xmx为啥要设置成一样
+      - **减少内存扩展和收缩带来的性能损耗**，每次扩展和收缩都会带来一定的性能开销，包括系统调用、内存重分配、GC暂停时间增长等
+      - **避免内存抖动**
   - 垃圾回收器选择G1  -XX:+UseG1GC；对于G1垃圾收集器，还可以考虑 `-XX:G1HeapRegionSize` 设置每个堆区域的大小
   - 并发线程数：-XX:ParallelGCThreads 或 -XX:ConcGCThreads
   - 元空间大小：-XX:MaxMetaspaceSize
