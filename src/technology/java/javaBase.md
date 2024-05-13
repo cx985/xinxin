@@ -170,14 +170,45 @@ System.out.println(aa==bb);// true
 ## 17、String s1 = new String("abc") 创建了几个字符串对象？
 答：会创建1或者2个字符串对象。如果字符串常量池不存在，那么会先在字符串常量池创建，然后在堆空间创建
 
+- 扩展：String s = new String("xyz") + new String("xyz") 创建了几个对象
+
+  答：4个。
+
+  1. 首先，两个 `new String("xyz")` 分别在堆内存中创建了两个新的 String 对象，每个都包含内容 "xyz"。
+  2. 接着，字符串连接操作（+）触发了编译器对字符串字面量的合并，生成一个新的字符串 "xyzxyz"。由于 "+" 操作符两边都是 String 对象，因此在执行此操作时，JVM 会在字符串常量池中创建第三个对象，内容为 "xyzxyz"。
+  3. 最后，由于字符串连接的结果需要赋值给变量 s，Java 会创建第四个对象，也就是 s 所引用的新 String 对象。这个对象的值来源于步骤 3 中字符串常量池中的 "xyzxyz"，但是它是一个独立于常量池的新对象，在堆内存中分配空间
+
 ## 18. String.intern() 方法？
 作用：将指定的字符串对象的引用保存在字符串常量池中。
 如果字符串常量池中保存了对应的字符串对象的引用，就直接返回该引用
 如果字符串常量池中没有保存对应的字符串引用，那就在常量池创建一个指向该字符串对象的引用并返回
+
 ```
-String s3 = new String("java");
-String s4 = s3.intern();
-System.out.println(s3 == s4); //false
+String s1 = "Programming";
+String s2 = new String("Programming");
+String s3 = "Program";
+String s4 = "ming";
+String s5 = "Program" + "ming";
+String s6 = s3 + s4;
+System.out.println(s1 == s2); //false
+System.out.println(s1 == s5); // true
+System.out.println(s1 == s6); // false
+System.out.println(s1 == s6.intern()); //true
+System.out.println(s2 == s2.intern()); //false
+
+
+解释如下：
+
+s1 == s2：比较的是栈上引用地址，虽然它们的内容都是 "Programming"，但由于 s1 是直接创建的字符串字面量，而 s2 是通过 new String("Programming") 显式创建的对象，所以它们位于不同的内存区域，因此结果为 false。
+
+s1 == s5：s5 是由两个字符串字面量 "Program" 和 "ming" 直接相加得到的，编译器会在编译期间将其优化合并为一个字符串字面量 "Programming"，因此它与 s1 引用的是同一个字符串常量池中的对象，结果为 true。
+
+s1 == s6：s6 是通过 s3 + s4 运算符连接得到的，这是一个运行时操作，会创建一个新的 String 对象，而不是复用字符串常量池中的 "Programming"，所以 s1 和 s6 指向不同对象，结果为 false。
+
+s1 == s6.intern()：s6.intern() 方法会尝试在字符串常量池中查找与 s6 内容相同的字符串，如果存在则返回该常量池中的引用，否则将 s6 加入常量池并返回其引用。因为 "Programming" 已经存在于常量池中（由前面的 s5 创建），所以这里返回的是常量池中的 "Programming" 的引用，因此 s1 和 s6.intern() 指向同一对象，结果为 true。
+
+s2 == s2.intern()：s2 是通过 new String("Programming") 创建的，即使调用 intern() 方法将其加入常量池，原始的 s2 仍然指向堆上的对象，而 s2.intern() 指向常量池中的对象，因此结果为 false
+
 ```
 
 
