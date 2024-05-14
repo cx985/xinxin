@@ -578,3 +578,13 @@ Spring Boot 的启动流程可以概括为以下几个关键步骤：
 - 当所有准备工作完成后，Spring Boot 应用程序便处于启动完成并等待处理请求的状态。
 
 以上就是Spring Boot启动的大致流程，每个步骤都涉及众多细节，但核心思路是简化应用配置、自动装配和启动过程，使得开发者可以快速构建和部署微服务应用。
+
+
+
+## 11. spring BeanFactory和FactoryBean的区别
+
+- BeanFactory
+  - 是Spring Ioc容器的核心接口，它负责管理和实例化应用程序中定义的Bean。
+  - 是个工厂
+- FacotryBean
+  - 是一个特殊的Bean, 它是一个接口, 允许开发者通过实现该接口来提供Bean的实例的创建逻辑
